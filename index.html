@@ -35,12 +35,25 @@
             z-index: 1000;
             padding: 1rem 0;
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         nav .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+        }
+
+        /* Add subtle nav indicator line */
+        nav .container::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
         }
 
         .logo {
@@ -163,9 +176,66 @@
             50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
         }
 
+        /* Background grid pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.15) 1px, transparent 0);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle corner accents */
+        .corner-accent {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corner-accent::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), transparent);
+            border-radius: 50%;
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        .corner-accent.top-left { top: -50px; left: -50px; }
+        .corner-accent.top-right { top: -50px; right: -50px; }
+        .corner-accent.bottom-left { bottom: -50px; left: -50px; }
+        .corner-accent.bottom-right { bottom: -50px; right: -50px; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+
         /* Sections */
         section {
             padding: 3rem 0;
+            position: relative;
+        }
+
+        /* Add section dividers */
+        section:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            transform: translateX(-50%);
         }
 
         .section-title {
@@ -177,6 +247,27 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            position: relative;
+        }
+
+        /* Add decorative elements around section titles */
+        .section-title::before,
+        .section-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5));
+        }
+
+        .section-title::before {
+            left: -60px;
+        }
+
+        .section-title::after {
+            right: -60px;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.5), transparent);
         }
 
         /* Projects Grid */
@@ -185,6 +276,20 @@
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
+            position: relative;
+        }
+
+        /* Add connecting lines between project cards */
+        .projects-grid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(59, 130, 246, 0.2), transparent);
+            transform: translateX(-50%);
+            z-index: 0;
         }
 
         .project-card {
@@ -196,6 +301,7 @@
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            z-index: 1;
         }
 
         .project-card::before {
@@ -208,6 +314,24 @@
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             transform: scaleX(0);
             transition: transform 0.3s ease;
+        }
+
+        /* Add subtle inner glow effect */
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 6px;
+            height: 6px;
+            background: rgba(59, 130, 246, 0.4);
+            border-radius: 50%;
+            animation: blink 3s infinite ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.3); }
         }
 
         .project-card:hover::before {
@@ -245,11 +369,30 @@
             color: #3b82f6;
             text-decoration: none;
             font-weight: 600;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .project-link:hover {
             color: #8b5cf6;
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Add subtle arrow animation */
+        .project-link::after {
+            content: '→';
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover::after {
+            transform: translateX(3px);
         }
 
         /* Experience Section */
@@ -261,6 +404,31 @@
             backdrop-filter: blur(10px);
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add decorative corner elements */
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), transparent);
+            border-bottom-left-radius: 16px;
+        }
+
+        .experience-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, transparent, rgba(139, 92, 246, 0.3));
+            border-top-right-radius: 16px;
         }
 
         .experience-title {
@@ -306,6 +474,37 @@
             text-align: center;
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        /* Add floating orbs around contact section */
+        .contact-content::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 8px;
+            height: 8px;
+            background: rgba(59, 130, 246, 0.4);
+            border-radius: 50%;
+            animation: orbit 8s infinite linear;
+        }
+
+        .contact-content::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 6px;
+            height: 6px;
+            background: rgba(139, 92, 246, 0.4);
+            border-radius: 50%;
+            animation: orbit 10s infinite linear reverse;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
         }
 
         .contact-description {
@@ -416,14 +615,41 @@
             padding: 2rem 0;
             text-align: center;
             border-top: 1px solid rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add subtle footer animation */
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), transparent);
+            animation: shimmer 3s infinite ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         footer p {
             color: #94a3b8;
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
+    <!-- Corner accent elements -->
+    <div class="corner-accent top-left"></div>
+    <div class="corner-accent top-right"></div>
+    <div class="corner-accent bottom-left"></div>
+    <div class="corner-accent bottom-right"></div>
+
     <!-- Navigation -->
     <nav>
         <div class="container">
@@ -446,14 +672,23 @@
     <section id="home" class="hero">
         <div class="particles">
             <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 15%; animation-delay: 2.5s;"></div>
             <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 25%; animation-delay: 3.5s;"></div>
             <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 35%; animation-delay: 4s;"></div>
             <div class="particle" style="left: 40%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 45%; animation-delay: 3s;"></div>
             <div class="particle" style="left: 50%; animation-delay: 1.5s;"></div>
+            <div class="particle" style="left: 55%; animation-delay: 4.5s;"></div>
             <div class="particle" style="left: 60%; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 65%; animation-delay: 1.8s;"></div>
             <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 4.2s;"></div>
             <div class="particle" style="left: 80%; animation-delay: 1.8s;"></div>
+            <div class="particle" style="left: 85%; animation-delay: 3.8s;"></div>
             <div class="particle" style="left: 90%; animation-delay: 0.8s;"></div>
+            <div class="particle" style="left: 95%; animation-delay: 2.8s;"></div>
         </div>
         <div class="container">
             <div class="hero-content">
@@ -480,7 +715,7 @@
                         Integrated Gemini API for document parsing and error explanation with PDF uploads, form detection, 
                         fallback logic, and secure deployment with rate-limiting. Major university-sponsored project.
                     </p>
-                    <a href="https://github.com/4shivv/DocLens" class="project-link" target="_blank">View on GitHub →</a>
+                    <a href="https://github.com/4shivv/DocLens" class="project-link" target="_blank">View on GitHub</a>
                 </div>
 
                 <div class="project-card">
@@ -492,8 +727,8 @@
                         of potential scam indicators using advanced natural language processing.
                     </p>
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                        <a href="https://scambuster-ai.onrender.com/" class="project-link" target="_blank">Live Demo →</a>
-                        <a href="https://github.com/Hareng8374/Scambuster-AI" class="project-link" target="_blank">GitHub →</a>
+                        <a href="https://scambuster-ai.onrender.com/" class="project-link" target="_blank">Live Demo</a>
+                        <a href="https://github.com/Hareng8374/Scambuster-AI" class="project-link" target="_blank">GitHub</a>
                     </div>
                 </div>
 
@@ -506,8 +741,8 @@
                         changes that adapt to current weather conditions using Flask backend and OpenWeatherMap integration.
                     </p>
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                        <a href="https://weatherdash-srty.onrender.com/" class="project-link" target="_blank">Live Demo →</a>
-                        <a href="https://github.com/Hareng8374/WeatherDash" class="project-link" target="_blank">GitHub →</a>
+                        <a href="https://weatherdash-srty.onrender.com/" class="project-link" target="_blank">Live Demo</a>
+                        <a href="https://github.com/Hareng8374/WeatherDash" class="project-link" target="_blank">GitHub</a>
                     </div>
                 </div>
 
@@ -519,7 +754,7 @@
                         Built an interactive UI demo simulating live tutor-student pairing with subject and 
                         availability input fields, responsive output panel, and frontend-only logic.
                     </p>
-                    <a href="https://drive.google.com/file/d/1iCNhsNHOlqMj450dfhRmbVqeJNVJUEA8/view?usp=drive_link" class="project-link" target="_blank">Research Paper →</a>
+                    <a href="https://drive.google.com/file/d/1iCNhsNHOlqMj450dfhRmbVqeJNVJUEA8/view?usp=drive_link" class="project-link" target="_blank">Research Paper</a>
                 </div>
 
                 <div class="project-card">
@@ -530,7 +765,7 @@
                         Included detailed screenshots, simplified setup instructions, and troubleshooting section to help 
                         new programmers get started with Python development.
                     </p>
-                    <a href="https://drive.google.com/file/d/15nzBwgeS0INdawKY3d6caIYGvxafUL7h/view?usp=drive_link" class="project-link" target="_blank">View Guide →</a>
+                    <a href="https://drive.google.com/file/d/15nzBwgeS0INdawKY3d6caIYGvxafUL7h/view?usp=drive_link" class="project-link" target="_blank">View Guide</a>
                 </div>
             </div>
         </div>
