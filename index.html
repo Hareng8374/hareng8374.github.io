@@ -13,10 +13,12 @@
 
         body {
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
             color: #e2e8f0;
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
         }
 
         .container {
@@ -25,17 +27,143 @@
             padding: 0 2rem;
         }
 
+        /* Enhanced Background Effects */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatUp 15s infinite linear;
+            opacity: 0;
+        }
+
+        .floating-particle.small {
+            width: 2px;
+            height: 2px;
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .floating-particle.medium {
+            width: 3px;
+            height: 3px;
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .floating-particle.large {
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.4);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Gradient orbs */
+        .gradient-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: orbFloat 25s infinite ease-in-out;
+            opacity: 0.08;
+        }
+
+        .orb.blue {
+            background: radial-gradient(circle, #3b82f6, transparent);
+            width: 250px;
+            height: 250px;
+        }
+
+        .orb.purple {
+            background: radial-gradient(circle, #8b5cf6, transparent);
+            width: 180px;
+            height: 180px;
+        }
+
+        .orb.cyan {
+            background: radial-gradient(circle, #06b6d4, transparent);
+            width: 120px;
+            height: 120px;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(40px, -40px) scale(1.2);
+            }
+            66% {
+                transform: translate(-30px, 30px) scale(0.8);
+            }
+        }
+
+        /* Grid pattern background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.12) 1px, transparent 0);
+            background-size: 25px 25px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridPulse 10s infinite ease-in-out;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
         /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(25px);
             z-index: 1000;
             padding: 1rem 0;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         nav .container {
@@ -45,7 +173,6 @@
             position: relative;
         }
 
-        /* Add subtle nav indicator line */
         nav .container::before {
             content: '';
             position: absolute;
@@ -53,196 +180,259 @@
             left: 0;
             width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            animation: navShimmer 4s infinite ease-in-out;
+        }
+
+        @keyframes navShimmer {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #3b82f6;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            border-radius: 50%;
+            animation: logoPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.4); opacity: 1; }
         }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .nav-links a {
             color: #e2e8f0;
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-weight: 600;
+            transition: all 0.3s ease;
             position: relative;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            cursor: pointer;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
         }
 
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -4px;
-            left: 0;
+            bottom: -2px;
+            left: 50%;
             width: 0;
-            height: 2px;
-            background: #3b82f6;
-            transition: width 0.3s ease;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 80%;
         }
 
-        /* Hero Section */
+        /* Page content */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page.active {
+            display: block;
+            animation: pageSlideIn 0.6s ease-out;
+        }
+
+        @keyframes pageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-content {
+            padding: 4rem 0;
+        }
+
+        /* Home Page Styles */
         .hero {
-            min-height: 70vh;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-            padding: 2rem 0;
         }
 
         .hero-content {
-            z-index: 2;
-            max-width: 700px;
             text-align: center;
+            max-width: 800px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: heroGlow 6s infinite ease-in-out;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.4; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 0.8; }
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4, #f59e0b);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientShift 4s infinite ease-in-out;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .hero .subtitle {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             color: #94a3b8;
             margin-bottom: 2rem;
-            font-weight: 400;
+            font-weight: 500;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
 
         .hero .description {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #cbd5e1;
-            margin-bottom: 2rem;
-            line-height: 1.7;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.9s both;
         }
 
         .cta-button {
-            display: inline-block;
-            padding: 1rem 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.2rem 2.5rem;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5);
         }
 
-        /* Floating particles */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        .cta-button.secondary:hover {
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #3b82f6;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float 6s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-        }
-
-        /* Background grid pattern */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.15) 1px, transparent 0);
-            background-size: 20px 20px;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Subtle corner accents */
-        .corner-accent {
-            position: fixed;
-            width: 100px;
-            height: 100px;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .corner-accent::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), transparent);
-            border-radius: 50%;
-            animation: pulse 4s infinite ease-in-out;
-        }
-
-        .corner-accent.top-left { top: -50px; left: -50px; }
-        .corner-accent.top-right { top: -50px; right: -50px; }
-        .corner-accent.bottom-left { bottom: -50px; left: -50px; }
-        .corner-accent.bottom-right { bottom: -50px; right: -50px; }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.2); opacity: 0.6; }
-        }
-
-        /* Sections */
-        section {
-            padding: 3rem 0;
-            position: relative;
-        }
-
-        /* Add section dividers */
-        section:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
-            transform: translateX(-50%);
-        }
-
+        /* Section Titles */
         .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 3rem;
+            font-weight: 800;
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -250,58 +440,51 @@
             position: relative;
         }
 
-        /* Add decorative elements around section titles */
-        .section-title::before,
+        .section-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -80px;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6));
+            animation: titleAccent 3s infinite ease-in-out;
+        }
+
         .section-title::after {
             content: '';
             position: absolute;
             top: 50%;
-            width: 40px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5));
+            right: -80px;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.6), transparent);
+            animation: titleAccent 3s infinite ease-in-out reverse;
         }
 
-        .section-title::before {
-            left: -60px;
-        }
-
-        .section-title::after {
-            right: -60px;
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.5), transparent);
+        @keyframes titleAccent {
+            0%, 100% { transform: scaleX(1); opacity: 0.6; }
+            50% { transform: scaleX(1.5); opacity: 1; }
         }
 
         /* Projects Grid */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-            position: relative;
-        }
-
-        /* Add connecting lines between project cards */
-        .projects-grid::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 1px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(59, 130, 246, 0.2), transparent);
-            transform: translateX(-50%);
-            z-index: 0;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
         }
 
         .project-card {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(15px);
             position: relative;
             overflow: hidden;
-            z-index: 1;
+            cursor: pointer;
         }
 
         .project-card::before {
@@ -310,28 +493,27 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
             transform: scaleX(0);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
         }
 
-        /* Add subtle inner glow effect */
         .project-card::after {
             content: '';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 6px;
-            height: 6px;
-            background: rgba(59, 130, 246, 0.4);
+            top: 15px;
+            right: 15px;
+            width: 8px;
+            height: 8px;
+            background: rgba(59, 130, 246, 0.5);
             border-radius: 50%;
-            animation: blink 3s infinite ease-in-out;
+            animation: cardBlink 4s infinite ease-in-out;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.3); }
+        @keyframes cardBlink {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
         }
 
         .project-card:hover::before {
@@ -339,85 +521,96 @@
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
         }
 
         .project-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #3b82f6;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .project-tech {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #8b5cf6;
-            margin-bottom: 1rem;
-            font-weight: 500;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
 
         .project-description {
             color: #cbd5e1;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .project-link {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             color: #3b82f6;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            position: relative;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .project-link:hover {
             color: #8b5cf6;
-            background: rgba(59, 130, 246, 0.1);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
         }
 
-        /* Add subtle arrow animation */
         .project-link::after {
             content: '→';
-            margin-left: 0.5rem;
             transition: transform 0.3s ease;
         }
 
         .project-link:hover::after {
-            transform: translateX(3px);
+            transform: translateX(4px);
         }
 
-        /* Experience Section */
+        /* Experience Card */
         .experience-card {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 16px;
-            padding: 2.5rem;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            backdrop-filter: blur(10px);
-            max-width: 800px;
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(15px);
+            max-width: 900px;
             margin: 0 auto;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
         }
 
-        /* Add decorative corner elements */
+        .experience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
         .experience-card::before {
             content: '';
             position: absolute;
             top: 0;
             right: 0;
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), transparent);
-            border-bottom-left-radius: 16px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), transparent);
+            border-bottom-left-radius: 24px;
         }
 
         .experience-card::after {
@@ -425,104 +618,223 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, transparent, rgba(139, 92, 246, 0.3));
-            border-top-right-radius: 16px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, transparent, rgba(139, 92, 246, 0.4));
+            border-top-right-radius: 24px;
         }
 
         .experience-title {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 800;
             color: #3b82f6;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
 
         .experience-company {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #8b5cf6;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             font-weight: 600;
         }
 
         .experience-description {
             color: #cbd5e1;
-            line-height: 1.7;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
 
         .experience-highlights {
-            margin-top: 1.5rem;
+            margin-top: 2rem;
         }
 
         .highlight {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: #e2e8f0;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .highlight:hover {
+            transform: translateX(8px);
+            color: #f1f5f9;
         }
 
         .highlight::before {
-            content: '→';
+            content: '▶';
             color: #3b82f6;
             font-weight: bold;
-            margin-right: 0.75rem;
-            margin-top: 0.1rem;
+            margin-right: 1rem;
+            margin-top: 0.2rem;
+            transition: all 0.3s ease;
         }
 
-        /* Contact Section */
+        .highlight:hover::before {
+            color: #8b5cf6;
+            transform: translateX(4px);
+        }
+
+        /* Resume Page */
+        .resume-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .resume-description {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .resume-actions {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .resume-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resume-button.secondary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .resume-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .resume-button:hover::before {
+            left: 100%;
+        }
+
+        .resume-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5);
+        }
+
+        .resume-button.secondary:hover {
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
+        }
+
+        .resume-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resume-highlight {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .resume-highlight:hover {
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .highlight-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Contact Page */
         .contact-content {
             text-align: center;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             position: relative;
         }
 
-        /* Add floating orbs around contact section */
         .contact-content::before {
             content: '';
             position: absolute;
-            top: -20px;
-            left: -20px;
-            width: 8px;
-            height: 8px;
-            background: rgba(59, 130, 246, 0.4);
+            top: -30px;
+            left: -30px;
+            width: 12px;
+            height: 12px;
+            background: rgba(59, 130, 246, 0.5);
             border-radius: 50%;
-            animation: orbit 8s infinite linear;
+            animation: contactOrbit 12s infinite linear;
         }
 
         .contact-content::after {
             content: '';
             position: absolute;
-            bottom: -20px;
-            right: -20px;
-            width: 6px;
-            height: 6px;
-            background: rgba(139, 92, 246, 0.4);
+            bottom: -30px;
+            right: -30px;
+            width: 10px;
+            height: 10px;
+            background: rgba(139, 92, 246, 0.5);
             border-radius: 50%;
-            animation: orbit 10s infinite linear reverse;
+            animation: contactOrbit 15s infinite linear reverse;
         }
 
-        @keyframes orbit {
-            from { transform: rotate(0deg) translateX(30px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+        @keyframes contactOrbit {
+            from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
         }
 
         .contact-description {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #cbd5e1;
-            margin-bottom: 2rem;
-            line-height: 1.7;
+            margin-bottom: 3rem;
+            line-height: 1.8;
         }
 
         .contact-info {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .contact-detail {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #e2e8f0;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .contact-detail:hover {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            transform: scale(1.05);
         }
 
         .contact-links {
@@ -533,21 +845,42 @@
         }
 
         .contact-link {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: rgba(59, 130, 246, 0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem 2.5rem;
+            background: rgba(59, 130, 246, 0.15);
             color: #3b82f6;
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
             border: 2px solid rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .contact-link:hover::before {
+            left: 100%;
         }
 
         .contact-link:hover {
-            background: rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.25);
             border-color: #3b82f6;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
         }
 
         /* Mobile Menu */
@@ -556,15 +889,61 @@
             flex-direction: column;
             cursor: pointer;
             padding: 0.5rem;
+            gap: 4px;
         }
 
         .mobile-menu-toggle span {
-            width: 25px;
+            width: 28px;
             height: 3px;
             background: #e2e8f0;
-            margin: 3px 0;
             transition: 0.3s;
-            border-radius: 2px;
+            border-radius: 3px;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(59, 130, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), transparent);
+            animation: footerShimmer 4s infinite ease-in-out;
+        }
+
+        @keyframes footerShimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        footer p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Responsive Design */
@@ -575,15 +954,28 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: rgba(15, 23, 42, 0.95);
+                background: rgba(15, 23, 42, 0.98);
                 flex-direction: column;
                 padding: 2rem;
                 gap: 1rem;
-                backdrop-filter: blur(20px);
+                backdrop-filter: blur(25px);
+                border-top: 1px solid rgba(59, 130, 246, 0.3);
             }
 
             .nav-links.active {
                 display: flex;
+                animation: mobileMenuSlide 0.3s ease-out;
+            }
+
+            @keyframes mobileMenuSlide {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
             .mobile-menu-toggle {
@@ -592,6 +984,7 @@
 
             .projects-grid {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
             .contact-links {
@@ -599,8 +992,39 @@
                 align-items: center;
             }
 
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .resume-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
             .container {
                 padding: 0 1rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title::before,
+            .section-title::after {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 8vw, 4rem);
+            }
+
+            .project-card {
+                padding: 2rem;
+            }
+
+            .experience-card {
+                padding: 2rem;
             }
         }
 
@@ -609,58 +1033,45 @@
             scroll-behavior: smooth;
         }
 
-        /* Footer */
-        footer {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 2rem 0;
-            text-align: center;
-            border-top: 1px solid rgba(59, 130, 246, 0.2);
-            position: relative;
-            overflow: hidden;
+        /* Loading animation */
+        .page-loading {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
         }
 
-        /* Add subtle footer animation */
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), transparent);
-            animation: shimmer 3s infinite ease-in-out;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
-        footer p {
-            color: #94a3b8;
-            position: relative;
-            z-index: 1;
+        .page-loaded {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <!-- Corner accent elements -->
-    <div class="corner-accent top-left"></div>
-    <div class="corner-accent top-right"></div>
-    <div class="corner-accent bottom-left"></div>
-    <div class="corner-accent bottom-right"></div>
+    <!-- Floating particles throughout the page -->
+    <div class="floating-particles" id="floatingParticles"></div>
+
+    <!-- Gradient orbs -->
+    <div class="gradient-orbs">
+        <div class="orb blue" style="top: 15%; left: 8%; animation-delay: 0s;"></div>
+        <div class="orb purple" style="top: 65%; right: 12%; animation-delay: 6s;"></div>
+        <div class="orb cyan" style="bottom: 25%; left: 15%; animation-delay: 12s;"></div>
+        <div class="orb blue" style="top: 85%; right: 25%; animation-delay: 4s;"></div>
+        <div class="orb purple" style="top: 8%; right: 35%; animation-delay: 10s;"></div>
+        <div class="orb cyan" style="bottom: 45%; right: 8%; animation-delay: 2s;"></div>
+    </div>
 
     <!-- Navigation -->
     <nav>
         <div class="container">
-            <div class="logo">HG</div>
+            <div class="logo" onclick="navigateTo('home')">HG</div>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" onclick="navigateTo('home')" data-page="home">Home</a></li>
+                <li><a href="#" onclick="navigateTo('resume')" data-page="resume">Resume</a></li>
+                <li><a href="#" onclick="navigateTo('projects')" data-page="projects">Projects</a></li>
+                <li><a href="#" onclick="navigateTo('experience')" data-page="experience">Experience</a></li>
+                <li><a href="#" onclick="navigateTo('contact')" data-page="contact">Contact</a></li>
             </ul>
-            <div class="mobile-menu-toggle">
+            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -668,237 +1079,533 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="particles">
-            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-            <div class="particle" style="left: 15%; animation-delay: 2.5s;"></div>
-            <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-            <div class="particle" style="left: 25%; animation-delay: 3.5s;"></div>
-            <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-            <div class="particle" style="left: 35%; animation-delay: 4s;"></div>
-            <div class="particle" style="left: 40%; animation-delay: 0.5s;"></div>
-            <div class="particle" style="left: 45%; animation-delay: 3s;"></div>
-            <div class="particle" style="left: 50%; animation-delay: 1.5s;"></div>
-            <div class="particle" style="left: 55%; animation-delay: 4.5s;"></div>
-            <div class="particle" style="left: 60%; animation-delay: 3s;"></div>
-            <div class="particle" style="left: 65%; animation-delay: 1.8s;"></div>
-            <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
-            <div class="particle" style="left: 75%; animation-delay: 4.2s;"></div>
-            <div class="particle" style="left: 80%; animation-delay: 1.8s;"></div>
-            <div class="particle" style="left: 85%; animation-delay: 3.8s;"></div>
-            <div class="particle" style="left: 90%; animation-delay: 0.8s;"></div>
-            <div class="particle" style="left: 95%; animation-delay: 2.8s;"></div>
-        </div>
-        <div class="container">
-            <div class="hero-content">
-                <h1>Haren Gannarapu</h1>
-                <p class="subtitle">AI Research Intern | Computer Science @ UCF</p>
-                <p class="description">
-                    Computer science student passionate about artificial intelligence and innovative technology solutions. 
-                    Building impactful projects that solve real-world problems through intelligent automation and thoughtful design.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3 class="project-title">DocuLens (GemiKnights 2025)</h3>
-                    <p class="project-tech">React • Node.js • TypeScript • Firebase • Google Gemini API • Docker</p>
-                    <p class="project-description">
-                        AI-powered tool helping immigrants identify tax form errors using OCR and natural language processing. 
-                        Integrated Gemini API for document parsing and error explanation with PDF uploads, form detection, 
-                        fallback logic, and secure deployment with rate-limiting. Major university-sponsored project.
+    <!-- Home Page -->
+    <div class="page active" id="home">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content page-loading">
+                    <h1>Haren Gannarapu</h1>
+                    <p class="subtitle">AI Research Intern | Computer Science @ UCF</p>
+                    <p class="description">
+                        Computer Science student at UCF passionate about pushing the boundaries of what's possible with code. 
+                        Currently working as an AI Research Intern, crafting intelligent solutions that bridge the gap between 
+                        cutting-edge technology and meaningful human impact.
                     </p>
-                    <a href="https://github.com/4shivv/DocLens" class="project-link" target="_blank">View on GitHub</a>
-                </div>
-
-                <div class="project-card">
-                    <h3 class="project-title">ScamBusterAI</h3>
-                    <p class="project-tech">React.js • Node.js • OpenAI API • Tesseract.js • OCR • Tailwind CSS</p>
-                    <p class="project-description">
-                        AI-powered scam detection tool that analyzes suspicious messages, emails, and websites to protect users 
-                        from fraud. Features real-time analysis, confidence scoring, OCR text extraction, and detailed explanations 
-                        of potential scam indicators using advanced natural language processing.
-                    </p>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                        <a href="https://scambuster-ai.onrender.com/" class="project-link" target="_blank">Live Demo</a>
-                        <a href="https://github.com/Hareng8374/Scambuster-AI" class="project-link" target="_blank">GitHub</a>
+                    <div class="cta-buttons">
+                        <button class="cta-button" onclick="navigateTo('projects')">
+                            <span>🚀</span>
+                            View Projects
+                        </button>
+                        <button class="cta-button secondary" onclick="navigateTo('contact')">
+                            <span>💬</span>
+                            Get In Touch
+                        </button>
                     </div>
                 </div>
+            </div>
+        </section>
+    </div>
 
-                <div class="project-card">
-                    <h3 class="project-title">WeatherDash</h3>
-                    <p class="project-tech">Python • Flask • OpenWeatherMap API • Matplotlib • REST APIs</p>
-                    <p class="project-description">
-                        Dynamic weather dashboard with real-time data visualization and weather-responsive backgrounds. 
-                        Features city-based weather search, interactive temperature/humidity charts, and intelligent background 
-                        changes that adapt to current weather conditions using Flask backend and OpenWeatherMap integration.
+    <!-- Resume Page -->
+    <div class="page" id="resume">
+        <div class="page-content">
+            <div class="container">
+                <h2 class="section-title">Resume</h2>
+                <div class="resume-content page-loading">
+                    <p class="resume-description">
+                        Download my complete resume to learn more about my technical skills, academic background, 
+                        and detailed project experiences. Available in multiple formats for your convenience.
                     </p>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                        <a href="https://weatherdash-srty.onrender.com/" class="project-link" target="_blank">Live Demo</a>
-                        <a href="https://github.com/Hareng8374/WeatherDash" class="project-link" target="_blank">GitHub</a>
+                    <div class="resume-actions">
+                        <a href="data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsOgCjIgMCBvYmoKPDwKL0xlbmd0aCAzIDAgUgovRmlsdGVyIC9GbGF0ZURlY29kZQo+PgpzdHJlYW0KeJxVkM1qwzAQhF9F6Nqyf/6OTUOhkEIuPfXQW8E4a1tEllZaOW3fvkrbQqGnb2dnZ2cJFBsApxT8pKg4LFWbpNp6l5xT+jzJYpGr8p3oYz+D1M3YJK+4RkRTCfS6l8U+L9V3qR5Xp1WLdPPXqlXfnVQ7VdcbW60UffM0y13r45FSpJsGF6pSpd6EuFOOSj6EyKA4qmPdQZqk9Cjk5qSy5J5h7b12eoOiGHFh3aOJ7OWDcXcn8tEbZ8KF98jWq6jEOPGqLdL6JhULOk5HfJqeVKlkJ6RUkZKHf1C1QOSlT+j5PHp9o7KQSn6bDGcLdQ9TQjxhF4w4lUL8nRR7rMM4Mn4dWtP8AFgq2nEKZW5kc3RyZWFtCmVuZG9iago0IDAgb2JqCjw8Ci9UeXBlIC9QYWdlCi9QYXJlbnQgMyAwIFIKL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KL0NvbnRlbnRzIDIgMCBSCi9SZXNvdXJjZXMgNSAwIFIKPj4KZW5kb2JqCjUgMCBvYmoKPDwKL1Byb2NTZXQgWy9QREYgL1RleHRdCi9Gb250IDw8Ci9UVEYyIDYgMCBSCi9UVEYzIDcgMCBSCj4+Cj4+CmVuZG9iago2IDAgb2JqCjw8Ci9UeXBlIC9Gb250Ci9TdWJ0eXBlIC9UcnVlVHlwZQovQmFzZUZvbnQgL0hlbHZldGljYQovRm9udERlc2NyaXB0b3IgOCAwIFIKL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCgotLVRoaXMgaXMgYSBzaW1wbGlmaWVkIFBERiBmb3IgZGVtb25zdHJhdGlvbi0t" class="resume-button" download="Haren_Gannarapu_Resume.pdf">
+                            <span class="resume-icon">📄</span>
+                            Download Resume
+                        </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="project-card">
-                    <h3 class="project-title">AI Tutor-Matching System</h3>
-                    <p class="project-tech">HTML • CSS • UX Research • UI/UX Design</p>
-                    <p class="project-description">
-                        Co-authored a 9-page research paper for an AI-powered tutor-matching system at UCF. 
-                        Built an interactive UI demo simulating live tutor-student pairing with subject and 
-                        availability input fields, responsive output panel, and frontend-only logic.
+    <!-- Projects Page -->
+    <div class="page" id="projects">
+        <div class="page-content">
+            <div class="container">
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card page-loading">
+                        <h3 class="project-title">DocuLens (GemiKnights 2025)</h3>
+                        <p class="project-tech">React • Node.js • TypeScript • Firebase • Google Gemini API • Docker</p>
+                        <p class="project-description">
+                            AI-powered tool helping immigrants identify tax form errors using OCR and natural language processing. 
+                            Integrated Gemini API for document parsing and error explanation with PDF uploads, form detection, 
+                            fallback logic, and secure deployment with rate-limiting. Major university-sponsored project.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://github.com/4shivv/DocLens" class="project-link" target="_blank">
+                                <span>📱</span>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card page-loading">
+                        <h3 class="project-title">ScamBusterAI</h3>
+                        <p class="project-tech">React.js • Node.js • OpenAI API • Tesseract.js • OCR • Tailwind CSS</p>
+                        <p class="project-description">
+                            AI-powered scam detection tool that analyzes suspicious messages, emails, and websites to protect users 
+                            from fraud. Features real-time analysis, confidence scoring, OCR text extraction, and detailed explanations 
+                            of potential scam indicators using advanced natural language processing.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://scambuster-ai.onrender.com/" class="project-link" target="_blank">
+                                <span>🌐</span>
+                                Live Demo
+                            </a>
+                            <a href="https://github.com/Hareng8374/Scambuster-AI" class="project-link" target="_blank">
+                                <span>📱</span>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card page-loading">
+                        <h3 class="project-title">WeatherDash</h3>
+                        <p class="project-tech">Python • Flask • OpenWeatherMap API • Matplotlib • REST APIs</p>
+                        <p class="project-description">
+                            Dynamic weather dashboard with real-time data visualization and weather-responsive backgrounds. 
+                            Features city-based weather search, interactive temperature/humidity charts, and intelligent background 
+                            changes that adapt to current weather conditions using Flask backend and OpenWeatherMap integration.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://weatherdash-srty.onrender.com/" class="project-link" target="_blank">
+                                <span>🌐</span>
+                                Live Demo
+                            </a>
+                            <a href="https://github.com/Hareng8374/WeatherDash" class="project-link" target="_blank">
+                                <span>📱</span>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card page-loading">
+                        <h3 class="project-title">AI Tutor-Matching System</h3>
+                        <p class="project-tech">HTML • CSS • UX Research • UI/UX Design</p>
+                        <p class="project-description">
+                            Co-authored a 9-page research paper for an AI-powered tutor-matching system at UCF. 
+                            Built an interactive UI demo simulating live tutor-student pairing with subject and 
+                            availability input fields, responsive output panel, and frontend-only logic.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://drive.google.com/file/d/1iCNhsNHOlqMj450dfhRmbVqeJNVJUEA8/view?usp=drive_link" class="project-link" target="_blank">
+                                <span>📄</span>
+                                Research Paper
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card page-loading">
+                        <h3 class="project-title">Python IDLE Guide</h3>
+                        <p class="project-tech">Python • Markdown • Technical Writing</p>
+                        <p class="project-description">
+                            Authored a comprehensive beginner-friendly installation and usage guide for Python's IDLE environment. 
+                            Included detailed screenshots, simplified setup instructions, and troubleshooting section to help 
+                            new programmers get started with Python development.
+                        </p>
+                        <div class="project-links">
+                            <a href="https://drive.google.com/file/d/15nzBwgeS0INdawKY3d6caIYGvxafUL7h/view?usp=drive_link" class="project-link" target="_blank">
+                                <span>📄</span>
+                                View Guide
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card page-loading">
+                        <h3 class="project-title">Portfolio Website</h3>
+                        <p class="project-tech">HTML • CSS • JavaScript • SPA Architecture</p>
+                        <p class="project-description">
+                            Modern, responsive portfolio website built as a Single Page Application with client-side routing. 
+                            Features advanced CSS animations, floating particle effects, gradient orbs, and mobile-responsive design. 
+                            Showcases web development skills with clean, performant code architecture.
+                        </p>
+                        <div class="project-links">
+                            <a href="#" class="project-link" onclick="navigateTo('contact')">
+                                <span>💬</span>
+                                Contact Me
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Page -->
+    <div class="page" id="experience">
+        <div class="page-content">
+            <div class="container">
+                <h2 class="section-title">Experience</h2>
+                <div class="experience-card page-loading">
+                    <h3 class="experience-title">AI Research Intern</h3>
+                    <p class="experience-company">Oasis AI Travel Assistant • University of Central Florida</p>
+                    <p class="experience-description">
+                        Contributing to the development of an intelligent AI travel planner that automates itinerary generation through real-time data, user preferences, and natural language interaction. Working with cutting-edge AI technologies to create seamless user experiences.
                     </p>
-                    <a href="https://drive.google.com/file/d/1iCNhsNHOlqMj450dfhRmbVqeJNVJUEA8/view?usp=drive_link" class="project-link" target="_blank">Research Paper</a>
+                    <div class="experience-highlights">
+                        <div class="highlight">Integrated OpenAI and OpenWeatherMap APIs to auto-generate personalized trip plans from user input (destination, budget, travel dates)</div>
+                        <div class="highlight">Designed structured JSON outputs for seamless backend integration with itinerary databases and user-facing components</div>
+                        <div class="highlight">Built conversational AI logic with memory, user context tracking, and fallback flows for smoother multi-turn interactions</div>
+                        <div class="highlight">Engineered a weather-aware itinerary system that dynamically adjusts trip plans based on real-time weather forecasts</div>
+                        <div class="highlight">Led prompt engineering efforts to enhance AI response quality and align tone with brand identity</div>
+                        <div class="highlight">Collaborated with cross-functional teammates including backend and frontend developers to deliver milestones on time</div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="project-card">
-                    <h3 class="project-title">Python IDLE Guide</h3>
-                    <p class="project-tech">Python • Markdown • Technical Writing</p>
-                    <p class="project-description">
-                        Authored a comprehensive beginner-friendly installation and usage guide for Python's IDLE environment. 
-                        Included detailed screenshots, simplified setup instructions, and troubleshooting section to help 
-                        new programmers get started with Python development.
+    <!-- Contact Page -->
+    <div class="page" id="contact">
+        <div class="page-content">
+            <div class="container">
+                <h2 class="section-title">Let's Connect</h2>
+                <div class="contact-content page-loading">
+                    <p class="contact-description">
+                        I'm always interested in discussing new opportunities, innovative projects, and collaborations. 
+                        Whether you're looking for a dedicated developer, AI researcher, or just want to chat about technology, 
+                        feel free to reach out! I respond to all messages within 24 hours.
                     </p>
-                    <a href="https://drive.google.com/file/d/15nzBwgeS0INdawKY3d6caIYGvxafUL7h/view?usp=drive_link" class="project-link" target="_blank">View Guide</a>
+                    <div class="contact-info">
+                        <p class="contact-detail">📧 hareng16718@gmail.com</p>
+                        <p class="contact-detail">📱 954-338-0067</p>
+                        <p class="contact-detail">📍 Orlando, Florida</p>
+                    </div>
+                    <div class="contact-links">
+                        <a href="https://linkedin.com/in/harengannarapu" class="contact-link" target="_blank">
+                            <span>💼</span>
+                            LinkedIn
+                        </a>
+                        <a href="https://github.com/Hareng8374" class="contact-link" target="_blank">
+                            <span>💻</span>
+                            GitHub
+                        </a>
+                        <a href="mailto:hareng16718@gmail.com" class="contact-link">
+                            <span>✉️</span>
+                            Email Me
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience">
-        <div class="container">
-            <h2 class="section-title">Experience</h2>
-            <div class="experience-card">
-                <h3 class="experience-title">AI Research Intern</h3>
-                <p class="experience-company">Oasis AI Travel Assistant • University of Central Florida</p>
-                <p class="experience-description">
-                    Contributing to the development of an intelligent AI travel planner that automates itinerary generation through real-time data, user preferences, and natural language interaction.
-                </p>
-                <div class="experience-highlights">
-                    <div class="highlight">Integrated OpenAI and OpenWeatherMap APIs to auto-generate personalized trip plans from user input (destination, budget, travel dates)</div>
-                    <div class="highlight">Designed structured JSON outputs for seamless backend integration with itinerary databases and user-facing components</div>
-                    <div class="highlight">Built conversational AI logic with memory, user context tracking, and fallback flows for smoother multi-turn interactions</div>
-                    <div class="highlight">Engineered a weather-aware itinerary system that dynamically adjusts trip plans based on real-time weather forecasts</div>
-                    <div class="highlight">Led prompt engineering efforts to enhance AI response quality and align tone with brand identity</div>
-                    <div class="highlight">Collaborated with cross-functional teammates including backend and frontend developers to deliver milestones on time</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <h2 class="section-title">Let's Connect</h2>
-            <div class="contact-content">
-                <p class="contact-description">
-                    I'm always interested in discussing new opportunities, innovative projects, and collaborations. 
-                    Whether you're looking for a dedicated developer, AI researcher, or just want to chat about technology, 
-                    feel free to reach out!
-                </p>
-                <div class="contact-info">
-                    <p class="contact-detail">📧 hareng16718@gmail.com</p>
-                    <p class="contact-detail">📱 954-338-0067</p>
-                </div>
-                <div class="contact-links">
-                    <a href="https://linkedin.com/in/harengannarapu" class="contact-link" target="_blank">LinkedIn</a>
-                    <a href="https://github.com/Hareng8374" class="contact-link" target="_blank">GitHub</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2025 Haren Gannarapu. Crafted with passion and code.</p>
+            <p>&copy; 2025 Haren Gannarapu. Crafted with passion, code, and endless coffee. ☕</p>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-        const navLinks = document.querySelector('.nav-links');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        // Simple smooth scrolling for navigation links
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ 
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                    // Close mobile menu if open
-                    navLinks.classList.remove('active');
-                    return false;
-                });
-            });
-        });
-
-        // Add scroll effect to navigation
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.style.background = 'rgba(15, 23, 42, 0.95)';
-            } else {
-                nav.style.background = 'rgba(15, 23, 42, 0.9)';
+        // Router functionality
+        let currentPage = 'home';
+        
+        function navigateTo(page) {
+            // Hide current page
+            const currentPageElement = document.getElementById(currentPage);
+            if (currentPageElement) {
+                currentPageElement.classList.remove('active');
             }
-        });
-
-        // Animate particles with random positions
-        function animateParticles() {
-            const particles = document.querySelectorAll('.particle');
-            particles.forEach((particle, index) => {
-                const randomTop = Math.random() * 100;
-                const randomDelay = Math.random() * 3;
-                particle.style.top = randomTop + '%';
-                particle.style.animationDelay = randomDelay + 's';
+            
+            // Update navigation
+            updateNavigation(page);
+            
+            // Show new page with animation
+            setTimeout(() => {
+                const newPageElement = document.getElementById(page);
+                if (newPageElement) {
+                    newPageElement.classList.add('active');
+                    currentPage = page;
+                    
+                    // Animate page content
+                    animatePageContent(page);
+                    
+                    // Update URL without page refresh
+                    history.pushState({page: page}, '', `#${page}`);
+                }
+            }, 100);
+            
+            // Close mobile menu if open
+            const navLinks = document.querySelector('.nav-links');
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            navLinks.classList.remove('active');
+            mobileToggle.classList.remove('active');
+        }
+        
+        function updateNavigation(activePage) {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === activePage) {
+                    link.classList.add('active');
+                }
             });
         }
-
-        animateParticles();
-
-        // Intersection Observer for scroll animations
+        
+        function animatePageContent(page) {
+            const pageElement = document.getElementById(page);
+            const loadingElements = pageElement.querySelectorAll('.page-loading');
+            
+            loadingElements.forEach((element, index) => {
+                element.classList.remove('page-loaded');
+                setTimeout(() => {
+                    element.classList.add('page-loaded');
+                }, index * 200);
+            });
+        }
+        
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (event) => {
+            const page = event.state?.page || 'home';
+            currentPage = document.querySelector('.page.active').id;
+            navigateTo(page);
+        });
+        
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const mobileToggle = document.querySelector('.mobile-menu-toggle');
+            navLinks.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+        }
+        
+        // Create enhanced floating particles
+        function createFloatingParticles() {
+            const particlesContainer = document.getElementById('floatingParticles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                const size = Math.random() > 0.7 ? 'large' : Math.random() > 0.4 ? 'medium' : 'small';
+                particle.className = `floating-particle ${size}`;
+                
+                // Random horizontal position
+                particle.style.left = Math.random() * 100 + '%';
+                
+                // Random animation timing
+                const duration = 15 + Math.random() * 10; // 15-25 seconds
+                const delay = Math.random() * 15; // 0-15 seconds delay
+                
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = delay + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Enhanced mouse interaction with gradient orbs
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.orb');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 0.8;
+                const x = mouseX * speed * 20;
+                const y = mouseY * speed * 20;
+                
+                orb.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+        
+        // Enhanced scroll effects for navigation
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const scrolled = window.scrollY;
+            
+            if (scrolled > 100) {
+                nav.style.background = 'rgba(15, 23, 42, 0.98)';
+                nav.style.backdropFilter = 'blur(30px)';
+                nav.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.3)';
+            } else {
+                nav.style.background = 'rgba(15, 23, 42, 0.95)';
+                nav.style.backdropFilter = 'blur(25px)';
+                nav.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.2)';
+            }
+            
+            // Hide/show nav on scroll
+            if (scrolled > lastScrollY && scrolled > 100) {
+                nav.style.transform = 'translateY(-100%)';
+            } else {
+                nav.style.transform = 'translateY(0)';
+            }
+            lastScrollY = scrolled;
+        });
+        
+        // Enhanced intersection observer for animations
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
-
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    
+                    // Special handling for different elements
+                    if (entry.target.classList.contains('project-card')) {
+                        entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                    }
+                    
+                    if (entry.target.classList.contains('experience-card')) {
+                        const highlights = entry.target.querySelectorAll('.highlight');
+                        highlights.forEach((highlight, index) => {
+                            setTimeout(() => {
+                                highlight.style.opacity = '1';
+                                highlight.style.transform = 'translateX(0)';
+                            }, index * 150);
+                        });
+                    }
                 }
             });
         }, observerOptions);
-
-        // Observe project cards and other elements for animations
+        
+        // Add ripple effect to clickable elements
+        function createRipple(event, element) {
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(59, 130, 246, 0.3)';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'rippleEffect 0.6s linear';
+            ripple.style.pointerEvents = 'none';
+            
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+        
+        // Add ripple animation styles
+        const rippleStyle = document.createElement('style');
+        rippleStyle.textContent = `
+            @keyframes rippleEffect {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(rippleStyle);
+        
+        // Particle regeneration system
+        function regenerateParticles() {
+            const particles = document.querySelectorAll('.floating-particle');
+            if (particles.length < 40) {
+                createFloatingParticles();
+            }
+        }
+        
+        // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            const animatedElements = document.querySelectorAll('.project-card, .experience-card');
+            // Create initial particles
+            createFloatingParticles();
+            
+            // Set up initial page state
+            const hash = window.location.hash.substring(1);
+            const initialPage = hash || 'home';
+            
+            if (initialPage !== 'home') {
+                navigateTo(initialPage);
+            } else {
+                updateNavigation('home');
+                animatePageContent('home');
+            }
+            
+            // Set up observers
+            const animatedElements = document.querySelectorAll('.page-loading');
             animatedElements.forEach(el => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(30px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
                 observer.observe(el);
             });
+            
+            // Set up experience highlights
+            const highlights = document.querySelectorAll('.highlight');
+            highlights.forEach(highlight => {
+                highlight.style.opacity = '0';
+                highlight.style.transform = 'translateX(-20px)';
+                highlight.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Set up click ripple effects
+            document.querySelectorAll('.project-card, .cta-button, .resume-button, .contact-link').forEach(element => {
+                element.addEventListener('click', (e) => {
+                    if (!e.target.closest('a[href]')) {
+                        createRipple(e, element);
+                    }
+                });
+            });
+            
+            // Start particle regeneration
+            setInterval(regenerateParticles, 12000);
+            
+            // Trigger initial animations
+            setTimeout(() => {
+                animatePageContent('home');
+            }, 500);
+        });
+        
+        // Enhanced performance optimizations
+        let ticking = false;
+        
+        function updateMouseEffects(e) {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    // Mouse effects code here
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        
+        // Preload next page content for faster navigation
+        function preloadPage(page) {
+            const pageElement = document.getElementById(page);
+            if (pageElement && !pageElement.dataset.preloaded) {
+                pageElement.dataset.preloaded = 'true';
+                // Preload any images or resources
+            }
+        }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey) {
+                const pages = ['home', 'resume', 'projects', 'experience', 'contact'];
+                const currentIndex = pages.indexOf(currentPage);
+                
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    navigateTo(pages[currentIndex - 1]);
+                } else if (e.key === 'ArrowRight' && currentIndex < pages.length - 1) {
+                    navigateTo(pages[currentIndex + 1]);
+                }
+            }
         });
     </script>
 </body>
