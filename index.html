@@ -237,7 +237,7 @@
             padding: 4rem 0;
         }
 
-        /* Enhanced Home Page Styles */
+        /* Hero Section - Centered Layout */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -248,135 +248,18 @@
             padding: 2rem 0;
         }
 
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            max-width: 1200px;
-            width: 100%;
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
             position: relative;
             z-index: 3;
         }
 
-        .hero-content {
-            position: relative;
-        }
-
-        .hero-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .profile-container {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .profile-circle {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            animation: profileFloat 6s infinite ease-in-out;
-        }
-
-        @keyframes profileFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
-        }
-
-        .profile-circle::before {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            background: #1e293b;
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        .profile-image {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #1e293b);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            color: #3b82f6;
-            position: relative;
-            z-index: 2;
-            border: 3px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .tech-orbit {
-            position: absolute;
-            border: 2px solid rgba(59, 130, 246, 0.2);
-            border-radius: 50%;
-            animation: rotate 20s linear infinite;
-        }
-
-        .tech-orbit.orbit-1 {
-            width: 380px;
-            height: 380px;
-            animation-duration: 25s;
-        }
-
-        .tech-orbit.orbit-2 {
-            width: 420px;
-            height: 420px;
-            animation-duration: 30s;
-            animation-direction: reverse;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .tech-icon {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: rgba(59, 130, 246, 0.15);
-            border: 2px solid rgba(59, 130, 246, 0.4);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            animation: reverseRotate 25s linear infinite;
-        }
-
-        .tech-icon.reverse {
-            animation: reverseRotate 30s linear infinite reverse;
-        }
-
-        @keyframes reverseRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(-360deg); }
-        }
-
-        .tech-icon:nth-child(1) { top: -20px; left: 50%; transform: translateX(-50%); }
-        .tech-icon:nth-child(2) { top: 50%; right: -20px; transform: translateY(-50%); }
-        .tech-icon:nth-child(3) { bottom: -20px; left: 50%; transform: translateX(-50%); }
-        .tech-icon:nth-child(4) { top: 50%; left: -20px; transform: translateY(-50%); }
-
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(3rem, 6vw, 5rem);
             font-weight: 900;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
             background-size: 200% 200%;
             -webkit-background-clip: text;
@@ -391,16 +274,17 @@
         }
 
         .hero .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: #94a3b8;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             font-weight: 500;
         }
 
         .cta-buttons {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 3rem;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
             flex-wrap: wrap;
         }
 
@@ -408,7 +292,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             text-decoration: none;
@@ -417,8 +301,6 @@
             font-size: 1rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            position: relative;
-            overflow: hidden;
             cursor: pointer;
             border: none;
         }
@@ -440,36 +322,135 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .stat-item {
             text-align: center;
-            padding: 1.5rem 1rem;
+            padding: 2rem 1.5rem;
             background: rgba(30, 41, 59, 0.6);
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid rgba(59, 130, 246, 0.2);
             transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
         }
 
         .stat-item:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
             border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
         }
 
         .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 900;
             color: #3b82f6;
             display: block;
+            margin-bottom: 0.5rem;
         }
 
         .stat-label {
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 600;
+        }
+
+        /* Skills Section */
+        .skills-section {
+            margin-top: 2rem;
+        }
+
+        .skills-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .skill-tag {
+            padding: 0.75rem 1.5rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .skill-tag:hover {
+            background: rgba(59, 130, 246, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Quick Links Section */
+        .quick-links {
+            margin-top: 3rem;
+        }
+
+        .quick-links-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quick-link-card {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .quick-link-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .quick-link-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-link-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         /* About Section */
@@ -981,47 +962,22 @@
             z-index: 1;
         }
 
-        /* Mobile responsiveness */
+        /* Mobile responsiveness for centered layout */
         @media (max-width: 968px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-                text-align: center;
-            }
-
-            .hero-image {
-                order: -1;
-            }
-
-            .profile-container {
-                width: 280px;
-                height: 280px;
-            }
-
-            .profile-circle {
-                width: 240px;
-                height: 240px;
-            }
-
-            .profile-image {
-                width: 220px;
-                height: 220px;
-                font-size: 4rem;
-            }
-
-            .tech-orbit.orbit-1 {
-                width: 300px;
-                height: 300px;
-            }
-
-            .tech-orbit.orbit-2 {
-                width: 320px;
-                height: 320px;
-            }
-
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+                max-width: 400px;
+            }
+
+            .quick-links-grid {
+                grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
             }
 
             .nav-links {
@@ -1064,11 +1020,6 @@
             }
 
             .contact-links {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .cta-buttons {
                 flex-direction: column;
                 align-items: center;
             }
@@ -1162,55 +1113,33 @@
     <div class="page active" id="home">
         <section class="hero">
             <div class="container">
-                <div class="hero-grid">
-                    <div class="hero-content page-loading">
-                        <h1>Haren Gannarapu</h1>
-                        <p class="subtitle">AI Research Intern | Computer Science @ UCF</p>
+                <div class="hero-content page-loading">
+                    <h1>Haren Gannarapu</h1>
+                    <p class="subtitle">AI Research Intern | Computer Science @ UCF</p>
 
-                        <div class="cta-buttons">
-                            <button class="cta-button" onclick="navigateTo('projects')">
-                                <span>🚀</span>
-                                View Projects
-                            </button>
-                            <button class="cta-button secondary" onclick="navigateTo('contact')">
-                                <span>💬</span>
-                                Get In Touch
-                            </button>
-                        </div>
-
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-number">5+</span>
-                                <span class="stat-label">Projects</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number">3.8</span>
-                                <span class="stat-label">GPA</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number">15+</span>
-                                <span class="stat-label">Technologies</span>
-                            </div>
-                        </div>
+                    <div class="cta-buttons">
+                        <button class="cta-button" onclick="navigateTo('projects')">
+                            <span>🚀</span>
+                            View Projects
+                        </button>
+                        <button class="cta-button secondary" onclick="navigateTo('contact')">
+                            <span>💬</span>
+                            Get In Touch
+                        </button>
                     </div>
 
-                    <div class="hero-image page-loading">
-                        <div class="profile-container">
-                            <div class="tech-orbit orbit-1">
-                                <div class="tech-icon">⚛️</div>
-                                <div class="tech-icon">🐍</div>
-                                <div class="tech-icon">🤖</div>
-                                <div class="tech-icon">☁️</div>
-                            </div>
-                            <div class="tech-orbit orbit-2">
-                                <div class="tech-icon reverse">📱</div>
-                                <div class="tech-icon reverse">🔥</div>
-                                <div class="tech-icon reverse">⚡</div>
-                                <div class="tech-icon reverse">🚀</div>
-                            </div>
-                            <div class="profile-circle">
-                                <div class="profile-image">👨‍💻</div>
-                            </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">5+</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">3.8</span>
+                            <span class="stat-label">GPA</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">15+</span>
+                            <span class="stat-label">Technologies</span>
                         </div>
                     </div>
                 </div>
@@ -1241,6 +1170,10 @@
                         <div class="skill-tag">Flask</div>
                         <div class="skill-tag">TypeScript</div>
                         <div class="skill-tag">Docker</div>
+                        <div class="skill-tag">Firebase</div>
+                        <div class="skill-tag">OpenAI API</div>
+                        <div class="skill-tag">Tailwind CSS</div>
+                        <div class="skill-tag">Git</div>
                     </div>
                 </div>
             </div>
