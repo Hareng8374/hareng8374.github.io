@@ -576,7 +576,51 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
-        .project-card::before {
+        /* Special winner card styling */
+        .project-card.winner-card {
+            border: 2px solid rgba(251, 191, 36, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 40px rgba(251, 191, 36, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: rgba(15, 20, 35, 0.95);
+        }
+
+        .project-card.winner-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b, #fde68a, #f59e0b);
+            background-size: 200% 100%;
+            animation: goldShimmer 3s linear infinite;
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        @keyframes goldShimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .project-card.winner-card::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b);
+            border-radius: 32px;
+            opacity: 0;
+            z-index: -1;
+            filter: blur(20px);
+            transition: opacity 0.5s ease;
+        }
+
+        .project-card.winner-card:hover::after { opacity: 0.5; }
+
+        .project-card.winner-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(251, 191, 36, 0.9);
+            box-shadow: 0 30px 80px rgba(251, 191, 36, 0.4), 0 0 60px rgba(251, 191, 36, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .project-card:not(.winner-card)::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0;
@@ -587,7 +631,7 @@
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .project-card::after {
+        .project-card:not(.winner-card)::after {
             content: '';
             position: absolute;
             inset: -3px;
@@ -599,13 +643,21 @@
             transition: opacity 0.5s ease;
         }
 
-        .project-card:hover::before { transform: scaleX(1); }
-        .project-card:hover::after { opacity: 0.6; }
+        .project-card:not(.winner-card):hover::before { transform: scaleX(1); }
+        .project-card:not(.winner-card):hover::after { opacity: 0.6; }
 
-        .project-card:hover {
+        .project-card:not(.winner-card):hover {
             transform: translateY(-15px) scale(1.02);
             border-color: rgba(59, 130, 246, 0.8);
             box-shadow: 0 30px 80px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .badge-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .project-badge {
@@ -618,7 +670,6 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
             box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
         }
 
@@ -626,6 +677,30 @@
             background: linear-gradient(135deg, #8b5cf6, #7c3aed);
             box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
         }
+
+        .winner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, #92400e, #b45309, #d97706);
+            color: #fde68a;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5), 0 0 15px rgba(251, 191, 36, 0.2);
+            animation: winnerPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes winnerPulse {
+            0%, 100% { box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5), 0 0 15px rgba(251, 191, 36, 0.2); }
+            50% { box-shadow: 0 6px 30px rgba(217, 119, 6, 0.8), 0 0 30px rgba(251, 191, 36, 0.4); }
+        }
+
+        .winner-badge .trophy { font-size: 1rem; }
 
         .project-title {
             font-size: 1.75rem;
@@ -636,9 +711,20 @@
             line-height: 1.3;
         }
 
+        .winner-card .project-title {
+            color: #fbbf24;
+        }
+
         .project-card:hover .project-title {
-            color: #3b82f6;
             transform: translateX(8px);
+        }
+
+        .winner-card:hover .project-title {
+            color: #fde68a;
+        }
+
+        .project-card:not(.winner-card):hover .project-title {
+            color: #3b82f6;
         }
 
         .project-tech {
@@ -647,6 +733,11 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
             line-height: 1.7;
+        }
+
+        .winner-card .project-tech {
+            color: #fcd34d;
+            opacity: 0.85;
         }
 
         .project-description {
@@ -680,6 +771,12 @@
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
+        .winner-card .project-link {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.25), rgba(180, 83, 9, 0.25));
+            border: 2px solid rgba(251, 191, 36, 0.4);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+        }
+
         .project-link::before {
             content: '';
             position: absolute;
@@ -689,12 +786,21 @@
             transition: opacity 0.3s ease;
         }
 
+        .winner-card .project-link::before {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.5), rgba(245, 158, 11, 0.5));
+        }
+
         .project-link:hover::before { opacity: 1; }
 
         .project-link:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 35px rgba(59, 130, 246, 0.6);
             border-color: #60a5fa;
+        }
+
+        .winner-card .project-link:hover {
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.5);
+            border-color: #fbbf24;
         }
 
         .project-link span { position: relative; z-index: 1; }
@@ -1159,7 +1265,7 @@
                     </div>
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <span class="stat-number">7+</span>
+                            <span class="stat-number">8+</span>
                             <span class="stat-label">Projects</span>
                         </div>
                         <div class="stat-item">
@@ -1245,6 +1351,33 @@
             <div class="container">
                 <h2 class="section-title">Featured Projects</h2>
                 <div class="projects-grid">
+
+                    <!-- REPLAI - WINNER CARD (first) -->
+                    <div class="project-card winner-card">
+                        <div class="badge-row">
+                            <span class="winner-badge"><span class="trophy">🏆</span> Winner — Hack The Bay 2025</span>
+                            <span class="project-badge featured">Featured</span>
+                        </div>
+                        <h3 class="project-title">ReplAI — Conversation Practice Platform</h3>
+                        <p class="project-tech">Next.js • TypeScript • React • Gemini 2.5 Flash • LiveKit • MediaPipe • Three.js • Tailwind CSS</p>
+                        <p class="project-description">
+                            Won Hack The Bay 2025 by building a real-time AI role-play platform for high-stakes conversation 
+                            practice — salary negotiations, HR disputes, legal client intake. An AI plays the other person 
+                            while MediaPipe tracks webcam body language (eye contact, posture, fidgeting) and LiveKit analyzes 
+                            voice (pace, filler words, energy) simultaneously. For the Legal Intake scenario, a custom 
+                            Levenshtein + Jaccard fuzzy-matching engine extracts named entities from live conversation 
+                            transcripts and surfaces opposing-party conflicts against a firm database in real time — 
+                            before the meeting is even over.
+                        </p>
+                        <div class="project-links">
+                            <a href="#" class="project-link" onclick="openVideoModal('https://www.youtube.com/embed/8P0dUUCXjxY'); return false;">
+                                <span>🎬</span><span>View Demo</span>
+                            </a>
+                            <a href="https://github.com/VickyAnaJ/HackTheBay" class="project-link" target="_blank">
+                                <span>📱</span><span>GitHub</span>
+                            </a>
+                        </div>
+                    </div>
 
                     <div class="project-card">
                         <span class="project-badge featured">Featured</span>
