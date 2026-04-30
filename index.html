@@ -416,37 +416,54 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 .project-card:hover::after{opacity:1;}
 
 /* WINNER VARIANTS */
-.project-card.winner-card{
-  border-color:rgba(251,191,36,0.22);
-  background:linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
-}
-.project-card.winner-card::before{
-  background:linear-gradient(90deg, transparent, rgba(251,191,36,0.5), transparent);
-  height:2px;
-}
-.project-card.winner-card::after{
-  background:radial-gradient(circle at var(--mx,50%) var(--my,0%), rgba(251,191,36,0.10), transparent 55%);
-}
-.project-card.winner-card:hover{
-  border-color:rgba(251,191,36,0.45);
-  box-shadow:0 28px 60px -20px rgba(0,0,0,0.85), 0 0 0 1px rgba(251,191,36,0.2), 0 0 60px -20px rgba(251,191,36,0.22);
+/* ===== GOLD WINNER CARDS (Revive + ReplAI) ===== */
+:root{
+  --gold:#f59e0b;
+  --gold-bright:#fbbf24;
+  --gold-soft:#fde68a;
+  --gold-deep:#92400e;
+  --gold-glow:rgba(245,158,11,0.5);
 }
 
+.project-card.winner-card,
 .project-card.revive-winner-card{
-  border-color:rgba(239,68,68,0.22);
-  background:linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+  border-color:rgba(251,191,36,0.35);
+  background:linear-gradient(160deg, #1a1200 0%, #100d00 50%, #0c0a00 100%);
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,0.18),
+    0 8px 32px -8px rgba(0,0,0,0.8),
+    0 0 80px -20px rgba(245,158,11,0.18);
 }
+.project-card.winner-card::before,
 .project-card.revive-winner-card::before{
-  background:linear-gradient(90deg, transparent, rgba(239,68,68,0.55), transparent);
+  background:linear-gradient(90deg, transparent 0%, rgba(251,191,36,0.8) 50%, transparent 100%);
   height:2px;
 }
+/* Ambient gold glow fixed at top of card */
+.project-card.winner-card .gold-aura,
+.project-card.revive-winner-card .gold-aura{
+  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  width:340px;height:140px;
+  background:radial-gradient(ellipse, rgba(251,191,36,0.22) 0%, transparent 70%);
+  pointer-events:none;filter:blur(24px);
+  border-radius:50%;z-index:0;
+}
+/* Mouse-tracked inner spotlight */
+.project-card.winner-card::after,
 .project-card.revive-winner-card::after{
-  background:radial-gradient(circle at var(--mx,50%) var(--my,0%), rgba(239,68,68,0.10), transparent 55%);
+  background:radial-gradient(circle at var(--mx,50%) var(--my,0%), rgba(251,191,36,0.18), transparent 55%);
 }
+.project-card.winner-card:hover,
 .project-card.revive-winner-card:hover{
-  border-color:rgba(239,68,68,0.45);
-  box-shadow:0 28px 60px -20px rgba(0,0,0,0.85), 0 0 0 1px rgba(239,68,68,0.2), 0 0 60px -20px rgba(239,68,68,0.22);
+  border-color:rgba(251,191,36,0.6);
+  box-shadow:
+    0 0 0 1px rgba(251,191,36,0.35),
+    0 28px 60px -16px rgba(0,0,0,0.9),
+    0 0 100px -16px rgba(245,158,11,0.45),
+    0 0 200px -40px rgba(245,158,11,0.25);
 }
+.project-card.winner-card:hover::after,
+.project-card.revive-winner-card:hover::after{opacity:1;}
 
 .badge-row{display:flex;align-items:center;gap:0.6rem;margin-bottom:1.4rem;flex-wrap:wrap;}
 .project-badge{
@@ -466,31 +483,22 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   background:linear-gradient(180deg, rgba(52,211,153,0.2), rgba(52,211,153,0.08));
   color:var(--emerald-soft);
 }
-.winner-badge{
-  display:inline-flex;align-items:center;gap:0.4rem;
-  padding:0.4rem 0.85rem;
-  background:linear-gradient(180deg, rgba(217,119,6,0.22), rgba(180,83,9,0.12));
-  color:#fbbf24;
-  border:1px solid rgba(251,191,36,0.4);
-  border-radius:100px;
-  font-family:var(--mono);
-  font-size:0.66rem;
-  font-weight:500;
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-}
+/* Unified gold winner badge for both cards */
+.winner-badge,
 .revive-winner-badge{
   display:inline-flex;align-items:center;gap:0.4rem;
   padding:0.4rem 0.85rem;
-  background:linear-gradient(180deg, rgba(185,28,28,0.22), rgba(127,29,29,0.12));
-  color:#fca5a5;
-  border:1px solid rgba(239,68,68,0.4);
+  background:linear-gradient(180deg, rgba(245,158,11,0.28), rgba(146,64,14,0.16));
+  color:var(--gold-bright);
+  border:1px solid rgba(251,191,36,0.5);
   border-radius:100px;
   font-family:var(--mono);
   font-size:0.66rem;
-  font-weight:500;
+  font-weight:600;
   text-transform:uppercase;
   letter-spacing:0.12em;
+  box-shadow:0 0 12px -4px rgba(251,191,36,0.4);
+  text-shadow:0 0 12px rgba(251,191,36,0.5);
 }
 
 .project-title{
@@ -504,10 +512,10 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   transition:color .35s ease;
 }
 .project-card:hover .project-title{color:var(--emerald-bright);}
-.winner-card .project-title{color:#fde68a;}
-.winner-card:hover .project-title{color:#fcd34d;}
-.revive-winner-card .project-title{color:#fca5a5;}
-.revive-winner-card:hover .project-title{color:#fda4af;}
+.winner-card .project-title,
+.revive-winner-card .project-title{color:var(--gold-soft);}
+.winner-card:hover .project-title,
+.revive-winner-card:hover .project-title{color:var(--gold-bright);}
 
 .project-tech{
   font-family:var(--mono);
@@ -517,8 +525,8 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   line-height:1.6;
   letter-spacing:0.01em;
 }
-.winner-card .project-tech{color:var(--text-faint);}
-.revive-winner-card .project-tech{color:var(--text-faint);}
+.winner-card .project-tech,
+.revive-winner-card .project-tech{color:rgba(251,191,36,0.45);}
 
 .project-description{
   color:var(--text-dim);
@@ -551,27 +559,20 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   box-shadow:0 8px 20px -10px rgba(16,185,129,0.5);
   color:var(--emerald-bright);
 }
-.winner-card .project-link{
-  background:linear-gradient(180deg, rgba(217,119,6,0.18), rgba(180,83,9,0.06));
-  border-color:rgba(251,191,36,0.4);
-  color:#fde68a;
+.winner-card .project-link,
+.revive-winner-card .project-link,
+.revive-link{
+  background:linear-gradient(180deg, rgba(245,158,11,0.16), rgba(146,64,14,0.06));
+  border-color:rgba(251,191,36,0.35);
+  color:var(--gold-soft);
 }
-.winner-card .project-link:hover{
-  background:linear-gradient(180deg, rgba(217,119,6,0.3), rgba(180,83,9,0.12));
+.winner-card .project-link:hover,
+.revive-winner-card .project-link:hover,
+.revive-link:hover{
+  background:linear-gradient(180deg, rgba(245,158,11,0.28), rgba(146,64,14,0.12));
   border-color:rgba(251,191,36,0.7);
   color:#fef3c7;
-  box-shadow:0 8px 20px -10px rgba(251,191,36,0.5);
-}
-.revive-winner-card .project-link, .revive-link{
-  background:linear-gradient(180deg, rgba(185,28,28,0.18), rgba(127,29,29,0.06));
-  border-color:rgba(239,68,68,0.4);
-  color:#fca5a5;
-}
-.revive-winner-card .project-link:hover, .revive-link:hover{
-  background:linear-gradient(180deg, rgba(185,28,28,0.3), rgba(127,29,29,0.12));
-  border-color:rgba(239,68,68,0.7);
-  color:#fecaca;
-  box-shadow:0 8px 20px -10px rgba(239,68,68,0.5);
+  box-shadow:0 8px 24px -8px rgba(245,158,11,0.5);
 }
 
 /* GALLERY */
@@ -695,6 +696,42 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 }
 .highlight:hover::before{transform:translateX(4px);}
 
+/* ===== RESUME EMBED ===== */
+.resume-embed-wrapper{max-width:900px;margin:0 auto;}
+.resume-actions-bar{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  margin-bottom:1.5rem;
+  justify-content:flex-end;
+}
+.resume-frame-container{
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid var(--line-strong);
+  background:var(--bg-1);
+  box-shadow:0 24px 60px -16px rgba(0,0,0,0.7), 0 0 0 1px rgba(52,211,153,0.1);
+}
+.resume-frame-container::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, var(--line-strong) 50%, transparent);
+  z-index:2;pointer-events:none;
+}
+.resume-iframe{
+  width:100%;
+  height:82vh;
+  min-height:640px;
+  border:none;
+  display:block;
+  background:#fff;
+}
+.resume-frame-fallback{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.2rem;padding:5rem 2rem;text-align:center;
+  color:var(--text-dim);
+}
+.resume-frame-fallback svg{opacity:0.35;color:var(--emerald);}
+.resume-frame-fallback p{font-size:1rem;}
+
 /* ===== RESUME / CONTACT ===== */
 .resume-content,.contact-content{text-align:center;max-width:760px;margin:0 auto;}
 .resume-description,.contact-description{
@@ -726,7 +763,17 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 .resume-button:hover{transform:translateY(-3px);box-shadow:0 1px 0 rgba(255,255,255,0.2) inset, 0 14px 32px -8px rgba(16,185,129,0.7), 0 0 0 1px rgba(52,211,153,0.6);}
 .resume-button:hover::after{left:100%;}
 
-.contact-info{margin-bottom:2.5rem;display:flex;flex-direction:column;gap:0.9rem;align-items:center;}
+.resume-button.secondary{
+  background:linear-gradient(180deg, var(--bg-2), var(--bg-3));
+  color:var(--emerald-bright);
+  border:1px solid var(--line-strong);
+  box-shadow:0 1px 0 rgba(52,211,153,0.08) inset, 0 8px 24px -12px rgba(0,0,0,0.6);
+}
+.resume-button.secondary:hover{
+  border-color:var(--emerald);
+  box-shadow:0 1px 0 rgba(52,211,153,0.15) inset, 0 12px 30px -12px rgba(16,185,129,0.4);
+  color:var(--text);
+}margin-bottom:2.5rem;display:flex;flex-direction:column;gap:0.9rem;align-items:center;}
 .contact-detail{
   font-family:var(--mono);
   font-size:1rem;
@@ -990,13 +1037,29 @@ footer .heart{color:var(--emerald-bright);}
     <div class="container">
       <div class="section-eyebrow">Resume</div>
       <h2 class="section-title">My <span class="em">credentials</span>, in one place.</h2>
-      <div class="resume-content">
-        <p class="resume-description">Download my complete resume to learn more about my technical skills, academic background, and detailed project experiences.</p>
-        <div class="resume-actions">
+      <div class="resume-embed-wrapper">
+        <div class="resume-actions-bar">
           <a href="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/view?usp=sharing" class="resume-button" target="_blank" rel="noopener noreferrer">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            View Resume
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF
           </a>
+          <a href="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/view?usp=sharing" class="resume-button secondary" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 0 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open in Drive
+          </a>
+        </div>
+        <div class="resume-frame-container">
+          <iframe
+            src="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/preview"
+            class="resume-iframe"
+            allow="autoplay"
+            title="Haren Gannarapu Resume"
+          ></iframe>
+          <div class="resume-frame-fallback" id="resumeFallback" style="display:none;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <p>Preview unavailable in this context.</p>
+            <a href="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/view?usp=sharing" class="resume-button" target="_blank">Open Resume →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1013,6 +1076,7 @@ footer .heart{color:var(--emerald-bright);}
 
         <!-- REVIVE -->
         <div class="project-card revive-winner-card">
+          <div class="gold-aura"></div>
           <div class="badge-row">
             <span class="revive-winner-badge">🏆 Winner — HackaBULL VII 2026</span>
             <span class="project-badge featured">Featured</span>
@@ -1049,6 +1113,7 @@ footer .heart{color:var(--emerald-bright);}
 
         <!-- REPLAI -->
         <div class="project-card winner-card">
+          <div class="gold-aura"></div>
           <div class="badge-row">
             <span class="winner-badge">🏆 Winner — Hack The Bay 2026</span>
             <span class="project-badge featured">Featured</span>
