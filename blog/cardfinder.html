@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CardFinder: Turning "Which Credit Card Should I Get?" Into a Scoring Problem | Haren Gannarapu</title>
+<meta name="description" content="How I turned a question nobody had a good answer to into a weighted scoring engine over 300+ credit cards.">
+<meta property="og:title" content="CardFinder: Turning a Fuzzy Question Into a Scoring Problem">
+<meta property="og:description" content="My friends and I kept asking each other the same question. Nobody had a good answer. I decided to build one.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hareng.dev/blog/cardfinder.html">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav class="blog-nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">Haren G.</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="post-main">
+  <div class="post-container">
+
+    <div class="post-back">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </div>
+
+    <header class="post-header">
+      <div class="post-card-meta">
+        <time class="post-date">Sep 2025</time>
+        <div class="tags">
+          <span class="tag">personal project</span>
+          <span class="tag">fintech</span>
+          <span class="tag">algorithms</span>
+        </div>
+      </div>
+      <h1>CardFinder: Turning "Which Credit Card Should I Get?" Into a Scoring Problem</h1>
+      <p class="post-lede">My friends and I kept asking each other the same question. Nobody had a good answer. The comparison sites aren't trying to help you — they're affiliate-driven. So I built something that actually is.</p>
+    </header>
+
+    <div class="prose">
+
+      <p>The idea came out of a conversation a few of us were having about credit cards. A friend was about to get his first card and had no idea which one to pick. Another one of us had just gotten a card mostly because a parent had it. I'd picked mine because the ad had a nice color scheme, which in retrospect is not a great decision-making process for a financial product.</p>
+
+      <p>There are comparison websites for this. None of them are actually useful. If you look at how they work, the cards that show up first are the ones that pay the site the most in affiliate commissions. The "best card for you" result doesn't depend on anything about you; it just surfaces the same five cards they surface for everyone. A student building credit for the first time and someone who travels internationally every month and pays their balance in full are going to get the same recommendations, which is absurd.</p>
+
+      <p>A lot of college students in particular end up choosing cards that are genuinely bad for their situation — high APR cards when they might carry a balance, or rewards cards where the annual fee exceeds what they'll ever earn back. The information asymmetry is real and the existing tools don't help. I decided to build something that did.</p>
+
+      <hr>
+
+      <h2>Turning a fuzzy question into a scoring problem</h2>
+
+      <p>The core insight is that "which credit card is best for you" is actually a well-defined optimization problem — it just requires knowing your preferences. The problem with most people's card choices is that they don't have a structured way to express those preferences, so they end up defaulting to marketing or word of mouth.</p>
+
+      <p>CardFinder asks you a short quiz: What do you mostly spend money on? Do you carry a balance month to month? Do you travel internationally? Are you building credit from scratch? Those answers feed into a <strong>weighted scoring matrix</strong> where the weights shift based on your profile.</p>
+
+      <p>The concrete example that shows why this matters: if you tell CardFinder you carry a balance, it shifts the APR weight in the scoring formula from 0.10 to 0.35. That single weight change reorders the entire ranked list. The card that was best for someone who pays in full every month is now nowhere near the top, because their APR doesn't matter — yours does. These aren't vague lifestyle recommendations; they're different solutions to different optimization problems.</p>
+
+      <hr>
+
+      <h2>The net annual value calculation</h2>
+
+      <p>For each card, CardFinder computes a 12-month <strong>net annual value</strong> based on your projected spend. The math is:</p>
+
+      <p><code>NAV = (welcome bonus / 12) + rewards_earned - annual_fee - interest_cost</code></p>
+
+      <p>Welcome bonus gets amortized over 12 months so you're comparing apples to apples. Rewards are calculated against your actual stated spending in each category. Interest cost is factored in if you carry a balance. Annual fee comes straight off the top.</p>
+
+      <p>This isn't complicated finance — it's arithmetic done honestly and applied to your actual situation rather than some hypothetical average user. The reason this matters is that a card with a $95 annual fee and good travel rewards can have a negative NAV for someone who doesn't travel and carries a balance, but a strongly positive NAV for someone who does. The number makes that visible.</p>
+
+      <hr>
+
+      <h2>The Gemini integration</h2>
+
+      <p>Gemini explains why a card ranked the way it did for your specific profile. The key decision here was about what to put in the prompt. You could just say "here's a credit card, describe it" — but that produces generic marketing copy. Instead, the prompt includes the user's profile, how the weights shifted from default, and the per-card subscore breakdown.</p>
+
+      <p>With that context, the explanation looks like: "Because you carry a balance, APR had a 0.35 weight in your ranking rather than the default 0.10. This card's 18.9% rate placed it 4th despite competitive rewards — the interest cost at your projected balance outweighed the rewards earned." That's actually useful. It's the engine logic in plain English, not a product pitch.</p>
+
+      <hr>
+
+      <h2>What I'd change</h2>
+
+      <p>The dataset is from CFPB public records and scraped issuer data. It's not real-time — card terms change and the current setup requires manual updates when they do. In a real product, the data pipeline would need to pull from live sources or at minimum have a freshness check. That's a solved engineering problem, but it's a real limitation of what exists now.</p>
+
+      <p>The quiz is intentionally short because I didn't want it to feel like a loan application. The tradeoff is that it can't capture edge cases — gig workers with variable income, people with specific spending categories that don't fit the defaults, those with credit-building constraints I didn't model. A better version would have an "advanced" path for users who want to give more detail and get more precise results.</p>
+
+      <hr>
+
+    </div>
+
+    <footer class="post-footer">
+      <a href="index.html" class="back-link">← Back to blog</a>
+      <a href="https://github.com/hareng8374/cardfinder" class="repo-link" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View on GitHub
+      </a>
+    </footer>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Haren Gannarapu · <a href="/">hareng.dev</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

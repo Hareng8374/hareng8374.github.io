@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revive: Why I Built a CPR Trainer from $50 of Arduino Hardware | Haren Gannarapu</title>
+<meta name="description" content="How a force-sensing pad, multi-agent Gemini, and ElevenLabs voice became a CPR training system that won HackaBull VII.">
+<meta property="og:title" content="Revive: Why I Built a CPR Trainer from $50 of Arduino Hardware">
+<meta property="og:description" content="Most CPR training tools are expensive, clinic-only, or don't feel real enough to stick. We thought we could fix that.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hareng.dev/blog/revive.html">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav class="blog-nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">Haren G.</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="post-main">
+  <div class="post-container">
+
+    <div class="post-back">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </div>
+
+    <header class="post-header">
+      <div class="post-card-meta">
+        <time class="post-date">Apr 2026</time>
+        <div class="tags">
+          <span class="tag">hackathon</span>
+          <span class="tag">hardware</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">HackaBull VII</span>
+        </div>
+      </div>
+      <h1>Revive: Why I Built a CPR Trainer from $50 of Arduino Hardware</h1>
+      <p class="post-lede">Most CPR training tools are expensive, clinic-only, or don't feel real enough to stick. We thought we could fix that with a force-sensing pad, some agents, and voice.</p>
+    </header>
+
+    <div class="prose">
+
+      <p>Sudden cardiac arrest kills around 350,000 people a year in the US. Bystander CPR — someone nearby starting compressions before paramedics arrive — doubles or triples survival odds. The problem isn't that people don't know CPR exists. It's that most people either never learned it, or learned it once in a certification class years ago and haven't thought about it since.</p>
+
+      <p>The reason training doesn't stick is straightforward: you learn CPR in a classroom, on a manikin, with an instructor. Then you go home and don't touch it again until the one moment in your life when you actually need it — at which point you're panicked, it's been years, and you're trying to remember something you practiced for forty-five minutes. That's not a good setup.</p>
+
+      <p>Revive was an attempt to make CPR training something you could actually do repeatedly, at home, without a $3,000 manikin or a class schedule.</p>
+
+      <hr>
+
+      <h2>The hardware</h2>
+
+      <p>The physical part is a force-sensitive resistor (FSR) mounted on a foam pad. You press down on it to simulate chest compressions. An <strong>Arduino</strong> reads the sensor at 200Hz and streams the data to the browser over the <strong>Web Serial API</strong>. Total hardware cost: under $50.</p>
+
+      <p>The tricky part is that force sensors are noisy. A single compression produces multiple threshold crossings — the sensor bounces around at peak force and again as you release. If you count every threshold crossing as a compression, you get numbers that are completely wrong. The fix is <strong>dual-threshold hysteresis</strong> in the Arduino firmware: the sensor has to cross a high threshold to register the start of a compression and a separate low threshold to register the end. Everything in between is treated as noise. This alone cut false compression counts by about 30%.</p>
+
+      <p>The 200Hz sampling rate matters because you're measuring two things simultaneously: compression depth (derived from how hard you press) and compression rate (compressions per minute). AHA guidelines care about both. At 200Hz you have enough resolution to distinguish a shallow tap from a proper compression, and to count rate accurately at the 100–120 compressions/minute target. At lower sampling rates you'd start missing peaks.</p>
+
+      <hr>
+
+      <h2>The multi-agent design</h2>
+
+      <p>The AI side has three <strong>Gemini</strong> agents, each with a distinct responsibility:</p>
+
+      <p><strong>The physiology agent</strong> tracks the virtual patient's vitals. Based on the quality of your compressions over the last few seconds, it updates heart rate, blood pressure, and SpO2. This is what makes the training feel real — you're not just pressing a pad and getting a score, you're watching someone respond to what you're doing.</p>
+
+      <p><strong>The evaluation agent</strong> compares your compressions against AHA guidelines and generates coaching in real time. Is your depth adequate? Is your rate on target? Are you letting the chest fully recoil between compressions? This agent knows the standards and keeps you honest.</p>
+
+      <p><strong>The scenario agent</strong> controls the narrative. Is the patient stabilizing or deteriorating? Does a passerby appear and ask if they can help? Should the 911 dispatcher give updated instructions? This is what turns it from a feedback tool into a simulation.</p>
+
+      <p>These three agents share data through an event bus. Every 500ms, the compression buffer is batched and sent to whichever agents need it. The 500ms batching interval is intentional — you genuinely don't want feedback arriving every half-second while you're doing compressions. It's overwhelming and pulls your attention away from the patient. At 500ms the feedback arrives at a pace you can actually absorb and act on.</p>
+
+      <hr>
+
+      <h2>The voice layer</h2>
+
+      <p>Audio output uses <strong>ElevenLabs TTS</strong> with three distinct voices: a calm instructor, a 911 dispatcher, and a panicked bystander. Each agent owns one voice. This distinction matters for a reason that sounds small but isn't: when you're focused on doing compressions and your eyes are on the patient, you need to know <em>who's talking</em> without looking at a screen. A different voice tells you immediately whether it's coaching (instructor), procedural guidance (dispatcher), or scene context (bystander). That's the kind of UX decision that only makes sense in the context of simulating an emergency.</p>
+
+      <hr>
+
+      <h2>Why hardware at all</h2>
+
+      <p>A fair question is: why not just simulate this entirely in software? You could have a user click a button to simulate compressions, or measure something through the camera.</p>
+
+      <p>The honest answer is partly that we thought it was more interesting. But there's a more principled reason: <strong>muscle memory is real</strong>. If you want to train someone to do something under physical and emotional pressure, having them do the physical motion — even a simplified version of it — is meaningfully different from clicking a button. The cognitive and motor rehearsal happens together.</p>
+
+      <p>There's also an accessibility angle. Professional CPR training manikins cost hundreds to thousands of dollars. A foam pad and an Arduino is under $50. If the software is the expensive part of good training, maybe the hardware doesn't have to be.</p>
+
+      <hr>
+
+      <h2>What I'd change</h2>
+
+      <p>The Web Serial API works on Chromium-based browsers and nowhere else — no Firefox, no Safari, no iOS. For a real product you'd need either a native wrapper or a Bluetooth LE path from the Arduino. We knew this going in; for the hackathon it was an acceptable constraint. For a real deployment it's a blocking issue.</p>
+
+      <p>The scenario library is also thin — there's one scenario (adult cardiac arrest). A meaningful training tool needs a library: drowning, choking, infant CPR, two-rescuer scenarios. That's the next layer of work, and it's mostly content and prompt engineering rather than new infrastructure.</p>
+
+      <hr>
+
+    </div>
+
+    <footer class="post-footer">
+      <a href="index.html" class="back-link">← Back to blog</a>
+      <a href="https://github.com/Hareng8374/Revive" class="repo-link" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View on GitHub
+      </a>
+    </footer>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Haren Gannarapu · <a href="/">hareng.dev</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

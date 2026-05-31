@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReplAI: What I Learned Building a Real-Time Conversation Coach | Haren Gannarapu</title>
+<meta name="description" content="How I built a real-time AI conversation coach at Hack The Bay 2026, won 1st place in the Zenardy Challenge, and why each tool choice mattered.">
+<meta property="og:title" content="ReplAI: What I Learned Building a Real-Time Conversation Coach">
+<meta property="og:description" content="Three judges sat across from me looking confused. Forty seconds later, one of them smiled.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hareng.dev/blog/replai.html">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav class="blog-nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">Haren G.</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="post-main">
+  <div class="post-container">
+
+    <div class="post-back">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </div>
+
+    <header class="post-header">
+      <div class="post-card-meta">
+        <time class="post-date">Apr 2026</time>
+        <div class="tags">
+          <span class="tag">hackathon</span>
+          <span class="tag">AI</span>
+          <span class="tag">WebRTC</span>
+          <span class="tag">Hack The Bay 2026</span>
+        </div>
+      </div>
+      <h1>ReplAI: What I Learned Building a Real-Time Conversation Coach</h1>
+      <p class="post-lede">Three judges sat across from me at Hack The Bay looking confused. Forty seconds later, one of them smiled. That's the moment I knew we had something.</p>
+    </header>
+
+    <div class="prose">
+
+      <p>Here's the thing about hackathon demos: the moment when the judges look confused is either the beginning of the end or the beginning of winning. At Hack The Bay 2026, we got that look about forty seconds into our ReplAI demo. One of the judges — who turned out to be the founder of Zenardy, the company behind the challenge we'd entered — was watching the app analyze his body language in real time while he practiced a pitch to our AI. He looked skeptical, maybe a little thrown off by seeing his own eye-contact score updating live on screen.</p>
+
+      <p>I kept going. Explained what it was doing, why the gaze tracker mattered, what the feedback loop was actually catching. Fifteen minutes later we were still talking. We won the Zenardy Challenge, Best Use of Gemini, and placed 3rd overall out of 34 projects.</p>
+
+      <p>I'm not writing this to recap a win. I'm writing it because ReplAI involved a bunch of non-obvious decisions, and most of them aren't apparent from a demo or a repo.</p>
+
+      <hr>
+
+      <h2>The problem</h2>
+
+      <p>ReplAI is a conversation coach. You pick a scenario — salary negotiation, a tough HR conversation, a legal client intake — and an AI plays the other person while the app watches you. Not just what you say, but how you say it: are you making eye contact, how's your posture, are you speaking at a reasonable pace. After each exchange you get coaching feedback.</p>
+
+      <p>The core insight is that most conversation coaching tools give feedback <em>after the fact</em>. You record yourself, you watch it back, you cringe, you close the tab. We wanted feedback during the conversation, at a pace where it's actually usable. That constraint — real-time, low-latency, multi-modal — drove almost every technical decision we made.</p>
+
+      <hr>
+
+      <h2>Why each tool exists</h2>
+
+      <h3>MediaPipe for body language</h3>
+      <p>I needed something that could track facial landmarks in a browser, in real time, without asking the user to install anything. <strong>MediaPipe Face Mesh</strong> gives you 468 facial landmarks at 30fps in JavaScript, including the ones you need to estimate gaze direction. It's not perfect — it struggles in low light and with certain camera angles — but it's fast, it's free, and it runs in-browser without a server round-trip. That last part mattered a lot for a 24-hour hackathon where we couldn't count on a backend staying up.</p>
+
+      <h3>LiveKit for WebRTC</h3>
+      <p>I needed low-latency audio and video in the browser. Building that from scratch means navigating ICE negotiation, codec selection, STUN/TURN servers — all of which would have eaten half my hackathon time. <strong>LiveKit</strong> wraps WebRTC in an SDK that handles the plumbing and exposes audio analysis (speech pace, filler words, energy levels) as a first-class feature. That prosody data feeds directly into the feedback loop without any additional processing on my end.</p>
+
+      <h3>Gemini 2.5 Flash for the AI side</h3>
+      <p>I needed something fast enough to close the conversational loop. GPT-4 is capable but the latency at our tier was high enough to break the illusion of a live conversation. <strong>Gemini 2.5 Flash</strong> turned out to be fast enough that we could keep speech-to-feedback under 300ms on a decent connection — which is the threshold below which the feedback feels responsive rather than delayed.</p>
+
+      <p>These three systems tie together through a shared event emitter. MediaPipe fires gaze and posture events; LiveKit fires prosody events; both attach to a context object that goes into each Gemini prompt. The LLM channel has backpressure on it — if a feedback request is in flight, new events queue rather than firing another request. Without that guard you get a feedback storm where the AI is commenting on every half-second of movement, which is overwhelming and useless.</p>
+
+      <hr>
+
+      <h2>The conflict detection piece</h2>
+
+      <p>The most technically interesting part of ReplAI is something we almost didn't build: a real-time conflict-of-interest detector for the legal scenario.</p>
+
+      <p>The setup: a lawyer is practicing a client intake conversation. Midway through, the client mentions a company. ReplAI should flag if that company is an adverse party in any of the firm's active cases — before the lawyer accidentally says something they shouldn't.</p>
+
+      <p>The naive approach — feed the transcript to an LLM and ask — was too slow and too expensive to run on every new sentence. So I built a lightweight pipeline that does two things:</p>
+
+      <ol>
+        <li>Runs named entity recognition on the streaming transcript to extract company and person names as they come in.</li>
+        <li>Matches those entities against a pre-loaded firm database using a <strong>hybrid Levenshtein + Jaccard scorer</strong>.</li>
+      </ol>
+
+      <p>Levenshtein catches typos and minor name variations ("Acme Corp" vs "ACME Corporation"). Jaccard handles partial overlaps ("Google" matching "Google DeepMind"). Together they surface likely conflicts faster and more cheaply than asking a language model to figure it out from scratch each time. The LLM only gets involved to confirm and explain a flagged match, not to do the matching itself.</p>
+
+      <p>This was the piece that stopped the Zenardy founder mid-demo. He asked me to walk him through it. Then he asked how it would handle international company names with transliterations. I had actually thought about that — it was a good fifteen minutes.</p>
+
+      <hr>
+
+      <h2>What I'd change</h2>
+
+      <p>The MediaPipe gaze estimation is shakier than I'd like. It works well under good lighting with a decent camera and falls apart on older laptops in a dim room. A real product would need a calibration step upfront — establish a baseline for this specific user's face before scoring their eye contact.</p>
+
+      <p>The multi-modal weights (gaze, prosody, dialogue) are currently static. There's a version of this where the feedback model learns which signals matter most for which scenario type — negotiation might weight vocal confidence more than eye contact; legal intake might be the opposite. We didn't have time for that in 24 hours, and I'm not sure I'd trust a self-trained weighting model on a prototype anyway.</p>
+
+      <p>The conflict-detection corpus is also mocked for the demo. In production you'd want a real case management API integration, which is a completely different engineering problem.</p>
+
+      <hr>
+
+    </div>
+
+    <footer class="post-footer">
+      <a href="index.html" class="back-link">← Back to blog</a>
+      <a href="https://github.com/Hareng8374/ReplAI" class="repo-link" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View on GitHub
+      </a>
+    </footer>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Haren Gannarapu · <a href="/">hareng.dev</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

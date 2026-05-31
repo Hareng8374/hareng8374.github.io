@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Notebook to Production: What My First ML Internship Actually Taught Me | Haren Gannarapu</title>
+<meta name="description" content="I thought I was going to implement a feature. They put me on production ML infrastructure. For three weeks I was completely out of my depth — and that turned out to be the whole point.">
+<meta property="og:title" content="From Notebook to Production: What My First ML Internship Actually Taught Me">
+<meta property="og:description" content="What three weeks of being totally lost taught me about how to actually learn.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hareng.dev/blog/oasis.html">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav class="blog-nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">Haren G.</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="post-main">
+  <div class="post-container">
+
+    <div class="post-back">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </div>
+
+    <header class="post-header">
+      <div class="post-card-meta">
+        <time class="post-date">Aug 2025</time>
+        <div class="tags">
+          <span class="tag">internship</span>
+          <span class="tag">MLOps</span>
+          <span class="tag">GNNs</span>
+          <span class="tag">career</span>
+        </div>
+      </div>
+      <h1>From Notebook to Production: What My First ML Internship Actually Taught Me</h1>
+      <p class="post-lede">I thought I was going to implement a feature. They put me on production ML infrastructure on day one. For three weeks I was completely out of my depth — and that turned out to be the whole point.</p>
+    </header>
+
+    <div class="prose">
+
+      <p>The hardest thing I've done so far wasn't some big dramatic moment. It was my first software internship at a small AI travel startup called Oasis, and the hard part had almost nothing to do with writing code.</p>
+
+      <p>I walked in feeling pretty confident. Good GPA, a couple of projects I actually liked, solid Python. I figured they'd give me something small and isolated. I'd knock it out, look sharp, build my resume a little. That's not what happened.</p>
+
+      <p>Almost immediately they put me on the machine learning infrastructure. They wanted a <strong>recommendation model</strong> — a graph neural network called GraphSAGE — actually running in production. Served at scale. Autoscaling when traffic spiked. Fully monitored. I nodded like I understood. I did not understand. By lunch on the first day I was pretty sure I didn't know what half of those words meant.</p>
+
+      <hr>
+
+      <h2>What I actually built</h2>
+
+      <p>The model is a <strong>GraphSAGE</strong> network trained on a graph of users, posts, and tags — 2 million edges representing how people interact with travel content. The idea is that a user's taste is better described by their neighborhood on this graph than by their raw interaction history alone. I built the full data pipeline: PostgreSQL to tensor extraction, then cached to S3 so we weren't dumping the whole database every night. That change cut the nightly training pipeline from 45 minutes to 8.</p>
+
+      <p>Serving runs on <strong>Triton Inference Server</strong>, which handles request batching and GPU utilization once you've got the model config right. Autoscaling is handled by <strong>KEDA</strong> watching an SQS queue depth — when inference requests back up, pods spin up; when they drain, pods scale back down. You're not provisioning for peak traffic all the time, which matters when GPU time is expensive.</p>
+
+      <p>Monitoring is Prometheus histograms and Grafana dashboards. This is where I caught a tokenizer regression that added 120ms to p99 latency within a few hours of a deploy. A model behavior regression, caught that fast, because the dashboard was there and I knew what to look at. Without that tooling it would have been invisible until users started noticing.</p>
+
+      <hr>
+
+      <h2>The part that actually mattered</h2>
+
+      <p>GraphSAGE, Triton, KEDA, Prometheus, Grafana. None of it had shown up in any class I'd taken. For that first stretch I was reading documentation that assumed I already knew things I didn't, at one in the morning, quietly wondering if they'd made a mistake hiring me. There's no textbook chapter for this stuff, no professor with office hours, no Stack Overflow answer that lined up exactly with my problem.</p>
+
+      <p>What changed wasn't some clean lightbulb moment. It was a shift in how I was thinking about it, and it took me longer than I'd like to admit. I'd been treating "I don't know how to do this" like a final answer — like evidence I didn't belong there. Then one night, after the model server crashed on startup for what felt like the hundredth time, it finally hit me that <em>not knowing was literally the job description</em>. Nobody hires a college junior expecting him to already know how to autoscale a neural network in production. They hire someone they're betting can figure it out.</p>
+
+      <p>So I stopped trying to look like I had it handled and just started chipping away at it. I broke problems into pieces small enough that I could win one per day instead of staring at the whole mountain. I started asking questions I was scared would sound dumb, and it turned out everyone was happy to help — because most of them had been exactly where I was a few years earlier. The model server that kept crashing? Config and dependency mismatch. I would have caught it days earlier if I'd just said out loud that I was stuck.</p>
+
+      <p>Eventually it worked. The model went live. Autoscaling held under real traffic. I sat there watching a Grafana dashboard I'd actually built, watching latency stay flat while request volume climbed. I don't think I've been prouder of anything since — not because it looked impressive, but because three weeks earlier I couldn't have explained a single piece of it.</p>
+
+      <hr>
+
+      <h2>What came after</h2>
+
+      <p>This internship is a big part of why I landed my next one. When Carnival asked about Oasis in my interviews, they didn't really care about GraphSAGE or Triton. They cared that I'd been handed something well over my head and pushed it all the way to production without bailing. That story carried a lot of weight.</p>
+
+      <p>The most useful thing I took from that summer isn't a technology. It's that the feeling of "I have no idea how to do this" has become a pretty reliable signal that I'm probably in the right place. Almost every project I've learned the most from started with exactly that feeling — and I've mostly stopped waiting for it to go away before I jump in.</p>
+
+      <hr>
+
+    </div>
+
+    <footer class="post-footer">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </footer>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Haren Gannarapu · <a href="/">hareng.dev</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helios: Building a Distributed LLM Inference Platform (and Why) | Haren Gannarapu</title>
+<meta name="description" content="After spending a summer making ML models serve real traffic, I got obsessed with one question: what does it actually take to run inference at scale on your own hardware?">
+<meta property="og:title" content="Helios: Building a Distributed LLM Inference Platform">
+<meta property="og:description" content="What I'm building next and why — a distributed LLM inference platform, built in public.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hareng.dev/blog/helios.html">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav class="blog-nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">Haren G.</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="post-main">
+  <div class="post-container">
+
+    <div class="post-back">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </div>
+
+    <header class="post-header">
+      <div class="post-card-meta">
+        <time class="post-date">2026 — in progress</time>
+        <div class="tags">
+          <span class="tag">distributed systems</span>
+          <span class="tag">LLM inference</span>
+          <span class="tag">what's next</span>
+        </div>
+      </div>
+      <h1>Helios: Building a Distributed LLM Inference Platform (and Why)</h1>
+      <p class="post-lede">After spending a summer making ML models serve real traffic in production, I got obsessed with one question: what does it actually take to run inference at scale on your own hardware?</p>
+    </header>
+
+    <div class="prose">
+
+      <p>I don't mean "call an API." I mean: own your hardware, handle your own routing, manage your own model lifecycle — the whole stack from raw compute to end-user request. That's what Helios is.</p>
+
+      <p>The project doesn't exist yet in any meaningful way. I have a design doc and a rough architecture. I'm writing this now partly to make the idea real by explaining it, and partly because building things in public keeps me honest.</p>
+
+      <hr>
+
+      <h2>Where this came from</h2>
+
+      <p>My internship at Oasis was the first time I'd been responsible for a model that served actual users. We used Triton Inference Server for serving, KEDA for autoscaling, and Prometheus plus Grafana for monitoring. By the end of the summer I understood those systems reasonably well — well enough to build with them, debug them when they broke, and have opinions about when to use them.</p>
+
+      <p>What I don't understand yet is the layer beneath. Triton handles batching and scheduling for you; what does that look like when you build it yourself? KEDA watches a queue and scales pods; what does a custom autoscaler look like if you don't have KEDA? The abstractions I used at Oasis are good abstractions — they're good because they hide complexity. But I want to understand what they're hiding.</p>
+
+      <p>There's also a more straightforward motivation: most of what I know about ML systems, I learned by doing it in a production environment with real constraints. That experience is worth more to me than anything I've learned from a course. I want to manufacture more of it deliberately.</p>
+
+      <hr>
+
+      <h2>What Helios is supposed to do</h2>
+
+      <p>A distributed LLM inference platform. You have a model (or several), you have traffic, and you need to serve requests efficiently across multiple nodes. That means:</p>
+
+      <ul>
+        <li>A router that distributes incoming requests across inference workers</li>
+        <li>Continuous batching — grouping requests that arrive close together to improve GPU utilization</li>
+        <li>Autoscaling tied to queue depth or request latency</li>
+        <li>A basic model registry to manage versions and rollouts</li>
+        <li>Observability built in from the start — latency histograms, throughput, error rates</li>
+      </ul>
+
+      <p>This is a solved problem at Anthropic, OpenAI, Google. They have entire teams working on it. But there's surprisingly little accessible material about how it all fits together at a medium scale — the kind of scale a startup or a research lab might actually operate at. Most tutorials stop at "here's how to run a model on one GPU." The jump to "here's how to route traffic across a cluster" is where things get interesting, and that's the gap I want to fill for myself by building through it.</p>
+
+      <hr>
+
+      <h2>Why not just use vLLM or something that exists</h2>
+
+      <p>Fair question. vLLM, TGI, Triton — these are good tools and I'd use them in production. The goal here isn't to build the best inference stack; it's to understand what's inside the one I'd use. There's a difference between knowing how to configure Triton and knowing why it makes the batching decisions it makes. I want the second kind of knowledge, and the only way I know how to get it is to build the thing myself at least once.</p>
+
+      <hr>
+
+      <h2>Where it is right now</h2>
+
+      <p>Early. The plan is: single-node serving first, then a basic round-robin router, then queue-depth autoscaling (the same mental model as KEDA, just without KEDA). Observability goes in at the start, not bolted on later — that's the lesson I took most directly from Oasis.</p>
+
+      <p>I'll write about it here as it progresses. If you're working on something similar, or you're interested in distributed inference and want to compare notes, I'm easy to reach.</p>
+
+      <hr>
+
+    </div>
+
+    <footer class="post-footer">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </footer>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Haren Gannarapu · <a href="/">hareng.dev</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
