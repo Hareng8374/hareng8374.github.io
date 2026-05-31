@@ -298,7 +298,7 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   padding:5rem 0 6rem;
   position:relative;
 }
-.about-grid{display:grid;grid-template-columns:1fr 300px;gap:4.5rem;align-items:start;}
+.about-grid{display:grid;grid-template-columns:1fr 400px;gap:4rem;align-items:start;}
 .about-label{
   font-family:var(--mono);font-size:0.72rem;
   text-transform:uppercase;letter-spacing:0.18em;
@@ -325,45 +325,14 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 }
 .about-text strong{color:var(--text);font-weight:500;}
 
-.about-photo-col{display:flex;justify-content:center;}
-.about-photo-placeholder{
-  position:sticky;
-  top:120px;
-  width:100%;
-  aspect-ratio:3/4;
-  background:linear-gradient(145deg, var(--bg-2) 0%, var(--bg-1) 100%);
-  border:1px solid var(--line-strong);
-  border-radius:20px;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:0.75rem;
+.about-globe-col{display:flex;align-items:flex-start;justify-content:center;position:sticky;top:120px;}
+#skillGlobe{
+  display:block;border-radius:20px;cursor:grab;
+  border:1px solid rgba(52,211,153,0.18);
+  background:#0a0e0d;
+  box-shadow:0 20px 50px -16px rgba(0,0,0,0.6),0 0 0 1px rgba(52,211,153,0.06);
 }
-.about-photo-placeholder::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.1) 0%, transparent 65%);
-  pointer-events:none;z-index:0;
-}
-.about-photo-placeholder::after{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg, transparent, var(--line-strong) 50%, transparent);
-}
-.about-photo-placeholder img{
-  width:100%;height:100%;
-  object-fit:cover;object-position:top center;
-  display:block;position:relative;z-index:1;
-}
-.about-photo-hint{
-  font-family:var(--mono);
-  font-size:0.68rem;
-  color:var(--text-faint);
-  text-transform:uppercase;
-  letter-spacing:0.12em;
-  text-align:center;
-  position:relative;z-index:1;
-}
+#skillGlobe:active{cursor:grabbing;}
 
 .skills-preview{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:2.5rem;}
 .skill-tag{
@@ -1064,7 +1033,7 @@ footer .heart{color:var(--emerald-bright);}
   .mobile-menu-toggle{display:flex;}
   .stats-grid{grid-template-columns:1fr;max-width:400px;}
   .about-grid{grid-template-columns:1fr;}
-  .about-photo-col{display:none;}
+  .about-globe-col{position:static;}
   .projects-grid{grid-template-columns:1fr;}
   .revive-gallery-grid{grid-template-columns:1fr;}
   .cta-buttons{flex-direction:column;}
@@ -1147,38 +1116,9 @@ footer .heart{color:var(--emerald-bright);}
           <h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2>
           <p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. I've shipped production ML infrastructure at <strong>Princess Cruises (Carnival)</strong> and built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong> — handling the full pipeline from raw data to scalable inference.</p>
           <p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours, and I care as much about clean architecture as I do about the outcome. I write code that holds up — not just code that ships.</p>
-          <div class="skills-preview">
-            <div class="skill-tag">Python</div>
-            <div class="skill-tag">JavaScript</div>
-            <div class="skill-tag">TypeScript</div>
-            <div class="skill-tag">React</div>
-            <div class="skill-tag">Next.js</div>
-            <div class="skill-tag">Node.js</div>
-            <div class="skill-tag">Flask</div>
-            <div class="skill-tag">PyTorch Geometric</div>
-            <div class="skill-tag">AWS</div>
-            <div class="skill-tag">Kubernetes</div>
-            <div class="skill-tag">Docker</div>
-            <div class="skill-tag">Terraform</div>
-            <div class="skill-tag">OpenAI API</div>
-            <div class="skill-tag">YOLOv5</div>
-            <div class="skill-tag">Firebase</div>
-            <div class="skill-tag">PostgreSQL</div>
-            <div class="skill-tag">Prometheus</div>
-            <div class="skill-tag">Grafana</div>
-            <div class="skill-tag">Arduino</div>
-            <div class="skill-tag">LiDAR</div>
-            <div class="skill-tag">Tailwind CSS</div>
-            <div class="skill-tag">Git</div>
-          </div>
         </div>
-        <div class="about-photo-col">
-          <div class="about-photo-placeholder">
-            <!-- To add your photo: replace the svg+span below with:
-                 <img src="your-photo.jpg" alt="Haren Gannarapu"> -->
-            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-faint);opacity:0.35;position:relative;z-index:1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span class="about-photo-hint">Photo coming soon</span>
-          </div>
+        <div class="about-globe-col">
+          <canvas id="skillGlobe"></canvas>
         </div>
       </div>
     </div>
@@ -1805,10 +1745,174 @@ const Breakout = (function(){
 
 })();
 
+/* ===== SKILL GLOBE ===== */
+const SkillGlobe=(function(){
+  const SK=[
+    {n:'Python',    bg:'#3776AB',fg:'#FFD43B',d:'t2',t:'PY'},
+    {n:'JavaScript',bg:'#F7DF1E',fg:'#1a1a1a',d:'t2',t:'JS'},
+    {n:'TypeScript',bg:'#3178C6',fg:'#fff',   d:'t2',t:'TS'},
+    {n:'React',     bg:'#20232A',fg:'#61DAFB',d:'react',t:''},
+    {n:'Next.js',   bg:'#fff',   fg:'#000',   d:'t1',t:'▲'},
+    {n:'Node.js',   bg:'#3C873A',fg:'#fff',   d:'t1',t:'N'},
+    {n:'Flask',     bg:'#1a1a1a',fg:'#fff',   d:'ts',t:'Flask'},
+    {n:'PyTorch',   bg:'#EE4C2C',fg:'#fff',   d:'t2',t:'PT'},
+    {n:'AWS',       bg:'#FF9900',fg:'#232F3E',d:'ts',t:'AWS'},
+    {n:'Kubernetes',bg:'#326CE5',fg:'#fff',   d:'k8s',t:''},
+    {n:'Docker',    bg:'#2496ED',fg:'#fff',   d:'dock',t:''},
+    {n:'Terraform', bg:'#7B42BC',fg:'#fff',   d:'t2',t:'TF'},
+    {n:'OpenAI',    bg:'#10A37F',fg:'#fff',   d:'oai',t:''},
+    {n:'Firebase',  bg:'#F57C00',fg:'#fff',   d:'fire',t:''},
+    {n:'PostgreSQL',bg:'#336791',fg:'#fff',   d:'t2',t:'PG'},
+    {n:'Prometheus',bg:'#E6522C',fg:'#fff',   d:'ts',t:'PROM'},
+    {n:'Grafana',   bg:'#F46800',fg:'#fff',   d:'t1',t:'G'},
+    {n:'Tailwind',  bg:'#0EA5E9',fg:'#fff',   d:'tail',t:''},
+    {n:'Git',       bg:'#F05032',fg:'#fff',   d:'git',t:''},
+    {n:'Arduino',   bg:'#00979D',fg:'#fff',   d:'inf',t:''},
+    {n:'YOLOv5',    bg:'#5E35B1',fg:'#fff',   d:'ts',t:'YOLO'},
+    {n:'LiDAR',     bg:'#1565C0',fg:'#fff',   d:'t1',t:'⟡'},
+  ];
+  let cv,cx,raf,rX=0.28,rY=0,vX=0,vY=0.004,drag=false,lx=0,ly=0;
+  let proj=[],hover=null,tipAlpha=0,tipName='',tipX=0,tipY=0;
+  const PHI=Math.PI*(3-Math.sqrt(5));
+  const PTS=SK.map((s,i)=>{
+    const y=1-(i/(SK.length-1))*2,r=Math.sqrt(1-y*y),t=PHI*i;
+    return {s,bx:Math.cos(t)*r,by:y,bz:Math.sin(t)*r};
+  });
+  function rd(c,x,y,w,h,r){
+    c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);
+    c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);
+    c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();
+  }
+  function rot(p){
+    let {bx:x,by:y,bz:z}=p;
+    let x2=x*Math.cos(rY)+z*Math.sin(rY),z2=-x*Math.sin(rY)+z*Math.cos(rY);
+    let y3=y*Math.cos(rX)-z2*Math.sin(rX),z3=y*Math.sin(rX)+z2*Math.cos(rX);
+    return {x:x2,y:y3,z:z3,s:p.s};
+  }
+  function ico(c,x,y,r,sk){
+    const{fg,bg,d,t}=sk;
+    c.fillStyle=fg;c.strokeStyle=fg;c.textAlign='center';c.textBaseline='middle';
+    switch(d){
+      case 't1':c.font=`700 ${r*1.18|0}px Outfit,sans-serif`;c.fillText(t,x,y);break;
+      case 't2':c.font=`900 ${r*0.92|0}px Outfit,sans-serif`;c.fillText(t,x,y);break;
+      case 'ts':c.font=`700 ${r*0.68|0}px Outfit,sans-serif`;c.fillText(t,x,y);break;
+      case 'react':
+        c.lineWidth=r*0.1;
+        [0,1,2].forEach(i=>{c.save();c.translate(x,y);c.rotate(i*Math.PI/3);c.beginPath();c.ellipse(0,0,r*0.82,r*0.28,0,0,Math.PI*2);c.stroke();c.restore();});
+        c.beginPath();c.arc(x,y,r*0.14,0,Math.PI*2);c.fill();break;
+      case 'k8s':
+        c.lineWidth=r*0.09;c.beginPath();c.arc(x,y,r*0.76,0,Math.PI*2);c.stroke();
+        for(let i=0;i<8;i++){const a=i*Math.PI/4;c.beginPath();c.moveTo(x+Math.cos(a)*r*0.22,y+Math.sin(a)*r*0.22);c.lineTo(x+Math.cos(a)*r*0.76,y+Math.sin(a)*r*0.76);c.stroke();}
+        c.beginPath();c.arc(x,y,r*0.17,0,Math.PI*2);c.fill();break;
+      case 'dock':
+        const cs=r*0.2,gp=r*0.05,sx=x-cs*1.65,sy=y-r*0.52;
+        [[0,0],[1,0],[2,0],[0,1],[1,1]].forEach(([col,row])=>{c.beginPath();rd(c,sx+col*(cs+gp),sy+row*(cs+gp),cs,cs,cs*0.18);c.fill();});
+        c.beginPath();c.moveTo(x+r*0.48,y-r*0.12);c.lineTo(x+r*0.72,y-r*0.38);c.lineTo(x+r*0.78,y+r*0.06);c.closePath();c.fill();break;
+      case 'oai':
+        for(let i=0;i<6;i++){c.save();c.translate(x,y);c.rotate(i*Math.PI/3-Math.PI/6);c.beginPath();c.ellipse(0,-r*0.42,r*0.16,r*0.42,0,0,Math.PI*2);c.fill();c.restore();}
+        c.fillStyle=bg;c.beginPath();c.arc(x,y,r*0.22,0,Math.PI*2);c.fill();break;
+      case 'fire':
+        c.beginPath();c.moveTo(x,y+r*0.75);
+        c.bezierCurveTo(x-r*0.55,y+r*0.2,x-r*0.5,y-r*0.35,x,y-r*0.72);
+        c.bezierCurveTo(x+r*0.12,y-r*0.18,x+r*0.5,y,x+r*0.42,y+r*0.75);
+        c.closePath();c.fill();break;
+      case 'tail':
+        c.lineWidth=r*0.15;c.lineCap='round';
+        c.beginPath();c.moveTo(x-r*0.7,y-r*0.18);c.bezierCurveTo(x-r*0.5,y-r*0.7,x-r*0.1,y-r*0.7,x,y-r*0.18);c.bezierCurveTo(x+r*0.1,y+r*0.35,x+r*0.5,y+r*0.35,x+r*0.7,y-r*0.18);c.stroke();
+        c.beginPath();c.moveTo(x-r*0.05,y+r*0.18);c.bezierCurveTo(x+r*0.15,y-r*0.35,x+r*0.5,y-r*0.35,x+r*0.65,y+r*0.18);c.stroke();break;
+      case 'git':
+        c.lineWidth=r*0.1;c.lineCap='round';
+        c.beginPath();c.moveTo(x,y-r*0.68);c.lineTo(x,y+r*0.68);c.stroke();
+        c.beginPath();c.moveTo(x,y-r*0.22);c.bezierCurveTo(x+r*0.1,y-r*0.48,x+r*0.58,y-r*0.48,x+r*0.58,y-r*0.72);c.stroke();
+        [[0,-0.68],[0,0.68],[0.58,-0.72]].forEach(([dx,dy])=>{c.beginPath();c.arc(x+dx*r,y+dy*r,r*0.14,0,Math.PI*2);c.fill();});break;
+      case 'inf':
+        c.lineWidth=r*0.13;c.lineCap='round';
+        c.beginPath();c.moveTo(x,y);
+        c.bezierCurveTo(x-r*0.1,y-r*0.55,x-r*0.75,y-r*0.55,x-r*0.55,y);
+        c.bezierCurveTo(x-r*0.35,y+r*0.55,x+r*0.35,y+r*0.55,x+r*0.55,y);
+        c.bezierCurveTo(x+r*0.75,y-r*0.55,x+r*0.1,y-r*0.55,x,y);c.stroke();break;
+    }
+  }
+  function frame(){
+    if(!cv||!cx)return;
+    if(!drag){rY+=vY;rX+=vX;vX*=0.97;vY*=0.998;}
+    const W=cv.width,H=cv.height,RAD=Math.min(W,H)*0.37,CX=W/2,CY=H/2;
+    cx.clearRect(0,0,W,H);
+    const g=cx.createRadialGradient(CX,CY,0,CX,CY,RAD*1.3);
+    g.addColorStop(0,'rgba(16,185,129,0.07)');g.addColorStop(1,'rgba(0,0,0,0)');
+    cx.fillStyle=g;cx.fillRect(0,0,W,H);
+    proj=PTS.map(p=>{const r=rot(p);return{x:CX+r.x*RAD,y:CY+r.y*RAD,z:r.z,s:r.s};}).sort((a,b)=>a.z-b.z);
+    proj.forEach(p=>{
+      const dep=(p.z+1)/2,sz=Math.round(28+dep*28),cr=sz*0.25;
+      cx.save();cx.globalAlpha=0.18+dep*0.82;
+      if(dep>0.55){cx.shadowColor=p.s.bg;cx.shadowBlur=dep*16;}
+      cx.fillStyle=p.s.bg;rd(cx,p.x-sz/2,p.y-sz/2,sz,sz,cr);cx.fill();
+      cx.shadowBlur=0;cx.strokeStyle='rgba(255,255,255,0.13)';cx.lineWidth=1;
+      rd(cx,p.x-sz/2,p.y-sz/2,sz,sz,cr);cx.stroke();
+      ico(cx,p.x,p.y,sz*0.32,p.s);cx.restore();
+    });
+    hover?tipAlpha=Math.min(1,tipAlpha+0.12):tipAlpha=Math.max(0,tipAlpha-0.1);
+    if(tipAlpha>0.02){
+      cx.save();cx.globalAlpha=tipAlpha;cx.font='500 12px JetBrains Mono,monospace';
+      const tw=cx.measureText(tipName).width,pd=7,hr=5,th=20;
+      const tx=Math.max(tw/2+pd+2,Math.min(W-tw/2-pd-2,tipX));
+      const ty=Math.min(H-12,tipY);
+      cx.fillStyle='rgba(5,8,7,0.94)';rd(cx,tx-tw/2-pd,ty-th/2,tw+pd*2,th,hr);cx.fill();
+      cx.strokeStyle='rgba(52,211,153,0.45)';cx.lineWidth=1;rd(cx,tx-tw/2-pd,ty-th/2,tw+pd*2,th,hr);cx.stroke();
+      cx.fillStyle='#e8f0ed';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(tipName,tx,ty);
+      cx.restore();
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  function resize(){
+    if(!cv)return;
+    const w=Math.min(cv.parentElement.clientWidth||400,440);
+    cv.width=cv.height=Math.max(w,200);
+  }
+  return{
+    init(){
+      cv=document.getElementById('skillGlobe');if(!cv)return;
+      cx=cv.getContext('2d');resize();frame();
+      cv.addEventListener('mousedown',e=>{
+        drag=true;vX=vY=0;const r=cv.getBoundingClientRect();
+        lx=(e.clientX-r.left)*(cv.width/r.width);ly=(e.clientY-r.top)*(cv.height/r.height);
+        cv.style.cursor='grabbing';
+      });
+      window.addEventListener('mouseup',()=>{drag=false;cv.style.cursor='grab';});
+      window.addEventListener('mousemove',e=>{
+        const r=cv.getBoundingClientRect();
+        const mx=(e.clientX-r.left)*(cv.width/r.width),my=(e.clientY-r.top)*(cv.height/r.height);
+        if(drag){vY=(mx-lx)*0.008;vX=(my-ly)*0.008;rY+=vY;rX+=vX;lx=mx;ly=my;}
+        else{
+          hover=null;
+          for(const p of[...proj].reverse()){
+            const dep=(p.z+1)/2,psz=28+dep*28;
+            if(Math.abs(mx-p.x)<psz/2&&Math.abs(my-p.y)<psz/2){hover=p.s;tipName=p.s.n;tipX=p.x;tipY=p.y+psz/2+16;break;}
+          }
+          cv.style.cursor=hover?'pointer':'grab';
+        }
+      });
+      cv.addEventListener('touchstart',e=>{
+        e.preventDefault();drag=true;vX=vY=0;const r=cv.getBoundingClientRect();
+        lx=(e.touches[0].clientX-r.left)*(cv.width/r.width);ly=(e.touches[0].clientY-r.top)*(cv.height/r.height);
+      },{passive:false});
+      cv.addEventListener('touchmove',e=>{
+        e.preventDefault();if(!drag)return;const r=cv.getBoundingClientRect();
+        const mx=(e.touches[0].clientX-r.left)*(cv.width/r.width),my=(e.touches[0].clientY-r.top)*(cv.height/r.height);
+        vY=(mx-lx)*0.008;vX=(my-ly)*0.008;rY+=vY;rX+=vX;lx=mx;ly=my;
+      },{passive:false});
+      cv.addEventListener('touchend',()=>{drag=false;});
+      window.addEventListener('resize',()=>{if(!drag)resize();});
+    }
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', ()=>{
   const hash = window.location.hash.substring(1);
   if(hash && document.getElementById(hash)) navigateTo(hash);
   else updateNavigation('home');
+  SkillGlobe.init();
 
   /* Wire real Revive screenshots from embedded base64 data. */
   const REVIVE_IMAGES = {
