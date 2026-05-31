@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Haren Gannarapu — Portfolio</title>
+<meta name="description" content="Haren Gannarapu — CS @ UCF, SWE at Princess Cruises, 2× hackathon winner. Building AI-powered systems at the intersection of ML, full-stack engineering, and real-world impact.">
+<meta name="author" content="Haren Gannarapu">
+<meta property="og:title" content="Haren Gannarapu — Portfolio">
+<meta property="og:description" content="CS @ UCF. SWE at Princess Cruises. 2× hackathon winner. Building AI-powered systems at the intersection of ML, full-stack engineering, and real-world impact.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hareng.dev">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Haren Gannarapu — Portfolio">
+<meta name="twitter:description" content="CS @ UCF. SWE at Princess Cruises. 2× hackathon winner. Building AI-powered systems.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -94,16 +103,16 @@ nav.scrolled{
 }
 nav .container{display:flex;justify-content:space-between;align-items:center;}
 .logo{
-  font-family:var(--display);
+  font-family:var(--sans);
   font-weight:600;
-  font-style:italic;
-  font-size:1.85rem;
-  letter-spacing:-0.04em;
+  font-size:1.25rem;
+  letter-spacing:0.01em;
   cursor:pointer;
   color:var(--text);
   position:relative;
   transition:transform .4s cubic-bezier(.4,0,.2,1);
   display:flex;align-items:center;gap:0.5rem;
+  text-transform:uppercase;
 }
 .logo::before{
   content:'';width:8px;height:8px;border-radius:50%;
@@ -183,12 +192,7 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   color:var(--text);
   opacity:0;animation:slideIn 1s cubic-bezier(.16,1,.3,1) .25s forwards;
 }
-.hero h1 .name-italic{font-style:italic;color:var(--emerald-bright);position:relative;display:inline-block;}
-.hero h1 .name-italic::after{
-  content:'';position:absolute;left:0;right:0;bottom:0.05em;height:2px;
-  background:linear-gradient(90deg, transparent, var(--emerald-bright) 30%, var(--emerald-bright) 70%, transparent);
-  opacity:0.4;
-}
+.hero h1 .name-italic{font-style:italic;color:var(--emerald-bright);}
 .hero .subtitle{
   font-size:1.35rem;
   color:#c4d4ce;
@@ -291,10 +295,10 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 
 /* ===== ABOUT ===== */
 .about-section{
-  padding:5rem 0;
+  padding:5rem 0 6rem;
   position:relative;
 }
-.about-grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:start;}
+.about-grid{display:grid;grid-template-columns:1fr 300px;gap:4.5rem;align-items:start;}
 .about-label{
   font-family:var(--mono);font-size:0.72rem;
   text-transform:uppercase;letter-spacing:0.18em;
@@ -306,21 +310,60 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 .about-title{
   font-family:var(--display);
   font-weight:400;
-  font-size:clamp(2.2rem,4.5vw,3.4rem);
-  line-height:1.05;
+  font-size:clamp(1.9rem,3.2vw,2.8rem);
+  line-height:1.12;
   letter-spacing:-0.03em;
-  margin-bottom:2rem;
+  margin-bottom:1.8rem;
   color:var(--text);
 }
 .about-title .em{font-style:italic;color:var(--emerald-bright);}
 .about-text{
-  font-size:1.08rem;
+  font-size:1.05rem;
   color:var(--text-dim);
-  line-height:1.75;
-  margin-bottom:1.2rem;
-  max-width:760px;
+  line-height:1.8;
+  margin-bottom:1.5rem;
 }
 .about-text strong{color:var(--text);font-weight:500;}
+
+.about-photo-col{display:flex;justify-content:center;}
+.about-photo-placeholder{
+  position:sticky;
+  top:120px;
+  width:100%;
+  aspect-ratio:3/4;
+  background:linear-gradient(145deg, var(--bg-2) 0%, var(--bg-1) 100%);
+  border:1px solid var(--line-strong);
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:0.75rem;
+}
+.about-photo-placeholder::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.1) 0%, transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.about-photo-placeholder::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, var(--line-strong) 50%, transparent);
+}
+.about-photo-placeholder img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:top center;
+  display:block;position:relative;z-index:1;
+}
+.about-photo-hint{
+  font-family:var(--mono);
+  font-size:0.68rem;
+  color:var(--text-faint);
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  text-align:center;
+  position:relative;z-index:1;
+}
 
 .skills-preview{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:2.5rem;}
 .skill-tag{
@@ -366,11 +409,31 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 .section-title .em{font-style:italic;color:var(--emerald-bright);}
 
 /* ===== PROJECTS ===== */
+.project-filters{
+  display:flex;gap:0.6rem;margin-bottom:2.2rem;
+}
+.filter-pill{
+  padding:0.45rem 1.2rem;
+  border-radius:100px;
+  font-family:var(--mono);font-size:0.75rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:0.08em;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  color:var(--text-dim);
+  cursor:pointer;
+  transition:all .25s ease;
+}
+.filter-pill:hover{color:var(--emerald-bright);border-color:var(--line-strong);}
+.filter-pill.active{
+  background:linear-gradient(180deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05));
+  color:var(--emerald-bright);
+  border-color:var(--emerald);
+}
 .projects-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(440px, 1fr));
   gap:1.8rem;
-  margin-top:2rem;
+  margin-top:0;
 }
 .project-card{
   position:relative;
@@ -699,9 +762,9 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 /* ===== RESUME EMBED ===== */
 .resume-embed-wrapper{max-width:900px;margin:0 auto;}
 .resume-actions-bar{
-  display:flex;gap:1rem;flex-wrap:wrap;
-  margin-bottom:1.5rem;
-  justify-content:flex-end;
+  display:flex;gap:1.2rem;flex-wrap:wrap;
+  margin-bottom:2rem;
+  justify-content:center;
 }
 .resume-frame-container{
   position:relative;
@@ -735,21 +798,27 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 /* ===== RESUME / CONTACT ===== */
 .resume-content,.contact-content{text-align:center;max-width:760px;margin:0 auto;}
 .resume-description,.contact-description{
-  font-size:1.15rem;
+  font-size:1.1rem;
   color:var(--text-dim);
-  margin-bottom:3rem;
-  line-height:1.75;
+  margin-bottom:2.5rem;
+  line-height:1.8;
+  max-width:560px;
+  margin-left:auto;
+  margin-right:auto;
 }
 .resume-actions,.contact-links{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
 .resume-button{
   display:inline-flex;align-items:center;gap:0.7rem;
-  padding:1.2rem 2.4rem;
+  padding:1.05rem 2rem;
   background:linear-gradient(135deg, #047857 0%, #10b981 100%);
   color:#02110c;
   text-decoration:none;
   border-radius:14px;
+  font-family:var(--sans);
   font-weight:600;
-  font-size:1.02rem;
+  font-size:0.97rem;
+  border:none;
+  cursor:pointer;
   transition:all .35s cubic-bezier(.4,0,.2,1);
   box-shadow:0 1px 0 rgba(255,255,255,0.15) inset, 0 8px 24px -8px rgba(16,185,129,0.5), 0 0 0 1px rgba(16,185,129,0.4);
   position:relative;overflow:hidden;
@@ -773,19 +842,21 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
   border-color:var(--emerald);
   box-shadow:0 1px 0 rgba(52,211,153,0.15) inset, 0 12px 30px -12px rgba(16,185,129,0.4);
   color:var(--text);
-}margin-bottom:2.5rem;display:flex;flex-direction:column;gap:0.9rem;align-items:center;}
+}
+.contact-info{margin-bottom:2.5rem;display:flex;flex-direction:column;gap:0.9rem;align-items:center;}
 .contact-detail{
   font-family:var(--mono);
-  font-size:1rem;
+  font-size:0.97rem;
   color:var(--text-dim);
-  padding:1.1rem 1.6rem;
+  padding:1rem 1.5rem;
   background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
   border:1px solid var(--line);
   border-radius:14px;
   transition:all .3s ease;
   display:inline-flex;align-items:center;gap:0.7rem;
+  text-decoration:none;
 }
-.contact-detail:hover{
+a.contact-detail:hover{
   color:var(--emerald-bright);
   border-color:var(--line-strong);
   transform:translateY(-2px);
@@ -918,6 +989,8 @@ footer .heart{color:var(--emerald-bright);}
   .nav-links a{padding:0.9rem 1rem;width:100%;}
   .mobile-menu-toggle{display:flex;}
   .stats-grid{grid-template-columns:1fr;max-width:400px;}
+  .about-grid{grid-template-columns:1fr;}
+  .about-photo-col{display:none;}
   .projects-grid{grid-template-columns:1fr;}
   .revive-gallery-grid{grid-template-columns:1fr;}
   .cta-buttons{flex-direction:column;}
@@ -946,8 +1019,8 @@ footer .heart{color:var(--emerald-bright);}
     <div class="logo" onclick="navigateTo('home')">Haren G.</div>
     <ul class="nav-links">
       <li><a href="#" onclick="navigateTo('home');return false;" data-page="home" class="active">Home</a></li>
-      <li><a href="#" onclick="navigateTo('resume');return false;" data-page="resume">Resume</a></li>
       <li><a href="#" onclick="navigateTo('projects');return false;" data-page="projects">Projects</a></li>
+      <li><a href="#" onclick="navigateTo('resume');return false;" data-page="resume">Resume</a></li>
       <li><a href="#" onclick="navigateTo('experience');return false;" data-page="experience">Experience</a></li>
       <li><a href="#" onclick="navigateTo('contact');return false;" data-page="contact">Contact</a></li>
     </ul>
@@ -967,7 +1040,6 @@ footer .heart{color:var(--emerald-bright);}
     <div class="container">
       <div class="hero-grid">
         <div>
-          <div class="hero-eyebrow"><span class="dot"></span>Available for opportunities</div>
           <h1>Haren <span class="name-italic">Gannarapu</span></h1>
           <p class="subtitle">SWE @ Princess Cruises (Carnival) · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p>
           <div class="cta-buttons">
@@ -976,8 +1048,8 @@ footer .heart{color:var(--emerald-bright);}
           </div>
           <div class="stats-grid">
             <div class="stat-item">
-              <span class="stat-number">9+</span>
-              <span class="stat-label">Projects Shipped</span>
+              <span class="stat-number">2×</span>
+              <span class="stat-label">Hackathon Winner</span>
             </div>
             <div class="stat-item">
               <span class="stat-number">3.8</span>
@@ -996,11 +1068,11 @@ footer .heart{color:var(--emerald-bright);}
   <section class="about-section">
     <div class="container">
       <div class="about-grid">
-        <div>
+        <div class="about-text-col">
           <div class="about-label">About</div>
-          <h2 class="about-title">Engineering at the edge of <span class="em">AI</span> and <span class="em">human-centered</span> design.</h2>
-          <p class="about-text">I'm an impact-driven Computer Science student at UCF passionate about designing AI-powered systems that bridge real-world utility with thoughtful design. I thrive at the intersection of <strong>AI/ML</strong>, <strong>full-stack engineering</strong>, and <strong>creative problem-solving</strong> — bringing precision and imagination to every project.</p>
-          <p class="about-text">From building autonomous robot navigation systems to creating intelligent scam detection tools and fintech applications, I write clean, efficient code and design experiences that genuinely matter. My projects span AI research, full-stack development, and robotics — always with a focus on solving real problems for real people.</p>
+          <h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2>
+          <p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. I've shipped production ML infrastructure at <strong>Princess Cruises (Carnival)</strong> and built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong> — handling the full pipeline from raw data to scalable inference.</p>
+          <p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours, and I care as much about clean architecture as I do about the outcome. I write code that holds up — not just code that ships.</p>
           <div class="skills-preview">
             <div class="skill-tag">Python</div>
             <div class="skill-tag">JavaScript</div>
@@ -1026,6 +1098,14 @@ footer .heart{color:var(--emerald-bright);}
             <div class="skill-tag">Git</div>
           </div>
         </div>
+        <div class="about-photo-col">
+          <div class="about-photo-placeholder">
+            <!-- To add your photo: replace the svg+span below with:
+                 <img src="your-photo.jpg" alt="Haren Gannarapu"> -->
+            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-faint);opacity:0.35;position:relative;z-index:1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="about-photo-hint">Photo coming soon</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1039,27 +1119,23 @@ footer .heart{color:var(--emerald-bright);}
       <h2 class="section-title">My <span class="em">credentials</span>, in one place.</h2>
       <div class="resume-embed-wrapper">
         <div class="resume-actions-bar">
-          <a href="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/view?usp=sharing" class="resume-button" target="_blank" rel="noopener noreferrer">
+          <a href="https://drive.google.com/uc?export=download&id=1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW" class="resume-button" target="_blank" rel="noopener noreferrer">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download PDF
           </a>
-          <a href="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/view?usp=sharing" class="resume-button secondary" target="_blank" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 0 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Open in Drive
-          </a>
+          <button class="resume-button secondary" id="viewResumeBtn" onclick="toggleResumePreview()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span id="viewResumeBtnLabel">View Resume</span>
+          </button>
         </div>
-        <div class="resume-frame-container">
+        <div class="resume-frame-container" id="resumeFrameContainer" style="display:none;margin-top:0;">
           <iframe
-            src="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/preview"
+            id="resumeIframe"
+            data-src="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/preview?v=1"
             class="resume-iframe"
             allow="autoplay"
             title="Haren Gannarapu Resume"
           ></iframe>
-          <div class="resume-frame-fallback" id="resumeFallback" style="display:none;">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <p>Preview unavailable in this context.</p>
-            <a href="https://drive.google.com/file/d/1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW/view?usp=sharing" class="resume-button" target="_blank">Open Resume →</a>
-          </div>
         </div>
       </div>
     </div>
@@ -1072,10 +1148,14 @@ footer .heart{color:var(--emerald-bright);}
     <div class="container">
       <div class="section-eyebrow">Projects</div>
       <h2 class="section-title">Things I've <span class="em">built</span>.</h2>
+      <div class="project-filters">
+        <button class="filter-pill active" onclick="filterProjects('all', this)">All</button>
+        <button class="filter-pill" onclick="filterProjects('featured', this)">Featured</button>
+      </div>
       <div class="projects-grid">
 
         <!-- REVIVE -->
-        <div class="project-card revive-winner-card">
+        <div class="project-card revive-winner-card" data-featured="true">
           <div class="gold-aura"></div>
           <div class="badge-row">
             <span class="revive-winner-badge">🏆 Winner — HackaBULL VII 2026</span>
@@ -1112,7 +1192,7 @@ footer .heart{color:var(--emerald-bright);}
         </div>
 
         <!-- REPLAI -->
-        <div class="project-card winner-card">
+        <div class="project-card winner-card" data-featured="true">
           <div class="gold-aura"></div>
           <div class="badge-row">
             <span class="winner-badge">🏆 Winner — Hack The Bay 2026</span>
@@ -1127,7 +1207,7 @@ footer .heart{color:var(--emerald-bright);}
           </div>
         </div>
 
-        <div class="project-card">
+        <div class="project-card" data-featured="true">
           <div class="badge-row"><span class="project-badge featured">Featured</span></div>
           <h3 class="project-title">KnightMobile — Autonomous Robot System</h3>
           <p class="project-tech">Python · Flask · React · YOLOv5 · Arduino · iPhone LiDAR · WebSockets · D* Lite</p>
@@ -1138,7 +1218,7 @@ footer .heart{color:var(--emerald-bright);}
           </div>
         </div>
 
-        <div class="project-card">
+        <div class="project-card" data-featured="true">
           <div class="badge-row"><span class="project-badge featured">Featured</span></div>
           <h3 class="project-title">CardFinder — Smart Card Analysis</h3>
           <p class="project-tech">Next.js · TypeScript · Python · CFPB API · Recharts · Zod · Vercel</p>
@@ -1216,9 +1296,10 @@ footer .heart{color:var(--emerald-bright);}
         <p class="experience-company">Oasis (AI Travel Startup) · Python, PyTorch Geometric, AWS, Kubernetes</p>
         <p class="experience-description">Built ML infrastructure for an AI travel startup's recommendation engine — a heterogeneous graph neural network modeling users, posts, and tags to surface personalized travel suggestions at scale.</p>
         <div class="experience-highlights">
-          <div class="highlight">Architected a heterogeneous GNN recommendation system using PyTorch Geometric, modeling users, posts, and tags as an interaction graph; built the full PostgreSQL-to-tensor data pipeline for link prediction.</div>
-          <div class="highlight">Re-architected AWS infrastructure with Terraform and Kubernetes IaC, reducing dev environment build times by 93% and fully eliminating manual data processing steps.</div>
-          <div class="highlight">Built a model observability pipeline with Prometheus and Grafana and deployed Triton Inference Server with KEDA autoscaling for horizontal GNN inference scaling, cutting mean time-to-debug by 60%.</div>
+          <div class="highlight">Cut nightly training pipeline runtime from 45 to 8 minutes by replacing full PostgreSQL dumps with incremental extraction and S3 tensor caching for a 2M-edge user–post–tag graph.</div>
+          <div class="highlight">Built a heterogeneous GraphSAGE link-prediction model in PyTorch Geometric, served via Triton for real-time content recommendations.</div>
+          <div class="highlight">Configured KEDA autoscaling on SQS queue depth to scale Triton inference pods from 2 to 20 replicas with traffic, matching GPU capacity to demand rather than provisioning for peak.</div>
+          <div class="highlight">Caught a tokenizer regression adding 120ms to p99 within hours of deploy by instrumenting inference services with Prometheus histograms and Grafana dashboards for latency, GPU utilization, and queue lag.</div>
         </div>
       </div>
 
@@ -1248,15 +1329,30 @@ footer .heart{color:var(--emerald-bright);}
       <div class="section-eyebrow">Contact</div>
       <h2 class="section-title">Let's <span class="em">build</span> something.</h2>
       <div class="contact-content">
-        <p class="contact-description">I'm always interested in discussing new opportunities, innovative projects, and collaborations. Whether you're looking for a dedicated developer, AI researcher, or just want to chat about technology — feel free to reach out. I respond to all messages within 24 hours.</p>
+        <p class="contact-description">Open to new opportunities, interesting projects, and good conversations. I respond within 24 hours.</p>
         <div class="contact-info">
-          <div class="contact-detail">📧 gannarapuharen@gmail.com</div>
-          <div class="contact-detail">📍 Orlando, Florida</div>
+          <a href="mailto:gannarapuharen@gmail.com" class="contact-detail">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            gannarapuharen@gmail.com
+          </a>
+          <div class="contact-detail">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Orlando, Florida
+          </div>
         </div>
         <div class="contact-links">
-          <a href="https://linkedin.com/in/harengannarapu" class="contact-link" target="_blank">💼 LinkedIn</a>
-          <a href="https://github.com/Hareng8374" class="contact-link" target="_blank">💻 GitHub</a>
-          <a href="mailto:gannarapuharen@gmail.com" class="contact-link">✉️ Email Me</a>
+          <a href="https://linkedin.com/in/harengannarapu" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/Hareng8374" class="contact-link" target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a href="mailto:gannarapuharen@gmail.com" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email Me
+          </a>
         </div>
       </div>
     </div>
@@ -1294,6 +1390,10 @@ function navigateTo(page){
       currentPage = page;
       window.scrollTo({top:0,behavior:'smooth'});
       history.pushState({page},'','#'+page);
+      if(page === 'projects'){
+        const firstPill = document.querySelector('.filter-pill');
+        if(firstPill) filterProjects('all', firstPill);
+      }
     }
   },80);
   document.querySelector('.nav-links').classList.remove('active');
@@ -1319,6 +1419,33 @@ function toggleMobileMenu(){
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+
+function filterProjects(filter, btn){
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.project-card').forEach(card=>{
+    card.style.display = (filter === 'all' || card.dataset.featured === 'true') ? '' : 'none';
+  });
+}
+
+function toggleResumePreview(){
+  const container = document.getElementById('resumeFrameContainer');
+  const iframe = document.getElementById('resumeIframe');
+  const label = document.getElementById('viewResumeBtnLabel');
+  const isHidden = container.style.display === 'none';
+  if(isHidden){
+    if(!iframe.src || !iframe.src.includes('drive.google.com')){
+      iframe.src = iframe.dataset.src;
+    }
+    container.style.display = 'block';
+    container.style.marginTop = '2rem';
+    setTimeout(()=>container.scrollIntoView({behavior:'smooth',block:'start'}),120);
+    label.textContent = 'Hide Preview';
+  } else {
+    container.style.display = 'none';
+    label.textContent = 'View Resume';
+  }
+}
 
 const scrollTopBtn = document.querySelector('.scroll-top');
 const navbar = document.getElementById('navbar');
