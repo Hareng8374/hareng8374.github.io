@@ -926,35 +926,36 @@ a.contact-detail:hover{
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
 }
 .game-overlay.hidden{display:none;}
-.game-overlay-eyebrow{
-  font-family:var(--mono);font-size:0.7rem;color:var(--text-faint);
-  text-transform:uppercase;letter-spacing:0.16em;
-}
 .game-overlay-title{
   font-family:var(--display);font-size:clamp(2rem,5vw,3rem);font-weight:400;
   color:var(--emerald-bright);letter-spacing:-0.04em;font-style:italic;
 }
 .game-overlay-sub{
-  font-family:var(--mono);font-size:0.78rem;color:var(--text-dim);
-  text-align:center;max-width:300px;line-height:1.7;
+  font-family:var(--mono);font-size:0.75rem;color:var(--text-dim);
+  text-align:center;max-width:280px;line-height:1.7;
 }
-.game-play-btn{
-  margin-top:0.4rem;padding:0.85rem 3rem;
-  font-family:var(--mono);font-size:0.88rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:0.12em;
-  background:linear-gradient(135deg,#047857 0%,#10b981 100%);
-  color:#02110c;border:none;border-radius:12px;cursor:pointer;
-  transition:all .3s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 8px 24px -8px rgba(16,185,129,0.5),0 0 0 1px rgba(16,185,129,0.4);
-  position:relative;overflow:hidden;
+.game-diff-btns{display:flex;gap:0.75rem;margin-top:0.4rem;flex-wrap:wrap;justify-content:center;}
+.diff-btn{
+  padding:0.6rem 1.5rem;
+  font-family:var(--mono);font-size:0.8rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.1em;
+  background:linear-gradient(180deg,var(--bg-2),var(--bg-1));
+  color:var(--emerald-bright);
+  border:1px solid var(--line-strong);
+  border-radius:10px;cursor:pointer;
+  transition:all .25s ease;
 }
-.game-play-btn::after{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
-  transition:left .5s ease;
+.diff-btn:hover{
+  border-color:var(--emerald);
+  background:linear-gradient(180deg,rgba(16,185,129,0.14),rgba(16,185,129,0.05));
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px -8px rgba(16,185,129,0.4);
 }
-.game-play-btn:hover{transform:translateY(-3px);box-shadow:0 14px 32px -8px rgba(16,185,129,0.7),0 0 0 1px rgba(52,211,153,0.6);}
-.game-play-btn:hover::after{left:100%;}
+.diff-btn.active-diff{
+  background:linear-gradient(135deg,#047857,#10b981);
+  color:#02110c;border-color:transparent;
+  box-shadow:0 6px 20px -8px rgba(16,185,129,0.5),0 0 0 1px rgba(16,185,129,0.4);
+}
 
 /* ===== VIDEO MODAL ===== */
 .video-modal{
@@ -1215,16 +1216,18 @@ footer .heart{color:var(--emerald-bright);}
             <span class="game-bar-label">// side quest — breakout</span>
             <div class="game-hud">
               <span>Score<span class="game-hud-val" id="brkScore">0</span></span>
-              <span>Lives<span class="game-hud-val" id="brkLives">♥♥♥</span></span>
             </div>
           </div>
           <div class="game-canvas-wrap">
             <canvas id="breakoutCanvas"></canvas>
             <div class="game-overlay" id="gameOverlay">
-              <span class="game-overlay-eyebrow">resume · side quest</span>
               <div class="game-overlay-title" id="gameOverlayTitle">Breakout</div>
-              <p class="game-overlay-sub" id="gameOverlaySub">Mouse or touch to move paddle. Arrow keys also work. Break all the bricks.</p>
-              <button class="game-play-btn" id="gamePlayBtn">▶ &nbsp;PLAY</button>
+              <p class="game-overlay-sub" id="gameOverlaySub">Mouse · touch · ← → to move. Break all bricks.</p>
+              <div class="game-diff-btns">
+                <button class="diff-btn" id="diffEasy">Easy</button>
+                <button class="diff-btn active-diff" id="diffNormal">Normal</button>
+                <button class="diff-btn" id="diffHard">Hard</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1598,8 +1601,9 @@ document.querySelectorAll('.project-card, .stat-item').forEach(card=>{
 
 /* ===== BREAKOUT GAME ===== */
 const Breakout = (function(){
-  let cv, cx, STATE='idle', score, lives, bricks, ball, pad, raf, keys={};
-  const COLS=8, ROWS=5, GAP=6, BR=7, BASE_SPD=5.4;
+  let cv, cx, STATE='idle', score, bricks, ball, pad, raf, keys={}, CUR_SPD=3.8;
+  const COLS=8, ROWS=5, GAP=6, BR=7;
+  const SPEEDS={easy:2.9, normal:3.8, hard:5.2};
   const BRICK_COLS=['#6ee7b7','#34d399','#10b981','#059669','#047857'];
   // ---- helpers ----
   function rr(x,y,w,h,r){
@@ -1616,14 +1620,10 @@ const Breakout = (function(){
     const w=Math.max(wrap.offsetWidth||0, wrap.clientWidth||0, 400);
     cv.width=w; cv.height=Math.min(Math.round(w*0.52),440);
     const cw=cv.width, ch=cv.height;
-    const spd=Math.min(BASE_SPD, cw*0.007);
-    score=0; lives=3; keys={};
-    const pw=Math.max(80,cw*0.12);
+    score=0; keys={};
+    const pw=Math.max(88,cw*0.13);
     pad={x:(cw-pw)/2, y:ch-50, w:pw, h:12};
-    const a=(0.35+Math.random()*0.3)*Math.PI;
-    ball={x:cw/2, y:pad.y-BR-2,
-          vx:Math.cos(a)*spd*(Math.random()>.5?1:-1),
-          vy:-Math.abs(Math.sin(a)*spd), trail:[]};
+    resetBall();
     const bW=(cw-(COLS+1)*GAP)/COLS;
     const bH=Math.max(14,ch*0.043);
     bricks=[];
@@ -1633,26 +1633,40 @@ const Breakout = (function(){
     hud();
   }
 
-  function hud(){
-    const s=document.getElementById('brkScore'),l=document.getElementById('brkLives');
-    if(s) s.textContent=score;
-    if(l) l.textContent='♥'.repeat(Math.max(0,lives))+'♡'.repeat(Math.max(0,3-lives));
+  function resetBall(){
+    const cw=cv.width, ch=cv.height;
+    const spd=Math.min(CUR_SPD, cw*0.006);
+    const a=(0.38+Math.random()*0.24)*Math.PI;
+    ball={x:cw/2, y:pad.y-BR-2,
+          vx:Math.cos(a)*spd*(Math.random()>.5?1:-1),
+          vy:-Math.abs(Math.sin(a)*spd), trail:[]};
   }
 
-  function showOverlay(title, sub, btnTxt){
+  function hud(){
+    const s=document.getElementById('brkScore');
+    if(s) s.textContent=score;
+  }
+
+  function showOverlay(title, sub){
     const el=document.getElementById('gameOverlay');
     const t=document.getElementById('gameOverlayTitle');
     const s=document.getElementById('gameOverlaySub');
-    const b=document.getElementById('gamePlayBtn');
     if(t) t.textContent=title;
-    if(s) s.textContent=sub;
-    if(b) b.textContent=btnTxt;
+    if(s) s.textContent=sub||'Mouse · touch · ← → to move. Break all bricks.';
     if(el) el.classList.remove('hidden');
   }
   function hideOverlay(){ const el=document.getElementById('gameOverlay'); if(el) el.classList.add('hidden'); }
 
-  function startGame(){
-    if(STATE==='over'||STATE==='win') setup();
+  function setDiff(level){
+    CUR_SPD=SPEEDS[level];
+    document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active-diff'));
+    const btn=document.getElementById('diff'+level.charAt(0).toUpperCase()+level.slice(1));
+    if(btn) btn.classList.add('active-diff');
+  }
+
+  function startGame(level){
+    if(level) setDiff(level);
+    setup();
     hideOverlay(); STATE='play'; loop();
   }
 
@@ -1682,22 +1696,13 @@ const Breakout = (function(){
       ball.vy=-Math.abs(Math.cos(a)*spd);
       ball.y=pad.y-BR-1;
     }
-    // bottom — lose life
+    // bottom — reset (one life)
     if(ball.y-BR>ch){
-      lives--; hud();
       cancelAnimationFrame(raf);
-      if(lives<=0){
-        STATE='over'; draw();
-        showOverlay('Game Over','Score: '+score,'▶  PLAY AGAIN');
-        return;
-      }
-      const spd=Math.min(BASE_SPD,cw*0.007);
-      const a=(0.35+Math.random()*0.3)*Math.PI;
-      ball={x:cw/2,y:pad.y-BR-2,
-            vx:Math.cos(a)*spd*(Math.random()>.5?1:-1),
-            vy:-Math.abs(Math.sin(a)*spd),trail:[]};
+      score=0; hud();
+      resetBall();
       STATE='idle'; draw();
-      showOverlay('Ball Lost!','Click to launch','▶  LAUNCH');
+      showOverlay('Ball Lost!','Score reset. Pick a difficulty to try again.');
       return;
     }
     // bricks
@@ -1713,7 +1718,7 @@ const Breakout = (function(){
     }
     if(bricks.every(b=>!b.alive)){
       STATE='win'; cancelAnimationFrame(raf); draw();
-      showOverlay('You cleared it! 🎉','Score: '+score,'▶  PLAY AGAIN');
+      showOverlay('You cleared it! 🎉','Score: '+score+'  —  pick a difficulty to play again.');
     }
   }
 
@@ -1766,8 +1771,12 @@ const Breakout = (function(){
       if(e.key===' '&&currentPage==='resume'){e.preventDefault();startGame();}
     });
     document.addEventListener('keyup',e=>{ keys[e.key]=false; });
-    const btn=document.getElementById('gamePlayBtn');
-    if(btn) btn.addEventListener('click',startGame);
+    const easy=document.getElementById('diffEasy');
+    const normal=document.getElementById('diffNormal');
+    const hard=document.getElementById('diffHard');
+    if(easy) easy.addEventListener('click',()=>startGame('easy'));
+    if(normal) normal.addEventListener('click',()=>startGame('normal'));
+    if(hard) hard.addEventListener('click',()=>startGame('hard'));
     window.addEventListener('resize',()=>{
       if(currentPage!=='resume'||STATE==='play') return;
       setup(); draw();
@@ -1785,7 +1794,7 @@ const Breakout = (function(){
       // Defer setup 1 frame so the page is visible and has layout
       requestAnimationFrame(()=>{
         setup(); draw();
-        showOverlay('Breakout','Mouse or ← → to move. Break all the bricks.','▶  PLAY');
+        showOverlay('Breakout');
       });
     },
     pause(){
