@@ -21,3 +21,6 @@ dist/
 # The shipped layers (*.webp) and ballspin.webm stay tracked.
 src/assets/avatar/*.png
 src/assets/avatar/*.mp4
+
+# registration master, used by tools/avatar only
+src/assets/avatar/idle.webp

@@ -15,6 +15,7 @@
 <meta name="twitter:description" content="CS @ UCF. SWE at Carnival. 2× hackathon winner. Building AI-powered systems.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="src/components/avatar.css">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -167,7 +168,9 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 
 /* ===== HERO ===== */
 .hero{min-height:calc(100vh - 96px);display:flex;align-items:center;padding:3rem 0 5rem;position:relative;}
-.hero-grid{display:grid;grid-template-columns:1fr;gap:4rem;align-items:center;width:100%;}
+.hero-grid{display:grid;grid-template-columns:1fr 340px;gap:4rem;align-items:center;width:100%;}
+.hero-avatar-col{display:flex;align-items:center;justify-content:center;}
+.hero-avatar-col .hg-avatar{--hg-avatar-width:340px;}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:0.6rem;
   font-family:var(--mono);font-size:0.72rem;
@@ -1217,6 +1220,9 @@ footer .heart{color:var(--emerald-bright);}
   .nav-links a{padding:0.9rem 1rem;width:100%;}
   .mobile-menu-toggle{display:flex;}
   .stats-grid{grid-template-columns:1fr;max-width:400px;}
+  .hero-grid{grid-template-columns:1fr;gap:2rem;}
+  .hero-avatar-col{order:-1;}
+  .hero-avatar-col .hg-avatar{--hg-avatar-width:200px;}
   .about-grid{grid-template-columns:1fr;}
   .about-globe-col{position:static;transform:none;}
   .projects-grid{grid-template-columns:1fr;}
@@ -1229,6 +1235,7 @@ footer .heart{color:var(--emerald-bright);}
 @media (max-width: 640px){
   .container{padding:0 1.3rem;}
   .project-card,.experience-card{padding:1.8rem;}
+  .hero-avatar-col .hg-avatar{--hg-avatar-width:150px;}
   .hero h1{font-size:clamp(2.6rem,11vw,4.5rem);}
 }
 </style>
@@ -1272,11 +1279,11 @@ footer .heart{color:var(--emerald-bright);}
           <h1>Haren <span class="name-italic">Gannarapu</span></h1>
           <p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p>
           <div class="cta-buttons">
-            <button class="cta-button" onclick="navigateTo('projects')">View Projects →</button>
-            <button class="cta-button secondary" onclick="navigateTo('contact')">Get In Touch</button>
+            <button class="cta-button" data-avatar-react="point" onclick="navigateTo('projects')">View Projects →</button>
+            <button class="cta-button secondary" data-avatar-react="wave1" onclick="navigateTo('contact')">Get In Touch</button>
           </div>
           <div class="stats-grid">
-            <div class="stat-item">
+            <div class="stat-item" data-avatar-react="thumbsup">
               <span class="stat-number">2×</span>
               <span class="stat-label">Hackathon Winner</span>
             </div>
@@ -1290,6 +1297,7 @@ footer .heart{color:var(--emerald-bright);}
             </div>
           </div>
         </div>
+        <div class="hero-avatar-col"><div id="heroAvatar"></div></div>
       </div>
     </div>
   </section>
@@ -2202,6 +2210,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if (REVIVE_IMAGES[key]) img.src = REVIVE_IMAGES[key];
   });
 });
+</script>
+<script src="src/components/avatar.js"></script>
+<script>
+(function(){
+  var host=document.getElementById('heroAvatar');
+  if(host&&window.Avatar) window.hgAvatar=window.Avatar.create(host,{clickReact:false});
+})();
 </script>
 </body>
 </html>

@@ -302,9 +302,15 @@ def main():
     ap.add_argument("--scratch", type=Path, required=True)
     ap.add_argument("--write", action="store_true", help="write the webp layers")
     ap.add_argument("--lid", choices=["synth", "harvest"], default="synth")
+    # The layers must be cut from the pose the component actually renders.
+    # idle.webp (video frame) and idle-still.webp (from image.png) are different
+    # renders whose irises sit in different places, so layers cut from one do
+    # not composite cleanly onto the other.
+    ap.add_argument("--source", default="idle-still.webp")
     a = ap.parse_args()
 
-    rgba = np.array(Image.open(L.AVATAR / "idle.webp").convert("RGBA")).astype(np.float32)
+    rgba = np.array(Image.open(L.AVATAR / a.source).convert("RGBA")).astype(np.float32)
+    print(f"cutting eye layers from {a.source}")
     ref, eyes = find_eyes(rgba)
     for i, e in enumerate(eyes):
         el = e["ell"]

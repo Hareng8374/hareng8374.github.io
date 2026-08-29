@@ -1,0 +1,120 @@
+/* Avatar component.
+ *
+ * Layout rule that everything else depends on: every animated element owns
+ * exactly ONE transform property and has exactly ONE writer. Breathing and the
+ * anticipation squash live on their own wrappers so they stay on the compositor
+ * and never collide with the per-frame JS writes.
+ *
+ *   .hg-avatar            JS   translate3d()  cursor parallax
+ *     __tilt              JS   rotate()       head tilt
+ *       __breathe         CSS  scale()        breathing
+ *         __squash        WAAPI scaleY()      anticipation
+ *           __stack       -                   layer stack
+ */
+
+.hg-avatar {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: var(--hg-avatar-width, 340px);
+  aspect-ratio: 680 / 720;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hg-avatar__tilt,
+.hg-avatar__breathe,
+.hg-avatar__squash,
+.hg-avatar__stack {
+  position: absolute;
+  inset: 0;
+}
+
+/* Tilt pivots low on the torso so the head swings furthest -- rotating about
+   the centre reads as the whole figure sliding, not as a head tilt. */
+.hg-avatar__tilt {
+  transform-origin: 50% 82%;
+  transform: rotate(0deg);
+  will-change: transform;
+}
+
+.hg-avatar__breathe {
+  transform-origin: 50% 100%;
+  animation: hg-breathe 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hg-avatar__squash {
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+@keyframes hg-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.008); }
+}
+
+/* ---------------------------------------------------------------- layers -- */
+
+.hg-avatar__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  /* Eased, not linear: a linear cross-dissolve spends too long at the 50/50
+     point where both poses are half-visible, which is what reads as ghosting. */
+  transition: opacity var(--hg-fade, 420ms) cubic-bezier(.4, 0, .2, 1);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.hg-avatar__layer.is-on { opacity: 1; }
+
+/* No per-pose rotation. Cross-dissolving two images held at different angles
+   reads as a double-exposure rather than movement -- the angle change has no
+   in-between frames to sell it, so both angles are simply visible at once. */
+.hg-avatar__pose { transform-origin: 50% 85%; }
+
+/* The incoming pose sits above the outgoing one for the duration of the fade,
+   so the overlap never dips in opacity and the character never goes see-through
+   mid-swap. */
+.hg-avatar__pose.is-incoming { z-index: 2; }
+
+.hg-avatar__pupils {
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* Stack order: pose, the incoming pose above it mid-fade, then irises, then
+   lids, then video. The incoming pose must stay below the eye layers, so it
+   sits at 2 and everything above it shifts up one. */
+.hg-avatar__pose   { z-index: 1; }
+.hg-avatar__pupils { z-index: 3; }
+.hg-avatar__eyes   { z-index: 4; }
+.hg-avatar__video  { z-index: 5; }
+.hg-avatar__poster { z-index: 5; }
+
+.hg-avatar__video {
+  /* The seam crossfade drives opacity; duration is set per-transition in JS. */
+  transition: opacity var(--hg-seam, 300ms) linear;
+}
+
+/* ------------------------------------------------------- reduced motion -- */
+
+/* Honouring the query means stopping the ambient motion too, not just the
+   video: breathing and drift are exactly what it asks to be spared. Poses
+   still swap on trigger, just without the squash and with a token fade. */
+.hg-avatar.is-reduced .hg-avatar__breathe { animation: none; }
+.hg-avatar.is-reduced .hg-avatar__layer   { transition-duration: 1ms; }
+.hg-avatar.is-reduced,
+.hg-avatar.is-reduced .hg-avatar__tilt,
+.hg-avatar.is-reduced .hg-avatar__pupils  { transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-avatar:not(.is-motion-ok) .hg-avatar__breathe { animation: none; }
+  .hg-avatar:not(.is-motion-ok) .hg-avatar__layer   { transition-duration: 1ms; }
+}
