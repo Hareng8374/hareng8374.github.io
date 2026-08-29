@@ -8,3 +8,16 @@ tools/**/.venv
 !.dev.vars.example
 .env*
 !.env.example
+
+# python bytecode
+__pycache__/
+*.pyc
+
+# node
+node_modules/
+dist/
+
+# avatar source assets: large, and only inputs to tools/avatar/.
+# The shipped layers (*.webp) and ballspin.webm stay tracked.
+src/assets/avatar/*.png
+src/assets/avatar/*.mp4

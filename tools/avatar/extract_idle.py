@@ -143,10 +143,26 @@ def contact_sheet(frames, rows, out):
 
 
 def save_idle(frames, idx, out):
+    """Key with the topological method from avatarlib.
+
+    A plain colour test cannot be used here: this render's sclera is bright and
+    desaturated enough to fall inside the key tolerance, and an earlier
+    colour-only version of this function punched a ~200px transparent hole
+    through his right eye. avatarlib.key_image protects anything the backdrop
+    flood fill cannot reach, and de-spills the soft edge.
+    """
+    sys.path.insert(0, str(Path(__file__).parent))
+    import avatarlib as AL
+
     c = crop(frames[idx])
-    a = colorkey_alpha(c)
-    rgba = np.dstack([c, (a * 255 + 0.5).astype(np.uint8)])
-    Image.fromarray(rgba, "RGBA").save(out, "WEBP", lossless=True, quality=100, method=6)
+    rgba, st = AL.key_image(c, key=KEY_RGB)
+    clear = rgba[..., 3] < 128
+    holes = int((clear & ~AL.flood_from_border(clear)).sum())
+    print(f"  similarity {st['similarity']:.4f}  blend {st['blend']}  "
+          f"protected {st['protected']:,}px  soft edge {st['edge_px']:,}px  "
+          f"interior holes {holes}")
+    Image.fromarray(np.clip(rgba + 0.5, 0, 255).astype(np.uint8), "RGBA").save(
+        out, "WEBP", lossless=True, quality=100, method=6, exact=True)
     return rgba
 
 
