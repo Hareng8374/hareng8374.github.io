@@ -1,3 +1,7 @@
+# python tooling
+.venv
+tools/**/.venv
+
 # wrangler files
 .wrangler
 .dev.vars*
