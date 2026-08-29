@@ -75,18 +75,20 @@
    * the eye layers register against, so it is also where blinking happens.
    * Holds are uneven on purpose -- equal holds read mechanical. */
   var CYCLE = [
-    ['idle-still', 3400],
+    ['idle-still', 3000],
     ['wave1',      1500],
     ['wave2',      1700],
-    ['idle-still', 3000],
+    ['idle-still', 2400],
+    ['ballspin',   9000],   // ~2 loop seams, so the spin actually reads
+    ['idle-still', 2600],
     ['thumbsup',   2400],
     ['point',      2600],
-    ['idle-still', 3200],
+    ['idle-still', 2800],
     ['surprised',  2200],
     ['dance1',     1800],
     ['dance2',     1800],
     ['dance1',     1600],
-    ['idle-still', 3600]
+    ['idle-still', 3200]
   ];
 
   /* 709-byte VP9+alpha probe: left half opaque green, right half fully clear.
@@ -188,6 +190,10 @@
     // Click-to-react is great on a demo page and noisy on a real site, where
     // every nav click would fire a pose change. Opt-out.
     this.clickReact = opts.clickReact !== false;
+    // Pupil tracking is off by default. The iris layer slides while the sclera
+    // and eyelids stay fixed, so at display size it reads as a drifting eye
+    // rather than a glance. Blinking still runs.
+    this.pupilTrack = opts.pupilTrack === true;
     this.touch = isTouch();
     this.reduced = prefersReduced();
     this.noVideo = this.touch || this.reduced || saveData();
@@ -405,7 +411,7 @@
     var p = POSES[this.pose];
     var ok = !!(p && p.eyes) && !this.videoOn && !this.reduced;
     this.eyesActive = ok;
-    this.pupilsEl.classList.toggle('is-on', ok);
+    this.pupilsEl.classList.toggle('is-on', ok && this.pupilTrack);
     if (!ok) this.eyesEl.classList.remove('is-on');
   };
 
@@ -464,7 +470,15 @@
       if (self.destroyed || !self.cycleOn) return;
       var s = CYCLE[i % CYCLE.length];
       i++;
-      if (!self.videoOn) {
+      // Fetch the clip two beats before it is due rather than on page load, so
+      // the 430KB is spent only by someone who actually stayed.
+      var soon = CYCLE[(i + 1) % CYCLE.length];
+      if (soon && soon[0] === 'ballspin') self._preloadVideo();
+
+      if (s[0] === 'ballspin') {
+        self._enterVideo();
+      } else {
+        if (self.videoOn) self._exitVideo();
         self.base = s[0];
         self._render();
       }
@@ -655,7 +669,7 @@
     this.cx += (this.tx - this.cx) * K.lerp;
     this.cy += (this.ty - this.cy) * K.lerp;
     this.cRot += (this.tRot - this.cRot) * K.lerp;
-    var pupilsLive = this.eyesActive && !this.videoOn;
+    var pupilsLive = this.pupilTrack && this.eyesActive && !this.videoOn;
     this.cPx += ((pupilsLive ? this.tPx : 0) - this.cPx) * K.lerp;
     this.cPy += ((pupilsLive ? this.tPy : 0) - this.cPy) * K.lerp;
 
