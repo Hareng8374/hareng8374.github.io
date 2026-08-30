@@ -256,7 +256,12 @@
       var img = document.createElement('img');
       img.className = 'hg-avatar__layer hg-avatar__pose';
       img.setAttribute('data-pose', name);
-      img.src = self.assets + POSES[name].file;
+      // Only the opening pose is fetched up front. The other seven are ~390KB
+      // together and nothing needs them for ~2.5s, so they are deferred until
+      // after load rather than competing with first paint -- which is most of
+      // why this felt slow on a phone.
+      if (name === self.pose) img.src = self.assets + POSES[name].file;
+      else img.setAttribute('data-src', self.assets + POSES[name].file);
       img.alt = '';
       img.decoding = 'async';
       img.draggable = false;
@@ -288,10 +293,24 @@
     this._syncEyes();
   };
 
+  Avatar.prototype._streamRest = function () {
+    var self = this;
+    var go = function () {
+      Object.keys(self.poseEls).forEach(function (k) {
+        var el = self.poseEls[k], src = el.getAttribute('data-src');
+        if (src) { el.src = src; el.removeAttribute('data-src'); }
+      });
+    };
+    if (document.readyState === 'complete') setTimeout(go, 250);
+    else global.addEventListener('load', function () { setTimeout(go, 250); }, { once: true });
+  };
+
   Avatar.prototype._preload = function () {
     var self = this;
+    this._streamRest();
     var imgs = Object.keys(this.poseEls).map(function (k) { return self.poseEls[k]; });
     var decoded = Promise.all(imgs.map(function (i) {
+      if (!i.getAttribute('src')) return Promise.resolve();   // deferred, not yet fetched
       return i.decode ? i.decode().catch(function () {}) : Promise.resolve();
     }));
     // Waiting on decode() is what buys a flicker-free first swap, but it must
@@ -399,6 +418,19 @@
     var out = this.poseEls[this.pose];
     var incoming = this.poseEls[name];
 
+    // Deferring the non-opening poses means one may not have arrived yet when
+    // the cycle asks for it -- swapping to an undecoded image shows nothing at
+    // all. Pull it forward and wait, rather than blanking the avatar.
+    var pending = incoming.getAttribute('data-src');
+    if (pending) { incoming.src = pending; incoming.removeAttribute('data-src'); }
+    if (!incoming.complete || !incoming.naturalWidth) {
+      incoming.addEventListener('load', function () {
+        // only land it if this pose is still the one wanted
+        if (!self.destroyed && (self.transient || self.base) === name) self._apply(name);
+      }, { once: true });
+      return;
+    }
+
     // Incoming rides above the outgoing for the length of the fade so the
     // overlapping body never dips in opacity mid-dissolve.
     Object.keys(this.poseEls).forEach(function (k) {
@@ -489,6 +521,13 @@
       var soon = CYCLE[(i + 1) % CYCLE.length];
       if (soon && soon[0] === 'ballspin') self._preloadVideo();
 
+      if (s[0] === 'ballspin' && self.noVideo) {
+        // No video on this device, so the beat would be 15s of nothing.
+        self.base = 'idle-still';
+        self._render();
+        self._after(1200, step);
+        return;
+      }
       if (s[0] === 'ballspin') {
         self._enterVideo('cycle');
       } else {

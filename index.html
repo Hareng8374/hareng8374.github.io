@@ -1532,7 +1532,6 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   aspect-ratio: 1 / 1 !important;
   height: auto !important;
   object-fit: cover !important;
-  object-position: center 22% !important;   /* his face, not the middle of the frame */
   border-radius: 50% !important;
   margin: 0 auto 1.6rem !important;
   border: 1px solid var(--rule) !important;
@@ -1718,6 +1717,56 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   border-color: var(--ink-deep) !important;
 }
 
+
+/* ═══════════════════════════════════════════════════
+   PHONE REFINEMENTS
+   The layout already reflowed correctly; what it lacked was rhythm. Most
+   traffic is mobile, so this is the primary view, not the fallback.
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Tighter vertical rhythm -- the hero was burning a screen and a half
+     before the first button. */
+  .hero { min-height: auto; padding: 1.5rem 0 3rem; }
+  .hero-grid { gap: 1.25rem; }
+  .hero .subtitle { margin-bottom: 1.75rem; font-size: 1.06rem; line-height: 1.6; }
+  .cta-buttons { margin-bottom: 2.5rem; gap: .7rem; }
+  .cta-button, .resume-button { width: 100%; justify-content: center; padding: .95rem 1.2rem; }
+
+  /* He is the reason anyone remembers the page -- give him room. */
+  .hero-avatar-col .hg-avatar { --hg-avatar-width: 208px; }
+
+  /* Stats read fine as a compact row and save most of a screen. */
+  .stats-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important;
+    gap: .5rem !important; }
+  .stat-item { padding: .85rem .6rem !important; text-align: center; }
+  .stat-number { font-size: 1.6rem !important; }
+  .stat-label { font-size: .58rem !important; letter-spacing: .08em !important; line-height: 1.3; }
+
+  /* Sections were inheriting desktop padding. */
+  .page-content, section { padding-top: 2.25rem !important; padding-bottom: 2.25rem !important; }
+  .section-title { font-size: clamp(1.9rem, 8.5vw, 2.6rem) !important; }
+
+  /* Long project copy was a wall on a narrow column. */
+  .project-card { padding: 1.35rem 1.2rem !important; }
+  .project-description { font-size: .95rem !important; line-height: 1.62 !important; }
+  .project-tech { font-size: .62rem !important; line-height: 1.9 !important; }
+  .project-links { gap: .5rem !important; }
+  .project-link { padding: .5rem .85rem !important; font-size: .82rem !important; }
+
+  /* Keep the branch on phones -- it is a signature, not decoration. */
+  .projects-ledge { display: block !important; width: 96vw; margin: 10px auto 34px; }
+  .sitting-avatar { height: 112px !important; right: 6px !important; bottom: 6px !important; }
+
+  .about-photo { width: 132px !important; }
+  .game-box { border-radius: 12px !important; }
+}
+/* Comfortable tap targets everywhere, per WCAG 2.5.5. */
+@media (pointer: coarse) {
+  .nav-link, .project-link, .filter-pill, .contact-link, .cta-button, .resume-button {
+    min-height: 44px; display: inline-flex; align-items: center;
+  }
+}
+
 </style>
 </head>
 <body><div class="ambient"></div>
@@ -1728,7 +1777,7 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
 <div class="orb orb-3"></div><nav id="navbar"><div class="container"><div class="logo" onclick="navigateTo('home')">Haren G.</div><ul class="nav-links"><li><a href="#" onclick="navigateTo('home');return false;" data-page="home" class="active">Home</a></li><li><a href="#" onclick="navigateTo('projects');return false;" data-page="projects">Projects</a></li><li><a href="#" onclick="navigateTo('resume');return false;" data-page="resume">Resume</a></li><li><a href="#" onclick="navigateTo('experience');return false;" data-page="experience">Experience</a></li><li><a href="#" onclick="navigateTo('contact');return false;" data-page="contact">Contact</a></li><li><a href="/blog/">Blog</a></li></ul><button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button></div>
 </nav><button class="scroll-top" onclick="scrollToTop()" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button><!-- HOME -->
-<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><img src="professional%20headshot.png" alt="Haren Gannarapu" class="about-photo"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p></div><div class="about-globe-col"><canvas id="skillGlobe"></canvas></div></div></div></section>
+<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><img src="headshot.webp" alt="Haren Gannarapu" class="about-photo"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p></div><div class="about-globe-col"><canvas id="skillGlobe"></canvas></div></div></div></section>
 </div><!-- RESUME -->
 <div class="page" id="resume"><div class="page-content"><div class="container"><div class="section-eyebrow">Resume</div><h2 class="section-title">My <span class="em">credentials</span>, in one place.</h2><div class="resume-embed-wrapper"><div class="resume-actions-bar"><a href="https://drive.google.com/uc?export=download&id=1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW" class="resume-button" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
           </a><button class="resume-button secondary" id="viewResumeBtn" onclick="toggleResumePreview()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span id="viewResumeBtnLabel">View Resume</span></button></div><div class="resume-frame-container" id="resumeFrameContainer" style="display:none;margin-top:0;"><iframe
