@@ -24,3 +24,6 @@ src/assets/avatar/*.mp4
 
 # registration master, used by tools/avatar only
 src/assets/avatar/idle.webp
+
+# original headshot source; the site ships headshot.webp (9KB)
+professional headshot.png
