@@ -43,9 +43,12 @@ CSS = """
 .xp-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
 .xp-video { object-fit: cover; }
 
-/* Identical logo box on all four; height is what the eye compares. */
+/* The logo sits as a corner badge so it stops covering the artwork it is
+   supposed to sit with. Kumon is the exception -- its art is scattered around
+   a deliberately empty middle, so its mark belongs there. */
 .xp-logo-wrap {
-  position: relative; z-index: 2;
+  position: absolute; z-index: 2;
+  left: 20px; bottom: 20px;
   display: grid; place-items: center;
   padding: .6rem 1rem;
   border-radius: 10px;
@@ -54,6 +57,14 @@ CSS = """
   box-shadow: 0 2px 10px rgba(28,24,17,0.08);
 }
 .xp-logo { display: block; height: 38px; width: auto; max-width: 220px; object-fit: contain; }
+
+/* Kumon: centred and larger, because its letters are arranged around an
+   intentionally clear middle. */
+.xp-illu.is-centre .xp-logo-wrap {
+  position: relative; left: auto; bottom: auto;
+  padding: .8rem 1.4rem;
+}
+.xp-illu.is-centre .xp-logo { height: 56px; max-width: 300px; }
 .xp-logo-wrap .xp-logo[src*="nebo"] { border-radius: 6px; }
 
 .xp-info { padding: 1.6rem 1.8rem 1.8rem; }
@@ -69,6 +80,16 @@ CSS = """
 }
 .experience-card .highlight { padding: .95rem 1.15rem !important; }
 .experience-card .cruise-stat { padding: 1rem 1.1rem !important; }
+
+/* All caption text reads black rather than grey. */
+.experience-card .experience-company,
+.experience-card .experience-description,
+.experience-card .highlight,
+.experience-card .exp-tag,
+.experience-card .cruise-stat,
+.experience-card .experience-title {
+  color: #1C1811 !important;
+}
 
 /* Emphasis inside the write-ups is solid black, not a tint. */
 .experience-card strong,
@@ -90,18 +111,20 @@ CSS = """
 @keyframes xpWave  { from{transform:translateX(0)}      to{transform:translateX(-200px)} }
 @keyframes xpWag   { 0%,100%{transform:rotate(-18deg)}  50%{transform:rotate(14deg)} }
 @keyframes xpBob   { 0%,100%{transform:translateY(0)}   50%{transform:translateY(-5px)} }
+@keyframes xpSail  { from{transform:translateX(-1010px)} to{transform:translateX(400px)} }
 @keyframes xpGlow  { 0%,100%{opacity:.20; transform:scale(1)} 50%{opacity:.34; transform:scale(1.06)} }
 @keyframes xpGull  { 0%{transform:translate(0,0)} 50%{transform:translate(40px,-10px)} 100%{transform:translate(80px,0)} }
 
 .xp-wave-1 { animation: xpWave 11s linear infinite; }
 .xp-wave-2 { animation: xpWave 17s linear infinite; }
+.xp-sail   { animation: xpSail 38s linear infinite; }
 .xp-ship   { animation: xpBob 6s ease-in-out infinite; }
 .xp-sun    { animation: xpGlow 7s ease-in-out infinite; transform-origin: 190px 150px; }
 .xp-gull   { animation: xpGull 14s ease-in-out infinite alternate; }
 .xp-num    { animation: xpDrift 8s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .xp-wave-1, .xp-wave-2, .xp-ship, .xp-sun, .xp-gull, .xp-num {
+  .xp-wave-1, .xp-wave-2, .xp-ship, .xp-sail, .xp-sun, .xp-gull, .xp-num {
     animation: none !important;
   }
   .xp-video { display: none; }
@@ -132,7 +155,7 @@ SHIP = (
  '<path d="M600 128 q10 -9 20 0 M620 128 q10 -9 20 0"/>'
  '<path d="M668 96 q8 -7 16 0 M684 96 q8 -7 16 0"/>'
  '</g>'
- '<g class="xp-ship">'
+ '<g class="xp-sail"><g class="xp-ship">'
  '<rect x="726" y="212" width="16" height="34" rx="4" fill="#B4451F"/>'
  '<rect x="729" y="212" width="10" height="12" rx="3" fill="#F7F3EA"/>'
  '<rect x="684" y="246" width="86" height="22" rx="4" fill="#F4F1E8"/>'
@@ -142,7 +165,7 @@ SHIP = (
  '<circle cx="750" cy="282" r="4"/><circle cx="774" cy="282" r="4"/></g>'
  '<path d="M644 296 h166 l-24 32 h-118 z" fill="#12293D"/>'
  '<rect x="644" y="296" width="166" height="7" fill="#B4451F"/>'
- '</g>'
+ '</g></g>'
  '<g class="xp-wave-2" opacity=".6"><path d="M0 352 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 v230 H0 z" fill="url(#xpSea)"/></g>'
  '<g class="xp-wave-1"><path d="M0 392 q50 -13 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 v190 H0 z" fill="url(#xpSea)"/></g>'
  '<g stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".28">'
@@ -189,8 +212,11 @@ OASIS_VIDEO = (
 )
 
 
-def zone(art, logo, alt):
-    return ('<div class="xp-illu">' + art
+def zone(art, logo, alt, centre=False):
+    if logo is None:                      # oasis: the clip is the identity
+        return '<div class="xp-illu">' + art + '</div>'
+    cls = 'xp-illu is-centre' if centre else 'xp-illu'
+    return ('<div class="' + cls + '">' + art
             + '<div class="xp-logo-wrap"><img class="xp-logo" '
               'src="src/assets/logos/' + logo + '.webp" alt="' + alt + '" '
               'decoding="async"></div></div>')
@@ -242,8 +268,8 @@ def main():
 
     zones = [
         zone(SHIP, "carnival", "Carnival Corporation &amp; plc"),
-        zone(OASIS_VIDEO, "oasis", "Oasis"),
-        zone(KUMON, "kumon", "Kumon"),
+        zone(OASIS_VIDEO, None, None),
+        zone(KUMON, "kumon", "Kumon", centre=True),
     ]
     n = 0
     while n < 3:
