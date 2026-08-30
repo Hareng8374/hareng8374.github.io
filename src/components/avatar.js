@@ -75,11 +75,11 @@
    * the eye layers register against, so it is also where blinking happens.
    * Holds are uneven on purpose -- equal holds read mechanical. */
   var CYCLE = [
-    ['idle-still', 3000],
+    ['idle-still', 2600],
+    ['ballspin',  15000],   // the ball leads: first thing after the opening pose
+    ['idle-still', 2400],
     ['wave1',      1500],
     ['wave2',      1700],
-    ['idle-still', 2400],
-    ['ballspin',   9000],   // ~2 loop seams, so the spin actually reads
     ['idle-still', 2600],
     ['thumbsup',   2400],
     ['point',      2600],
@@ -466,6 +466,11 @@
   Avatar.prototype._startCycle = function () {
     var self = this, i = 0;
     this.cycleOn = true;
+    // The ball is the second beat now, so the two-beat lookahead below would
+    // fire too late to have it decoded. Start the fetch up front when it leads.
+    for (var k = 0; k < 3; k++) {
+      if (CYCLE[k] && CYCLE[k][0] === 'ballspin') { this._preloadVideo(); break; }
+    }
     function step() {
       if (self.destroyed || !self.cycleOn) return;
       var s = CYCLE[i % CYCLE.length];
