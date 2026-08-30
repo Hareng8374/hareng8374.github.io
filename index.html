@@ -28,6 +28,10 @@
   --ink-mute:#6B6155;
   --ink:#2B2620;
   --ink-deep:#1C1811;
+  /* Alias: earlier rules reference --ink-figure, which was lost in the
+     palette swap. Undefined vars make the whole declaration invalid, which
+     is why the Download PDF button lost its fill and kept pale text. */
+  --ink-figure:#1C1811;
 
   /* One accent: the basketball's own hue (#C2744C) driven dark enough to
      clear AA on body text -- 6.55:1. Same colour family as the avatar, so it
@@ -1673,6 +1677,47 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   }
 }
 
+
+/* Resume buttons, explicitly. */
+.resume-button { background: var(--ink-deep) !important; color: var(--paper) !important;
+  border: 1px solid var(--ink-deep) !important; font-weight: 600; }
+.resume-button:hover { background: var(--accent) !important; border-color: var(--accent) !important;
+  color: var(--paper) !important; }
+.resume-button.secondary { background: transparent !important; color: var(--ink) !important;
+  border: 1px solid rgba(28,24,17,0.30) !important; }
+.resume-button.secondary:hover { background: var(--accent-wash) !important;
+  color: var(--accent) !important; border-color: var(--accent) !important; }
+.resume-button svg { color: currentColor; }
+
+/* ── breakout: give the playfield its own lit surface ── */
+.game-box {
+  background: var(--surface) !important;
+  border: 1px solid rgba(28,24,17,0.30) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  overflow: hidden;
+}
+.game-canvas-wrap {
+  background: linear-gradient(180deg, #FFFDF9 0%, #F4EEE3 100%) !important;
+  border-top: 1px solid rgba(28,24,17,0.16) !important;
+  border-bottom: 1px solid rgba(28,24,17,0.16) !important;
+}
+.game-bar { background: var(--bg-2) !important;
+  border-bottom: 1px solid rgba(28,24,17,0.20) !important; }
+.game-bar-label, .game-hud { color: var(--ink-mute) !important; font-family: var(--mono); }
+.game-hud-val { color: var(--accent) !important; }
+.game-overlay-title { color: var(--accent) !important; font-family: var(--display); }
+.game-overlay-sub { color: var(--ink) !important; }
+.game-diff-btns button, .game-diff-btns .btn {
+  border: 1px solid rgba(28,24,17,0.30) !important;
+  background: var(--surface) !important; color: var(--ink) !important;
+  border-radius: 100px !important; font-family: var(--mono);
+}
+.game-diff-btns .active, .game-diff-btns button.active {
+  background: var(--ink-deep) !important; color: var(--paper) !important;
+  border-color: var(--ink-deep) !important;
+}
+
 </style>
 </head>
 <body><div class="ambient"></div>
@@ -1841,7 +1886,7 @@ const Breakout = (function(){
   let cv, cx, STATE='idle', score, bricks, ball, pad, raf, keys={}, CUR_SPD=3.8;
   const COLS=8, ROWS=5, GAP=6, BR=7;
   const SPEEDS={easy:2.9, normal:3.8, hard:5.2};
-  const BRICK_COLS=['#E8B79A','#D98B5F','#C2744C','#9A3E12','#6E2A0B'];
+  const BRICK_COLS=['#D98B5F','#C2744C','#A8501F','#9A3E12','#6E2A0B'];
   // ---- helpers ----
   function rr(x,y,w,h,r){
     cx.beginPath();
