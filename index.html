@@ -1502,8 +1502,6 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
 @media (max-width: 560px) {
   .projects-ledge { display: none; }
 }
-}
-}
 
 
 /* ── the cruise scene keeps real colour: it is an illustration, not chrome ── */
@@ -1767,6 +1765,91 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   EXPERIENCE CARDS -- one shared two-zone component
+   ═══════════════════════════════════════════════════════════ */
+.experience-card {
+  border: 1px solid rgba(28,24,17,0.30) !important;
+  border-radius: 14px !important;
+  background: var(--surface) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  overflow: hidden;
+  padding: 0 !important;                 /* the zones own their padding */
+}
+.experience-card + .experience-card { margin-top: 1.5rem; }
+.experience-card::before { display: none !important; }
+
+/* Illustration zone. aspect-ratio rather than a fixed height, so the zone
+   scales with the card and can never letterbox or leave a dead band under
+   the logo. The fill is the PAGE background -- never a dark plate. */
+.xp-illu {
+  position: relative;
+  height: clamp(118px, 16vw, 168px);
+  background: var(--paper);
+  border-bottom: 1px solid rgba(28,24,17,0.18);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.xp-art { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+
+/* Identical logo box on all four: height is what the eye compares, so it is
+   pinned and width follows each mark's own ratio. */
+.xp-logo-wrap {
+  position: relative; z-index: 2;
+  display: grid; place-items: center;
+  padding: .55rem .9rem;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid rgba(28,24,17,0.18);
+}
+.xp-logo { display: block; height: 34px; width: auto; max-width: 210px; object-fit: contain; }
+/* nebo's mark is a WHITE wordmark on its own cyan, so unlike the other three
+   it cannot be keyed -- white on beige would vanish. It keeps that cyan as
+   part of the mark and sits in the SAME chip as the others, so every logo box
+   measures identically rather than one card being the odd one out. */
+.xp-logo-wrap .xp-logo[src*="nebo"] { border-radius: 6px; }
+
+/* nebo's zone is live footage rather than a flat drawing, so its logo chip
+   gets a touch more weight to stay readable over moving video. */
+.xp-video { object-fit: cover; }
+.xp-illu:has(.xp-video) .xp-logo-wrap {
+  background: rgba(251,247,240,0.94);
+  border-color: rgba(28,24,17,0.28);
+}
+@media (prefers-reduced-motion: reduce) { .xp-video { display: none; } }
+
+.xp-info { padding: 1.5rem 1.7rem 1.7rem; }
+.xp-info .exp-meta { margin-bottom: .85rem; }
+
+@media (max-width: 640px) {
+  .xp-logo { height: 26px; max-width: 150px; }
+  .xp-info { padding: 1.15rem 1.1rem 1.3rem; }
+}
+
+/* Decorative animation: transform/opacity only, all looping. */
+@keyframes xpDrift { 0%,100%{transform:translateY(0)}  50%{transform:translateY(-7px)} }
+@keyframes xpWave  { from{transform:translateX(0)}     to{transform:translateX(-160px)} }
+@keyframes xpWag   { 0%,100%{transform:rotate(-18deg)} 50%{transform:rotate(14deg)} }
+@keyframes xpFly   { from{offset-distance:0%}          to{offset-distance:100%} }
+@keyframes xpBob   { 0%,100%{transform:translateY(0)}  50%{transform:translateY(-3px)} }
+
+.xp-wave-1 { animation: xpWave 9s linear infinite; }
+.xp-wave-2 { animation: xpWave 14s linear infinite; }
+.xp-ship   { animation: xpBob 5s ease-in-out infinite; }
+.xp-tail   { animation: xpWag .9s ease-in-out infinite; transform-origin: 885px 118px; }
+.xp-plane  { offset-path: path("M70 140 Q300 18 500 34 T940 112");
+             offset-rotate: auto; animation: xpFly 11s linear infinite; }
+.xp-num    { animation: xpDrift 7s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-wave-1, .xp-wave-2, .xp-ship, .xp-tail, .xp-plane, .xp-num {
+    animation: none !important;
+  }
+  .xp-plane { offset-distance: 42%; }
+}
+
 </style>
 </head>
 <body><div class="ambient"></div>
@@ -1790,8 +1873,36 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
 </div><!-- PROJECTS -->
 <div class="page" id="projects"><div class="page-content"><div class="container"><div class="section-eyebrow">Projects</div><div class="projects-heading-wrap"><h2 class="section-title">Things I've <span class="em">built</span>.</h2><div class="projects-ledge"><img src="src/assets/avatar/sitting.webp" alt="" class="sitting-avatar"></div></div><div class="project-filters"><button class="filter-pill active" onclick="filterProjects('all', this)">All</button><button class="filter-pill" onclick="filterProjects('featured', this)">Featured</button></div><div class="projects-grid"><!-- REVIVE --><div class="project-card revive-winner-card" data-featured="true"><div class="gold-aura"></div><div class="badge-row"><span class="revive-winner-badge">Winner — HackaBULL VII 2026</span><span class="project-badge featured">Featured</span></div><h3 class="project-title">Revive — Emergency CPR Training System</h3><p class="project-tech">Next.js 16 · React 19 · TypeScript · Arduino UNO R4 Minima · Gemini 2.5 Flash · ElevenLabs TTS · Web Serial API · Tailwind CSS 4 · Vitest</p><p class="project-description">Won HackaBULL VII by building a hardware-software CPR training system that turns $50 of Arduino hardware into a full cardiac emergency simulation. A force-sensitive pad streams compression peaks over Web Serial at 100Hz — Gemini 2.5 Flash generates live patient scenarios, simulates real-time physiology (HR, BP, SpO2, rhythm) based on your depth and rate, and coaches you via three distinct ElevenLabs voices (calm instructor, 911 dispatcher, panicked bystander) with sub-50ms correction latency. Your eyes stay on the patient. Fully scored against AHA protocol with a detailed session debrief. 222 Vitest tests. Triple fallback chain: pad disconnected → keyboard mode, Gemini timeout → cached scenarios, ElevenLabs down → browser SpeechSynthesis.</p><div class="revive-gallery" id="reviveGallery" style="display:none;"><div class="revive-gallery-grid"><div class="revive-gallery-item"><div class="revive-gallery-label">Splash Screen</div><img src="" data-revive="splash" class="revive-img" alt="Revive Splash"/></div><div class="revive-gallery-item"><div class="revive-gallery-label">Live Compression Session</div><img src="" data-revive="session" class="revive-img" alt="Live Session"/></div><div class="revive-gallery-item"><div class="revive-gallery-label">Vital Signs Monitor</div><img src="" data-revive="vitals" class="revive-img" alt="Vitals"/></div><div class="revive-gallery-item"><div class="revive-gallery-label">Session Debrief</div><img src="" data-revive="debrief" class="revive-img" alt="Debrief"/></div></div></div><div class="project-links"><a href="#" class="project-link revive-link" onclick="openVideoModal('https://www.youtube.com/embed/mbjH27CmkY0', 'Revive Demo'); return false;">View Demo</a><a href="https://github.com/Hareng8374/Revive" class="project-link revive-link" target="_blank">GitHub</a><button class="project-link revive-link" onclick="toggleReviveGallery()"> <span id="galleryBtnText">Screenshots</span></button></div></div><!-- REPLAI --><div class="project-card winner-card" data-featured="true"><div class="gold-aura"></div><div class="badge-row"><span class="winner-badge">Winner — Hack The Bay 2026</span><span class="project-badge featured">Featured</span></div><h3 class="project-title">ReplAI — Conversation Practice Platform</h3><p class="project-tech">Next.js · TypeScript · React · Gemini 2.5 Flash · LiveKit · MediaPipe · Three.js · Tailwind CSS</p><p class="project-description">Won Hack The Bay 2025 by building a real-time AI role-play platform for high-stakes conversation practice — salary negotiations, HR disputes, legal client intake. An AI plays the other person while MediaPipe tracks webcam body language (eye contact, posture, fidgeting) and LiveKit analyzes voice (pace, filler words, energy) simultaneously. For the Legal Intake scenario, a custom Levenshtein + Jaccard fuzzy-matching engine extracts named entities from live conversation transcripts and surfaces opposing-party conflicts against a firm database in real time — before the meeting is even over.</p><div class="project-links"><a href="#" class="project-link" onclick="openVideoModal('https://www.youtube.com/embed/8P0dUUCXjxY', 'ReplAI Demo'); return false;">View Demo</a><a href="https://github.com/VickyAnaJ/HackTheBay" class="project-link" target="_blank">GitHub</a></div></div><div class="project-card" data-featured="true"><div class="badge-row"><span class="project-badge featured">Featured</span></div><h3 class="project-title">KnightMobile — Autonomous Robot System</h3><p class="project-tech">Python · Flask · React · YOLOv5 · Arduino · iPhone LiDAR · WebSockets · D* Lite</p><p class="project-description">Built an autonomous robot from scratch that navigates unknown environments using AI vision and spatial mapping. Integrated Arduino motor control with iPhone LiDAR for real-time obstacle avoidance and path planning. Connected Flask API + React dashboard for live telemetry and control with sub-250ms feedback latency. Improved navigation reliability by 40% vs ESP32 prototype through adaptive mapping and motor feedback loops.</p><div class="project-links"><a href="#" class="project-link" onclick="openVideoModal('https://www.youtube.com/embed/ouFIQNFO67w', 'KnightMobile Demo'); return false;">View Demo</a><a href="https://github.com/4shivv/knighthacks_25" class="project-link" target="_blank">GitHub</a></div></div><div class="project-card" data-featured="true"><div class="badge-row"><span class="project-badge featured">Featured</span></div><h3 class="project-title">CardFinder — Smart Card Analysis</h3><p class="project-tech">Next.js · TypeScript · Python · CFPB API · Recharts · Zod · Vercel</p><p class="project-description">Created a fintech web app benchmarking 300+ U.S. credit cards using CFPB data and scraped issuer information, producing a transparent scoring algorithm for informed decision-making. Built interactive sliders and analytics charts for real-time fee, APR, and reward comparisons. Collaborated in a 4-member team following CI/CD practices and type-safe API design with Zod validation. Deployed on Vercel for seamless user experience.</p><div class="project-links"><a href="https://github.com/4shivv/Credit-Card-Finder" class="project-link" target="_blank">GitHub</a></div></div><div class="project-card"><h3 class="project-title">DocuLens — GemiKnights 2025</h3><p class="project-tech">React · Node.js · TypeScript · Firebase · Google Gemini API · Docker · OCR</p><p class="project-description">AI-powered tool helping immigrants identify tax form errors using OCR and natural language processing. Developed an intelligent system to parse and summarize U.S. tax PDFs using Gemini API for document parsing and error explanation. Implemented Firebase rules and audit logging to ensure secure document access. Featured PDF uploads, form detection, fallback logic, and rate-limiting for production-ready deployment. Major university-sponsored project.</p><div class="project-links"><a href="https://github.com/4shivv/DocLens" class="project-link" target="_blank">GitHub</a></div></div><div class="project-card"><h3 class="project-title">ScamBuster AI + Chrome Extension</h3><p class="project-tech">React.js · Node.js · Express · OpenAI API · Tesseract.js · OCR · Tailwind CSS</p><p class="project-description">AI-powered scam detection tool that analyzes suspicious messages, emails, and websites to protect users from fraud. Built an OCR → LLM pipeline with schema validation, fallback logic, and timeout resilience achieving 95% uptime. Created an explainable red-flag panel combining GPT reasoning + regex severity scoring. Developed a Chrome extension for instant webpage analysis with debounced listeners and secure REST calls. Backend deployed on Render for scalability.</p><div class="project-links"><a href="https://scambuster-ai.onrender.com/" class="project-link" target="_blank"> Live Demo</a><a href="https://github.com/Hareng8374/Scambuster-AI" class="project-link" target="_blank">GitHub</a></div></div><div class="project-card"><h3 class="project-title">WeatherDash</h3><p class="project-tech">Python · Flask · OpenWeatherMap API · Matplotlib · REST APIs</p><p class="project-description">Dynamic weather dashboard with real-time data visualization and weather-responsive backgrounds. Features city-based weather search, interactive temperature/humidity charts, and intelligent background changes that adapt to current weather conditions using Flask backend and OpenWeatherMap integration. Demonstrates full-stack capabilities with seamless API integration and responsive design.</p><div class="project-links"><a href="https://weatherdash-srty.onrender.com/" class="project-link" target="_blank"> Live Demo</a><a href="https://github.com/Hareng8374/WeatherDash" class="project-link" target="_blank">GitHub</a></div></div><div class="project-card"><h3 class="project-title">AI Tutor-Matching System</h3><p class="project-tech">HTML · CSS · JavaScript · UX Research · UI/UX Design</p><p class="project-description">Co-authored a 9-page research paper for an AI-powered tutor-matching system at UCF. Built an interactive UI demo simulating live tutor-student pairing with subject and availability input fields, responsive output panel, and frontend-only logic. Focuses on improving educational accessibility through intelligent matching algorithms.</p><div class="project-links"><a href="https://drive.google.com/file/d/1iCNhsNHOlqMj450dfhRmbVqeJNVJUEA8/view?usp=drive_link" class="project-link" target="_blank"> Research Paper</a></div></div><div class="project-card"><h3 class="project-title">Python IDLE Guide</h3><p class="project-tech">Python · Markdown · Technical Writing · Documentation</p><p class="project-description">Authored a comprehensive beginner-friendly installation and usage guide for Python's IDLE environment. Included detailed screenshots, simplified setup instructions, and troubleshooting section to help new programmers get started with Python development. Demonstrates technical communication skills and commitment to making programming accessible.</p><div class="project-links"><a href="https://drive.google.com/file/d/15nzBwgeS0INdawKY3d6caIYGvxafUL7h/view?usp=drive_link" class="project-link" target="_blank"> View Guide</a></div></div></div></div></div>
 </div><!-- EXPERIENCE -->
-<div class="page" id="experience"><div class="page-content"><div class="container"><div class="section-eyebrow">Experience</div><h2 class="section-title">Where I've <span class="em">shipped</span>.</h2><div class="experience-card cruise-card"><div class="cruise-scene" aria-hidden="true"><div class="cruise-stars"></div><div class="cruise-moon"></div><div class="cruise-moon-trail"></div><div class="cruise-horizon"></div><div class="cruise-wave cruise-wave-back"></div><div class="cruise-ship"><svg class="cruise-ship-inner" viewBox="0 0 260 130" xmlns="http://www.w3.org/2000/svg"><!-- wake --><ellipse cx="132" cy="112" rx="118" ry="9" fill="#54524f" opacity="0.14"/><!-- smoke --><circle class="smoke" cx="172" cy="16" r="5" fill="#33302d" opacity="0"/><circle class="smoke smoke-2" cx="172" cy="16" r="4" fill="#33302d" opacity="0"/><circle class="smoke smoke-3" cx="172" cy="16" r="6" fill="#33302d" opacity="0"/><!-- mast + flag --><line x1="46" y1="64" x2="46" y2="24" stroke="#33302d" stroke-width="2" stroke-linecap="round"/><path d="M46,25 L74,31 L46,37 Z" fill="#9c9a97"/><!-- funnel --><path d="M160,46 L184,46 L179,17 L165,17 Z" fill="#9c9a97"/><rect x="164" y="17" width="16" height="6" rx="2" fill="#d1cfcd"/><!-- decks --><rect x="88" y="30" width="68" height="16" rx="4" fill="#201d1a"/><rect x="64" y="46" width="116" height="18" rx="4" fill="#1e1b18"/><rect x="42" y="64" width="172" height="22" rx="5" fill="#201d1a"/><!-- windows --><g fill="#d4d3d1" opacity="0.5"><rect x="96" y="35" width="7" height="6" rx="1.5"/><rect x="108" y="35" width="7" height="6" rx="1.5"/><rect x="120" y="35" width="7" height="6" rx="1.5"/><rect x="132" y="35" width="7" height="6" rx="1.5"/><rect x="72" y="51" width="7" height="7" rx="1.5"/><rect x="84" y="51" width="7" height="7" rx="1.5"/><rect x="96" y="51" width="7" height="7" rx="1.5"/><rect x="108" y="51" width="7" height="7" rx="1.5"/><rect x="120" y="51" width="7" height="7" rx="1.5"/><rect x="132" y="51" width="7" height="7" rx="1.5"/><rect x="144" y="51" width="7" height="7" rx="1.5"/><rect x="156" y="51" width="7" height="7" rx="1.5"/><rect x="52" y="70" width="7" height="7" rx="1.5"/><rect x="64" y="70" width="7" height="7" rx="1.5"/><rect x="76" y="70" width="7" height="7" rx="1.5"/><rect x="88" y="70" width="7" height="7" rx="1.5"/><rect x="100" y="70" width="7" height="7" rx="1.5"/><rect x="112" y="70" width="7" height="7" rx="1.5"/><rect x="124" y="70" width="7" height="7" rx="1.5"/><rect x="136" y="70" width="7" height="7" rx="1.5"/><rect x="148" y="70" width="7" height="7" rx="1.5"/><rect x="160" y="70" width="7" height="7" rx="1.5"/><rect x="172" y="70" width="7" height="7" rx="1.5"/><rect x="184" y="70" width="7" height="7" rx="1.5"/><rect x="196" y="70" width="7" height="7" rx="1.5"/></g><!-- hull --><path d="M20,86 L244,86 L228,110 C176,120 90,120 36,110 Z" fill="#1e1b18"/><path d="M20,86 L244,86 L242,92 L21,92 Z" fill="#d1cfcd" opacity="0.85"/><path d="M24,99 L240,99 L237,104 L27,104 Z" fill="#9c9a97" opacity="0.75"/></svg></div><div class="cruise-wave cruise-wave-mid"></div><div class="cruise-wave cruise-wave-front"></div><div class="cruise-plaque"><img decoding="async" src="src/assets/img/embedded-1.webp" alt="Carnival Corporation &amp; plc"
-                   onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="cruise-plaque-fallback">Carnival Corporation &amp; plc</span></div><div class="cruise-tag">// where I've shipped, literally</div></div><div class="exp-meta"><span class="exp-tag">Jun 2026 – Aug 2026</span><span class="exp-tag">AI Tooling · Platform</span></div><h3 class="experience-title">Software Engineering Intern</h3><p class="experience-company">Carnival Corporation (Princess Cruises), Web &amp; eCommerce · Java, Spring Boot, Python, Azure OpenAI, Atlassian Rovo, Copilot Studio, Jira, JQL</p><div class="experience-highlights"><div class="highlight"><span>Built a retrieval-augmented engineering assistant as a <b>Java/Spring Boot</b> API on <b>Azure</b> fronting a <b>Python RAG</b> service that retrieves live <b>Jira</b> and <b>Confluence</b> context and answers with <b>Azure OpenAI</b>, with request validation, secret redaction, and a test suite for honesty traps and out-of-scope queries.</span></div><div class="highlight"><span>Scanned <b>26 weeks</b> of resolved platform bugs and scored <b>68 tickets</b> to isolate the runbook-ready subset, then shipped an <b>Atlassian Rovo</b> agent and two Jira flows: one surfaces the matching runbook the second a ticket is created, the other grades the close-out on resolve and drafts a new runbook behind a human approval gate.</span></div><div class="highlight"><span>Put the same knowledge in Teams through a <b>Copilot Studio</b> bot on the <b>Atlassian MCP</b> server, then handed the whole system off clean: <b>10 runbooks</b> published to a team-owned space and both automations moved off my account so they keep running without me.</span></div></div><div class="cruise-stats"><div class="cruise-stat"><b>26</b><span>weeks of bugs scanned</span></div><div class="cruise-stat"><b>68</b><span>tickets scored</span></div><div class="cruise-stat"><b>10</b><span>runbooks published</span></div><div class="cruise-stat"><b>2</b><span>automated Jira flows</span></div></div></div><div class="experience-card"><div class="exp-meta"><span class="exp-tag">May 2025 – Aug 2025</span><span class="exp-tag">AI / ML</span></div><h3 class="experience-title">Software Engineering Intern — AI/ML</h3><p class="experience-company">Oasis (AI Travel Startup) · Python, PyTorch Geometric, AWS, Kubernetes</p><p class="experience-description">Built ML infrastructure for an AI travel startup's recommendation engine — a heterogeneous graph neural network modeling users, posts, and tags to surface personalized travel suggestions at scale.</p><div class="experience-highlights"><div class="highlight">Cut nightly training pipeline runtime from 45 to 8 minutes by replacing full PostgreSQL dumps with incremental extraction and S3 tensor caching for a 2M-edge user–post–tag graph.</div><div class="highlight">Built a heterogeneous GraphSAGE link-prediction model in PyTorch Geometric, served via Triton for real-time content recommendations.</div><div class="highlight">Configured KEDA autoscaling on SQS queue depth to scale Triton inference pods from 2 to 20 replicas with traffic, matching GPU capacity to demand rather than provisioning for peak.</div><div class="highlight">Caught a tokenizer regression adding 120ms to p99 within hours of deploy by instrumenting inference services with Prometheus histograms and Grafana dashboards for latency, GPU utilization, and queue lag.</div></div></div><div class="experience-card"><div class="exp-meta"><span class="exp-tag">Nov 2023 – May 2024</span><span class="exp-tag">Data · Education</span></div><h3 class="experience-title">Data Analyst &amp; Academic Tutor</h3><p class="experience-company">Kumon · Davie, FL</p><p class="experience-description">Leveraged data analytics to improve student outcomes and educational program effectiveness. Combined technical skills with educational expertise to create data-driven insights for student success.</p><div class="experience-highlights"><div class="highlight">Developed SQL dashboards analyzing attendance and performance trends for 70+ students, improving retention insights and program effectiveness.</div><div class="highlight">Built early-warning reports identifying at-risk students 2 weeks sooner to support timely intervention and improve success rates.</div><div class="highlight">Provided one-on-one tutoring in mathematics and reading comprehension, helping students improve academic performance.</div><div class="highlight">Utilized data visualization tools to communicate insights to program managers and parents.</div></div></div></div></div>
+<div class="page" id="experience"><div class="page-content"><div class="container"><div class="section-eyebrow">Experience</div><h2 class="section-title">Where I've <span class="em">shipped</span>.</h2><div class="experience-card"><div class="xp-illu"><video class="xp-art xp-video" muted loop playsinline preload="none" poster="src/assets/img/nebo-poster.webp" aria-hidden="true" data-src="src/assets/img/nebo-loop.webm"></video><div class="xp-logo-wrap"><img class="xp-logo" src="src/assets/logos/nebo.webp" alt="Nebo Agency" decoding="async"></div></div><div class="xp-info"><div class="exp-meta"><span class="exp-tag">Aug 2026 &ndash; Present</span><span class="exp-tag">Frontend</span></div><h3 class="experience-title">Frontend Engineering Intern</h3><p class="experience-company">Nebo Agency</p><p class="experience-description">Building web pages for clients.</p></div></div><div class="experience-card" data-xp="0"><div class="xp-illu"><svg class="xp-art" viewBox="0 0 1000 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g class="xp-ship">
+<rect x="742" y="52" width="9" height="17" rx="2" fill="#9A3E12"/>
+<rect x="716" y="69" width="44" height="12" rx="2" fill="#173A52"/>
+<rect x="698" y="81" width="80" height="15" rx="2" fill="#12293D"/>
+<path d="M690 96 h96 l-13 15 h-70 z" fill="#12293D"/>
+</g>
+<g class="xp-wave-2" opacity=".4"><path d="M0 124 q40 -9 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 v60 H0 z" fill="#2E7DA8"/></g>
+<g class="xp-wave-1" opacity=".7"><path d="M0 138 q40 -8 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 v46 H0 z" fill="#1B5E86"/></g>
+</svg><div class="xp-logo-wrap"><img class="xp-logo" src="src/assets/logos/carnival.webp" alt="Carnival Corporation &amp; plc" decoding="async"></div></div><div class="xp-info"><div class="exp-meta"><span class="exp-tag">Jun 2026 – Aug 2026</span><span class="exp-tag">AI Tooling · Platform</span></div><h3 class="experience-title">Software Engineering Intern</h3><p class="experience-company">Carnival Corporation (Princess Cruises), Web &amp; eCommerce · Java, Spring Boot, Python, Azure OpenAI, Atlassian Rovo, Copilot Studio, Jira, JQL</p><div class="experience-highlights"><div class="highlight"><span>Built a retrieval-augmented engineering assistant as a <b>Java/Spring Boot</b> API on <b>Azure</b> fronting a <b>Python RAG</b> service that retrieves live <b>Jira</b> and <b>Confluence</b> context and answers with <b>Azure OpenAI</b>, with request validation, secret redaction, and a test suite for honesty traps and out-of-scope queries.</span></div><div class="highlight"><span>Scanned <b>26 weeks</b> of resolved platform bugs and scored <b>68 tickets</b> to isolate the runbook-ready subset, then shipped an <b>Atlassian Rovo</b> agent and two Jira flows: one surfaces the matching runbook the second a ticket is created, the other grades the close-out on resolve and drafts a new runbook behind a human approval gate.</span></div><div class="highlight"><span>Put the same knowledge in Teams through a <b>Copilot Studio</b> bot on the <b>Atlassian MCP</b> server, then handed the whole system off clean: <b>10 runbooks</b> published to a team-owned space and both automations moved off my account so they keep running without me.</span></div></div><div class="cruise-stats"><div class="cruise-stat"><b>26</b><span>weeks of bugs scanned</span></div><div class="cruise-stat"><b>68</b><span>tickets scored</span></div><div class="cruise-stat"><b>10</b><span>runbooks published</span></div><div class="cruise-stat"><b>2</b><span>automated Jira flows</span></div></div></div></div><div class="experience-card" data-xp="1"><div class="xp-illu"><svg class="xp-art" viewBox="0 0 1000 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<circle cx="112" cy="92" r="34" fill="none" stroke="#8A8175" stroke-width="2.2" opacity=".5"/>
+<path d="M78 92 h68 M112 58 q18 34 0 68 M112 58 q-18 34 0 68" fill="none" stroke="#8A8175" stroke-width="1.6" opacity=".4"/>
+<path d="M70 140 Q300 18 500 34 T940 112" fill="none" stroke="#9A3E12" stroke-width="2.4"
+      stroke-linecap="round" stroke-dasharray="7 11" opacity=".6"/>
+<g class="xp-plane">
+<path d="M-15 0 L15 0 M-4 -10 L7 0 L-4 10 M-11 -6 L-5 0 L-11 6" fill="none"
+      stroke="#12293D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg><div class="xp-logo-wrap"><img class="xp-logo" src="src/assets/logos/oasis.webp" alt="Oasis" decoding="async"></div></div><div class="xp-info"><div class="exp-meta"><span class="exp-tag">May 2025 – Aug 2025</span><span class="exp-tag">AI / ML</span></div><h3 class="experience-title">Software Engineering Intern — AI/ML</h3><p class="experience-company">Oasis (AI Travel Startup) · Python, PyTorch Geometric, AWS, Kubernetes</p><p class="experience-description">Built ML infrastructure for an AI travel startup's recommendation engine — a heterogeneous graph neural network modeling users, posts, and tags to surface personalized travel suggestions at scale.</p><div class="experience-highlights"><div class="highlight">Cut nightly training pipeline runtime from 45 to 8 minutes by replacing full PostgreSQL dumps with incremental extraction and S3 tensor caching for a 2M-edge user–post–tag graph.</div><div class="highlight">Built a heterogeneous GraphSAGE link-prediction model in PyTorch Geometric, served via Triton for real-time content recommendations.</div><div class="highlight">Configured KEDA autoscaling on SQS queue depth to scale Triton inference pods from 2 to 20 replicas with traffic, matching GPU capacity to demand rather than provisioning for peak.</div><div class="highlight">Caught a tokenizer regression adding 120ms to p99 within hours of deploy by instrumenting inference services with Prometheus histograms and Grafana dashboards for latency, GPU utilization, and queue lag.</div></div></div></div><div class="experience-card" data-xp="2"><div class="xp-illu"><svg class="xp-art" viewBox="0 0 1000 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g font-family="'Bricolage Grotesque',sans-serif" font-weight="800" fill="#8A8175" opacity=".32">
+<text class="xp-num" x="60"  y="60"  font-size="34" style="animation-duration:8s;animation-delay:0s">7</text>
+<text class="xp-num" x="150" y="130" font-size="28" style="animation-duration:11s;animation-delay:-3s">+</text>
+<text class="xp-num" x="248" y="52"  font-size="24" style="animation-duration:9s;animation-delay:-5s">x</text>
+<text class="xp-num" x="318" y="136" font-size="22" style="animation-duration:13s;animation-delay:-8s">9</text>
+<text class="xp-num" x="660" y="48"  font-size="26" style="animation-duration:10.5s;animation-delay:-4s">=</text>
+<text class="xp-num" x="742" y="138" font-size="31" style="animation-duration:12s;animation-delay:-1.5s">3</text>
+<text class="xp-num" x="846" y="58"  font-size="35" style="animation-duration:7.5s;animation-delay:-6s">A</text>
+<text class="xp-num" x="912" y="132" font-size="29" style="animation-duration:8.5s;animation-delay:-2s">B</text>
+</g>
+</svg><div class="xp-logo-wrap"><img class="xp-logo" src="src/assets/logos/kumon.webp" alt="Kumon" decoding="async"></div></div><div class="xp-info"><div class="exp-meta"><span class="exp-tag">Nov 2023 – May 2024</span><span class="exp-tag">Data · Education</span></div><h3 class="experience-title">Data Analyst &amp; Academic Tutor</h3><p class="experience-company">Kumon · Davie, FL</p><p class="experience-description">Leveraged data analytics to improve student outcomes and educational program effectiveness. Combined technical skills with educational expertise to create data-driven insights for student success.</p><div class="experience-highlights"><div class="highlight">Developed SQL dashboards analyzing attendance and performance trends for 70+ students, improving retention insights and program effectiveness.</div><div class="highlight">Built early-warning reports identifying at-risk students 2 weeks sooner to support timely intervention and improve success rates.</div><div class="highlight">Provided one-on-one tutoring in mathematics and reading comprehension, helping students improve academic performance.</div><div class="highlight">Utilized data visualization tools to communicate insights to program managers and parents.</div></div></div></div></div></div>
 </div><!-- CONTACT -->
 <div class="page" id="contact"><div class="page-content"><div class="container"><div class="section-eyebrow">Contact</div><h2 class="section-title">Let's <span class="em">build</span> something.</h2><div class="contact-content"><p class="contact-description">Open to new opportunities, interesting projects, and good conversations. I respond within 24 hours.</p><div class="contact-info"><a href="mailto:gannarapuharen@gmail.com" class="contact-detail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>gannarapuharen@gmail.com
           </a><div class="contact-detail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Orlando, Florida
@@ -2323,6 +2434,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
 (function(){
   var host=document.getElementById('heroAvatar');
   if(host&&window.Avatar) window.hgAvatar=window.Avatar.create(host,{clickReact:false});
+})();
+</script>
+<script>
+/* The nebo clip is 476KB on a page most visitors never open, so it is not
+   fetched until that card is on screen. Under reduced motion the video is
+   hidden by CSS and never loaded at all. */
+(function () {
+  var v = document.querySelector('.xp-video');
+  if (!v || !v.hasAttribute('data-src')) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  function load() {
+    if (!v.hasAttribute('data-src')) return;
+    v.src = v.getAttribute('data-src');
+    v.removeAttribute('data-src');
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) { load(); io.disconnect(); }
+    }, { rootMargin: '200px' });
+    io.observe(v);
+  } else { load(); }
 })();
 </script>
 </body>
