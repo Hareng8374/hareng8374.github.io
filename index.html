@@ -1477,22 +1477,14 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
 .projects-ledge {
   position: relative;
   width: min(780px, 90vw);
-  height: 10px;
-  margin: 26px auto 104px;          /* the bottom margin is dangle room */
-  border-radius: 999px;
-  background: linear-gradient(180deg, #B98A5C 0%, #8A6038 48%, #63421F 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
-}
-/* a second, thinner branch crossing under it */
-.projects-ledge::after {
-  content: ''; position: absolute; left: 5%; right: 13%; top: 7px; height: 6px;
-  border-radius: 999px; opacity: .85;
-  background: linear-gradient(180deg, #A87A4C, #75512C);
+  aspect-ratio: 522 / 83;           /* the keyed stick's own proportions */
+  margin: 18px auto 70px;
+  background: url("src/assets/avatar/stick.webp") center / contain no-repeat;
 }
 .sitting-avatar {
   position: absolute;
-  right: 58px;
-  bottom: -82px;                    /* drops him so the ledge meets his thighs */
+  right: 64px;
+  bottom: 12px;                     /* puts his thighs on the stick, feet below it */
   height: 240px;
   width: auto;
   pointer-events: none;
@@ -1500,8 +1492,8 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   z-index: 2;
 }
 @media (max-width: 900px) {
-  .projects-ledge { margin: 20px auto 74px; width: 94vw; }
-  .sitting-avatar { height: 172px; right: 24px; bottom: -58px; }
+  .projects-ledge { margin: 14px auto 52px; width: 94vw; }
+  .sitting-avatar { height: 172px; right: 26px; bottom: 8px; }
 }
 @media (max-width: 560px) {
   .projects-ledge { display: none; }
@@ -1527,6 +1519,69 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
 .cruise-ship .hull, .cruise-ship-inner .hull { background: #12293D !important; }
 .cruise-stars { opacity: .35 !important; }
 .cruise-wave { opacity: .96; }
+
+
+/* Headshot: circular and centred, full colour. */
+.about-photo {
+  display: block !important;
+  width: clamp(150px, 16vw, 210px) !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  object-fit: cover !important;
+  object-position: center 22% !important;   /* his face, not the middle of the frame */
+  border-radius: 50% !important;
+  margin: 0 auto 1.6rem !important;
+  border: 1px solid var(--rule) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6) !important;
+  filter: none !important;
+}
+.about-text-col { text-align: center; }
+.about-text-col .about-text { text-align: left; }
+
+
+/* ── award cards: Revive and ReplAI ──
+   Selected by :has() on the winner badge rather than by hardcoding project
+   names, so a future win styles itself. The lift is warm and directional, not
+   the generic grey blur under a card. */
+.project-card:has(.winner-badge),
+.project-card:has(.revive-winner-badge) {
+  background: linear-gradient(180deg, #FDF8F0 0%, #F8EFE0 100%) !important;
+  border-color: rgba(154,62,18,0.30) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    0 0 0 1px rgba(154,62,18,0.07),
+    0 20px 44px -30px rgba(154,62,18,0.55) !important;
+}
+.project-card:has(.winner-badge):hover,
+.project-card:has(.revive-winner-badge):hover {
+  border-color: rgba(154,62,18,0.55) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    0 0 0 1px rgba(154,62,18,0.12),
+    0 26px 52px -28px rgba(154,62,18,0.65) !important;
+}
+
+/* The trophy glow itself: warm gold, on the badge. */
+.winner-badge, .revive-winner-badge {
+  background: linear-gradient(180deg, #F7E6C8 0%, #EBCF9E 100%) !important;
+  border: 1px solid rgba(154,62,18,0.38) !important;
+  color: #6E2A0B !important;
+  box-shadow: 0 0 0 3px rgba(233,180,90,0.22),
+              0 2px 12px rgba(196,138,52,0.40) !important;
+  animation: trophyGlow 3.2s ease-in-out infinite;
+}
+@keyframes trophyGlow {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(233,180,90,0.20),
+                         0 2px 12px rgba(196,138,52,0.34); }
+  50%      { box-shadow: 0 0 0 5px rgba(233,180,90,0.30),
+                         0 3px 18px rgba(196,138,52,0.55); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .winner-badge, .revive-winner-badge { animation: none; }
+}
+
+/* FEATURED sits quieter so the award badge leads. */
+.project-badge { background: var(--bg-2) !important; color: var(--ink-mute) !important; }
 
 </style>
 </head>
