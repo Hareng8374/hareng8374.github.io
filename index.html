@@ -1632,6 +1632,47 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   width: clamp(140px, 13vw, 178px) !important;
 }
 
+
+/* ── every icon chip gets a defined edge ──
+   The hairline --rule reads as almost nothing on beige, so anything carrying an
+   icon (contact chips, social links, project links, tags, filter pills) gets a
+   light-black edge instead. Dark enough to define the shape, light enough not
+   to become a grid of boxes. */
+.contact-detail, .contact-link, .project-link, .exp-tag,
+.filter-pill, .stat-item, .project-badge,
+.resume-button, .cta-button.secondary, .social-link, .tag {
+  border: 1px solid rgba(28,24,17,0.30) !important;
+}
+.contact-detail:hover, .contact-link:hover, .project-link:hover,
+.filter-pill:hover, .resume-button:hover, .cta-button.secondary:hover {
+  border-color: rgba(28,24,17,0.62) !important;
+}
+.filter-pill.active, .cta-button:not(.secondary) {
+  border-color: var(--ink-deep) !important;
+}
+/* Award badge keeps its gold edge rather than the neutral one. */
+.winner-badge, .revive-winner-badge {
+  border: 1px solid rgba(154,62,18,0.55) !important;
+}
+/* The icons themselves stay rust; only their containers gain an edge. */
+.contact-link svg, .social-link svg { color: var(--accent); }
+
+
+/* Broader reduced-motion safety net. The earlier rule only named hero
+   elements, so anything else that starts at opacity 0 and animates in --
+   contact chips, project cards, experience blocks -- stayed invisible for
+   users who asked for no motion. */
+@media (prefers-reduced-motion: reduce) {
+  .contact-detail, .contact-link, .contact-links, .contact-info,
+  .project-card, .exp-card, .blog-card, .filter-pill, .filter-bar,
+  .section-eyebrow, .section-title, .about-title, .about-text,
+  .resume-embed-wrapper, .stats-grid, .stat-item, .cta-buttons {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 </style>
 </head>
 <body><div class="ambient"></div>

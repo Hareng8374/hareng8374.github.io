@@ -352,7 +352,10 @@
 
   Avatar.prototype._activity = function () {
     this.lastIdle = Date.now();
-    if (this.videoOn) this._exitVideo();
+    // Only bail out of the video if it was the idle screensaver. When the ball
+    // is a scheduled beat of the cycle, exiting on input meant the faintest
+    // mouse movement cancelled it -- so it was effectively never watchable.
+    if (this.videoOn && this.videoReason === 'idle') this._exitVideo();
   };
 
   /* --------------------------------------------------------------- poses -- */
@@ -481,7 +484,7 @@
       if (soon && soon[0] === 'ballspin') self._preloadVideo();
 
       if (s[0] === 'ballspin') {
-        self._enterVideo();
+        self._enterVideo('cycle');
       } else {
         if (self.videoOn) self._exitVideo();
         self.base = s[0];
@@ -537,11 +540,12 @@
     });
   };
 
-  Avatar.prototype._enterVideo = function () {
+  Avatar.prototype._enterVideo = function (reason) {
     if (this.videoOn || this.noVideo || this.destroyed) return;
     var self = this;
     this._preloadVideo();
     this.videoOn = true;
+    this.videoReason = reason || 'idle';
     this.base = 'ballspin';
     this._syncEyes();
 
@@ -579,6 +583,7 @@
     if (!this.videoOn) return;
     var self = this;
     this.videoOn = false;
+    this.videoReason = null;
     this.base = 'idle-still';
     this.lastIdle = Date.now();
 
@@ -684,7 +689,7 @@
     var idleFor = Date.now() - this.lastIdle;
     if (!this.noVideo && !this.videoOn) {
       if (idleFor > K.preloadAt && !this.videoLoading) this._preloadVideo();
-      if (idleFor > K.videoAt) this._enterVideo();
+      if (idleFor > K.videoAt) this._enterVideo('idle');
     }
 
     // Exactly one transform write per animated element, batched at the end.
