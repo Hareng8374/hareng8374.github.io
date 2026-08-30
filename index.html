@@ -1583,6 +1583,55 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
 /* FEATURED sits quieter so the award badge leads. */
 .project-badge { background: var(--bg-2) !important; color: var(--ink-mute) !important; }
 
+
+/* ── stronger award glow: clearly different, still clean ── */
+.project-card:has(.winner-badge),
+.project-card:has(.revive-winner-badge) {
+  background: linear-gradient(180deg, #FFFBF4 0%, #F9EEDC 100%) !important;
+  border-color: rgba(154,62,18,0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    0 0 0 1px rgba(196,138,52,0.22),
+    0 0 34px -6px rgba(214,158,72,0.42),
+    0 26px 56px -30px rgba(154,62,18,0.60) !important;
+}
+.project-card:has(.winner-badge):hover,
+.project-card:has(.revive-winner-badge):hover {
+  border-color: rgba(154,62,18,0.68) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    0 0 0 1px rgba(196,138,52,0.34),
+    0 0 46px -4px rgba(214,158,72,0.62),
+    0 32px 66px -28px rgba(154,62,18,0.70) !important;
+}
+/* A hairline of gold down the leading edge so the card reads as awarded even
+   before you notice the glow. */
+.project-card:has(.winner-badge)::before,
+.project-card:has(.revive-winner-badge)::before {
+  content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #E8B45A, #9A3E12);
+}
+.project-card { position: relative; }
+
+.winner-badge, .revive-winner-badge {
+  box-shadow: 0 0 0 4px rgba(233,180,90,0.26),
+              0 3px 16px rgba(196,138,52,0.52) !important;
+}
+@keyframes trophyGlow {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(233,180,90,0.24),
+                         0 3px 16px rgba(196,138,52,0.46); }
+  50%      { box-shadow: 0 0 0 7px rgba(233,180,90,0.36),
+                         0 4px 24px rgba(196,138,52,0.70); }
+}
+
+/* ── headshot: left column, sitting just above the ABOUT line ── */
+.about-text-col { text-align: left; }
+.about-photo {
+  margin: 0 0 1.5rem 0 !important;   /* flush left, above the eyebrow */
+  width: clamp(140px, 13vw, 178px) !important;
+}
+
 </style>
 </head>
 <body><div class="ambient"></div>

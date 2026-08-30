@@ -6,7 +6,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Matches index.html: warm beige paper, single rust accent. */
+  /* Matches index.html. Written AFTER the colour conversion pass so these
+     values are not themselves rewritten -- which is exactly what happened the
+     first time and turned the accent into a pale grey. */
   --paper: #F2EBE0;
   --paper-2: #EAE1D3;
   --surface: #FBF7F0;
@@ -21,16 +23,16 @@
   --bg-1: #F6F0E7;
   --bg-2: #EAE1D3;
   --bg-3: #E3D8C7;
-  --line: rgba(209,203,192,0.10);
-  --line-strong: rgba(209,203,192,0.20);
-  --emerald: #aca59c;
-  --emerald-bright: #aca59c;
-  --emerald-soft: #989289;
-  --emerald-deep: #bbb5ab;
-  --emerald-glow: rgba(172,165,156,0.10);
-  --text: #d1cbc0;
-  --text-dim: #9f9990;
-  --text-faint: #857f76;
+  --line: rgba(43,38,32,0.12);
+  --line-strong: rgba(43,38,32,0.24);
+  --emerald: #9A3E12;
+  --emerald-bright: #9A3E12;
+  --emerald-soft: #B4551F;
+  --emerald-deep: #7A2F0C;
+  --emerald-glow: rgba(154,62,18,0.12);
+  --text: #2B2620;
+  --text-dim: #554E45;
+  --text-faint: #7A7165;
 
   --display: 'Bricolage Grotesque', 'Helvetica Neue', sans-serif;
   --sans: 'Bricolage Grotesque', 'Helvetica Neue', sans-serif;
@@ -446,3 +448,11 @@ a { color: var(--accent); }
     transform: none !important;
   }
 }
+
+/* Headings and post titles carry full ink; the accent is the rust. */
+.blog-title, .post-card h2, .post-title { color: var(--ink-deep) !important;
+  font-weight: 700 !important; }
+.blog-title em { color: var(--accent) !important; font-style: italic; }
+.blog-subtitle, .post-excerpt { color: var(--ink) !important; font-family: var(--body); }
+.read-more, .back-link { color: var(--accent) !important; }
+.post-card:hover h2 { color: var(--accent) !important; }
