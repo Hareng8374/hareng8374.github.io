@@ -156,15 +156,15 @@ SHIP = (
  '<path d="M668 96 q8 -7 16 0 M684 96 q8 -7 16 0"/>'
  '</g>'
  '<g class="xp-sail"><g class="xp-ship">'
- '<rect x="726" y="212" width="16" height="34" rx="4" fill="#B4451F"/>'
- '<rect x="729" y="212" width="10" height="12" rx="3" fill="#F7F3EA"/>'
- '<rect x="684" y="246" width="86" height="22" rx="4" fill="#F4F1E8"/>'
- '<rect x="656" y="268" width="142" height="28" rx="4" fill="#FBF8F1"/>'
+ '<rect x="726" y="256" width="16" height="34" rx="4" fill="#B4451F"/>'
+ '<rect x="729" y="256" width="10" height="12" rx="3" fill="#F7F3EA"/>'
+ '<rect x="684" y="290" width="86" height="22" rx="4" fill="#F4F1E8"/>'
+ '<rect x="656" y="312" width="142" height="28" rx="4" fill="#FBF8F1"/>'
  '<g fill="#4E9AC0">'
- '<circle cx="678" cy="282" r="4"/><circle cx="702" cy="282" r="4"/><circle cx="726" cy="282" r="4"/>'
- '<circle cx="750" cy="282" r="4"/><circle cx="774" cy="282" r="4"/></g>'
- '<path d="M644 296 h166 l-24 32 h-118 z" fill="#12293D"/>'
- '<rect x="644" y="296" width="166" height="7" fill="#B4451F"/>'
+ '<circle cx="678" cy="326" r="4"/><circle cx="702" cy="326" r="4"/><circle cx="726" cy="326" r="4"/>'
+ '<circle cx="750" cy="326" r="4"/><circle cx="774" cy="326" r="4"/></g>'
+ '<path d="M644 340 h166 l-24 32 h-118 z" fill="#12293D"/>'
+ '<rect x="644" y="340" width="166" height="7" fill="#B4451F"/>'
  '</g></g>'
  '<g class="xp-wave-2" opacity=".6"><path d="M0 352 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 v230 H0 z" fill="url(#xpSea)"/></g>'
  '<g class="xp-wave-1"><path d="M0 392 q50 -13 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 v190 H0 z" fill="url(#xpSea)"/></g>'
@@ -268,7 +268,7 @@ def main():
 
     zones = [
         zone(SHIP, "carnival", "Carnival Corporation &amp; plc"),
-        zone(OASIS_VIDEO, None, None),
+        zone(OASIS_VIDEO, "oasis", "Oasis"),
         zone(KUMON, "kumon", "Kumon", centre=True),
     ]
     n = 0
