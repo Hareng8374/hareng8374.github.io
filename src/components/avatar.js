@@ -369,6 +369,12 @@
   };
 
   Avatar.prototype._setTransient = function (pose) {
+    // A requested pose always wins over the video. Without this the pose fades
+    // in on a layer BELOW the video, and because the clip has an alpha channel
+    // you see both at once -- the pose ghosting through wherever the video is
+    // transparent. Exiting also resets base to idle-still, so releasing the
+    // hover lands somewhere sensible rather than back on a dismissed clip.
+    if (pose && this.videoOn) this._exitVideo();
     this.transient = pose;
     this._render();
   };
