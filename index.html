@@ -2026,6 +2026,55 @@ main:focus { outline: none; }
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
+
+/* ── Toolkit ────────────────────────────────────────────────
+   A labelled row per discipline rather than one undifferentiated cloud:
+   a recruiter scanning for "does he know Spring Boot" finds it by category
+   in about a second, which a tag soup does not allow. */
+.skills-section { padding: 5rem 0 6rem; border-top: 1px solid var(--rule); }
+.skills-note {
+  font-family: var(--body); color: var(--ink);
+  max-width: 56ch; margin: -0.4rem 0 2.6rem; font-size: 1.02rem; line-height: 1.6;
+}
+.skill-grid { display: grid; gap: 1.5rem; }
+.skill-row {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+.skill-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.skill-cat {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-mute);
+  padding-top: .55rem;
+}
+.skill-list { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; margin: 0; padding: 0; }
+.skill-pill {
+  font-family: var(--sans); font-size: .9rem; font-weight: 500; color: var(--ink);
+  padding: .48rem .95rem;
+  border: 1.5px solid rgba(28,24,17,0.30);
+  border-radius: 100px;
+  background: linear-gradient(178deg, #FFFDFA 0%, var(--surface) 60%, #F4EEE4 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(28,24,17,0.05);
+  transition: border-color .18s ease, transform .18s ease, color .18s ease;
+}
+.skill-pill:hover {
+  border-color: var(--accent); color: var(--accent); transform: translateY(-2px);
+}
+@media (max-width: 720px) {
+  .skills-section { padding: 3rem 0 3.5rem; }
+  .skill-row { grid-template-columns: 1fr; gap: .7rem; }
+  .skill-cat { padding-top: 0; }
+  .skill-pill { font-size: .84rem; padding: .42rem .8rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-pill { transition: none; }
+  .skill-pill:hover { transform: none; }
+}
+
 </style>
 </head>
 <body><a class="skip-link" href="#main">Skip to content</a><div class="ambient"></div>
@@ -2036,7 +2085,7 @@ main:focus { outline: none; }
 <div class="orb orb-3"></div><header class="site-header"><nav id="navbar"><div class="container"><div class="logo" onclick="navigateTo('home')">Haren G.</div><ul class="nav-links"><li><a href="#" onclick="navigateTo('home');return false;" data-page="home" class="active">Home</a></li><li><a href="#" onclick="navigateTo('projects');return false;" data-page="projects">Projects</a></li><li><a href="#" onclick="navigateTo('resume');return false;" data-page="resume">Resume</a></li><li><a href="#" onclick="navigateTo('experience');return false;" data-page="experience">Experience</a></li><li><a href="#" onclick="navigateTo('contact');return false;" data-page="contact">Contact</a></li><li><a href="/blog/">Blog</a></li></ul><button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button></div>
 </nav></header><button class="scroll-top" onclick="scrollToTop()" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button><!-- HOME -->
-<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><img src="headshot.webp" alt="Haren Gannarapu" class="about-photo" width="440" height="440"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p></div><div class="about-globe-col"><canvas id="skillGlobe"></canvas></div></div></div></section>
+<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><img src="headshot.webp" alt="Haren Gannarapu" class="about-photo" width="440" height="440"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p></div><div class="about-globe-col"><canvas id="skillGlobe"></canvas></div></div></div></section><section class="skills-section" aria-labelledby="skills-heading"><div class="container"><div class="section-eyebrow">Toolkit</div><h2 class="section-title" id="skills-heading">What I <span class="em">build with</span>.</h2><p class="skills-note">Everything here is something I have shipped with, not a list of things I have read about.</p><div class="skill-grid"><div class="skill-row"><div class="skill-cat">Languages</div><ul class="skill-list"><li class="skill-pill">Python</li><li class="skill-pill">TypeScript</li><li class="skill-pill">JavaScript</li><li class="skill-pill">Java</li><li class="skill-pill">SQL</li><li class="skill-pill">HTML / CSS</li></ul></div><div class="skill-row"><div class="skill-cat">AI &amp; ML</div><ul class="skill-list"><li class="skill-pill">PyTorch Geometric</li><li class="skill-pill">Azure OpenAI</li><li class="skill-pill">Gemini 2.5</li><li class="skill-pill">OpenAI API</li><li class="skill-pill">MediaPipe</li><li class="skill-pill">YOLOv5</li><li class="skill-pill">ElevenLabs</li><li class="skill-pill">Tesseract OCR</li></ul></div><div class="skill-row"><div class="skill-cat">Frontend</div><ul class="skill-list"><li class="skill-pill">React</li><li class="skill-pill">Next.js</li><li class="skill-pill">Tailwind CSS</li><li class="skill-pill">Three.js</li><li class="skill-pill">Recharts</li><li class="skill-pill">Zod</li></ul></div><div class="skill-row"><div class="skill-cat">Backend</div><ul class="skill-list"><li class="skill-pill">Spring Boot</li><li class="skill-pill">Flask</li><li class="skill-pill">Node.js</li><li class="skill-pill">Express</li><li class="skill-pill">REST APIs</li><li class="skill-pill">WebSockets</li></ul></div><div class="skill-row"><div class="skill-cat">Cloud &amp; Infra</div><ul class="skill-list"><li class="skill-pill">AWS</li><li class="skill-pill">Azure</li><li class="skill-pill">Docker</li><li class="skill-pill">Kubernetes</li><li class="skill-pill">Vercel</li><li class="skill-pill">Firebase</li></ul></div><div class="skill-row"><div class="skill-cat">Hardware &amp; Robotics</div><ul class="skill-list"><li class="skill-pill">Arduino</li><li class="skill-pill">iPhone LiDAR</li><li class="skill-pill">Web Serial API</li><li class="skill-pill">D* Lite</li></ul></div><div class="skill-row"><div class="skill-cat">Tooling</div><ul class="skill-list"><li class="skill-pill">Git</li><li class="skill-pill">Jira / JQL</li><li class="skill-pill">Atlassian Rovo</li><li class="skill-pill">Copilot Studio</li><li class="skill-pill">Vitest</li><li class="skill-pill">Prometheus</li><li class="skill-pill">Grafana</li></ul></div></div></div></section>
 </div><!-- RESUME -->
 <main id="main" tabindex="-1"><div class="page" id="resume"><div class="page-content"><div class="container"><div class="section-eyebrow">Resume</div><h2 class="section-title">My <span class="em">credentials</span>, in one place.</h2><div class="resume-embed-wrapper"><div class="resume-actions-bar"><a href="https://drive.google.com/uc?export=download&id=1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW" class="resume-button" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
           </a><button class="resume-button secondary" id="viewResumeBtn" onclick="toggleResumePreview()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span id="viewResumeBtnLabel">View Resume</span></button></div><div class="resume-frame-container" id="resumeFrameContainer" style="display:none;margin-top:0;"><iframe
