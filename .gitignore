@@ -17,13 +17,12 @@ __pycache__/
 node_modules/
 dist/
 
-# avatar source assets: large, and only inputs to tools/avatar/.
-# The shipped layers (*.webp) and ballspin.webm stay tracked.
-src/assets/avatar/*.png
-src/assets/avatar/*.mp4
+# Avatar source art is TRACKED on purpose. It is ~20MB of Gemini renders that
+# cannot be regenerated -- the model does not reproduce the same character
+# twice, which is how gather.png ended up in different trousers from the other
+# three shooting frames. The shipped .webp layers are small keyed derivatives,
+# so losing these originals would be permanent. Git is the backup.
 
-# registration master, used by tools/avatar only
-src/assets/avatar/idle.webp
-
-# original headshot source; the site ships headshot.webp (9KB)
-professional headshot.png
+# The one exception: an NBA 2K screenshot, kept locally as a style reference for
+# the court. This repo is public, and that is someone else's copyrighted art.
+src/assets/avatar/courtviz.png
