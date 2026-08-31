@@ -1108,7 +1108,7 @@ a.contact-detail:hover{
 .game-hud{display:flex;gap:1.8rem;font-family:var(--mono);font-size:0.8rem;color:var(--text-dim);}
 .game-hud-val{color:var(--emerald-bright);font-weight:600;margin-left:0.35rem;}
 .game-canvas-wrap{position:relative;line-height:0;}
-#breakoutCanvas{display:block;width:100%;height:440px;background:#f5f4f2;}
+#hoopsCanvas{display:block;width:100%;height:440px;background:#191512;touch-action:none;cursor:crosshair;}
 .game-overlay{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
@@ -1714,11 +1714,45 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.9) !important;
   overflow: hidden;
 }
+/* The court needs a ~1.6:1 frame; at full container width it stretches past
+   2:1 and the hoop drifts to the far edge. */
+.game-box { max-width: 880px; margin-left: auto; margin-right: auto; }
 .game-canvas-wrap {
-  background: linear-gradient(180deg, #FFFDF9 0%, #F4EEE3 100%) !important;
-  border-top: 1px solid rgba(28,24,17,0.16) !important;
-  border-bottom: 1px solid rgba(28,24,17,0.16) !important;
+  /* The court is a lit gym, so this panel is the one dark surface on the page.
+     Read as an inset screen it gives the resume tab a focal point; the blonde
+     hardwood keeps it in the same warm family as the paper around it. */
+  background: #191512 !important;
+  border-top: 1px solid rgba(28,24,17,0.34) !important;
+  border-bottom: 1px solid rgba(28,24,17,0.34) !important;
 }
+.game-overlay {
+  background: rgba(20,17,14,0.80) !important;
+  backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
+}
+.game-overlay .game-overlay-title { color: #F6C98B !important; }
+.game-overlay .game-overlay-sub { color: #E6D9C6 !important; max-width: 330px; }
+.game-diff-btns button, .game-diff-btns .diff-btn {
+  border: 1px solid rgba(246,201,139,0.32) !important;
+  background: rgba(255,255,255,0.05) !important;
+  color: #EBDCC6 !important;
+}
+.game-diff-btns .diff-btn.active-diff {
+  border-color: #E2622A !important; color: #FFD3A3 !important;
+  background: rgba(226,98,42,0.18) !important;
+}
+.hoops-start {
+  margin-top: .35rem; cursor: pointer;
+  font-family: var(--mono); font-size: .74rem; letter-spacing: .14em;
+  text-transform: uppercase; color: #1C1811;
+  background: linear-gradient(180deg, #F0A25C, #E2622A);
+  border: 0; border-radius: 999px; padding: .7rem 1.6rem;
+  box-shadow: 0 8px 20px -8px rgba(226,98,42,.7);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.hoops-start:hover { transform: translateY(-2px);
+  box-shadow: 0 12px 26px -8px rgba(226,98,42,.85); }
+@media (prefers-reduced-motion: reduce) { .hoops-start { transition: none; }
+  .hoops-start:hover { transform: none; } }
 .game-bar { background: var(--bg-2) !important;
   border-bottom: 1px solid rgba(28,24,17,0.20) !important; }
 .game-bar-label, .game-hud { color: var(--ink-mute) !important; font-family: var(--mono); }
@@ -2027,61 +2061,12 @@ main:focus { outline: none; }
 }
 
 
-/* ── Toolkit ────────────────────────────────────────────────
-   A labelled row per discipline rather than one undifferentiated cloud:
-   a recruiter scanning for "does he know Spring Boot" finds it by category
-   in about a second, which a tag soup does not allow. */
-.skills-section { padding: 5rem 0 6rem; border-top: 1px solid var(--rule); }
-.skills-note {
-  font-family: var(--body); color: var(--ink);
-  max-width: 56ch; margin: -0.4rem 0 2.6rem; font-size: 1.02rem; line-height: 1.6;
-}
-.skill-grid { display: grid; gap: 1.5rem; }
-.skill-row {
-  display: grid;
-  grid-template-columns: 190px 1fr;
-  gap: 1.5rem;
-  align-items: start;
-  padding-bottom: 1.4rem;
-  border-bottom: 1px solid var(--rule);
-}
-.skill-row:last-child { border-bottom: 0; padding-bottom: 0; }
-.skill-cat {
-  font-family: var(--mono); font-size: .72rem; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink-mute);
-  padding-top: .55rem;
-}
-.skill-list { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; margin: 0; padding: 0; }
-.skill-pill {
-  font-family: var(--sans); font-size: .9rem; font-weight: 500; color: var(--ink);
-  padding: .48rem .95rem;
-  border: 1.5px solid rgba(28,24,17,0.30);
-  border-radius: 100px;
-  background: linear-gradient(178deg, #FFFDFA 0%, var(--surface) 60%, #F4EEE4 100%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(28,24,17,0.05);
-  transition: border-color .18s ease, transform .18s ease, color .18s ease;
-}
-.skill-pill:hover {
-  border-color: var(--accent); color: var(--accent); transform: translateY(-2px);
-}
-@media (max-width: 720px) {
-  .skills-section { padding: 3rem 0 3.5rem; }
-  .skill-row { grid-template-columns: 1fr; gap: .7rem; }
-  .skill-cat { padding-top: 0; }
-  .skill-pill { font-size: .84rem; padding: .42rem .8rem; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .skill-pill { transition: none; }
-  .skill-pill:hover { transform: none; }
-}
-
-
-/* ── Toolkit ────────────────────────────────────────────────
-   Editorial rows rather than a field of chips: the eye reads one line per
-   discipline instead of parsing 40 separate shapes, and the hairlines do
-   the structural work that borders were doing before. */
+/* ── Toolkit ────────────────────────────────
+   A specification sheet rather than a tag cloud. The numbered column and the
+   two heavy framing rules give the block authority, and each item is a chip so
+   it reads as a discrete designed object instead of a word in a sentence. */
 .skills-section { padding: 6.5rem 0 7rem; }
-.skills-head { text-align: center; margin-bottom: 3.4rem; }
+.skills-head { text-align: center; margin-bottom: 3.6rem; }
 .skills-head .section-eyebrow {
   display: block; margin-bottom: 1rem;
   color: var(--accent) !important;
@@ -2091,55 +2076,127 @@ main:focus { outline: none; }
 .skills-head .section-eyebrow::after { display: none !important; }
 .skills-head .section-title { margin: 0 auto; }
 
-.skill-grid { max-width: 1040px; margin: 0 auto; }
+.skill-grid {
+  max-width: 1060px; margin: 0 auto;
+  border-top: 2px solid var(--ink-deep);
+  border-bottom: 2px solid var(--ink-deep);
+}
 .skill-row {
   display: grid;
-  grid-template-columns: 230px 1fr;
-  gap: 3.2rem;
-  align-items: center;
-  padding: 2rem 0;
+  grid-template-columns: 210px 1fr;
+  gap: 3rem;
+  align-items: start;
+  padding: 1.9rem 0 !important;
   border-top: 1px solid var(--rule);
+  border-bottom: 0 !important;
 }
-.skill-row:last-child { border-bottom: 1px solid var(--rule); }
+.skill-row:first-child { border-top: 0; }
 
 .skill-cat {
-  font-family: var(--mono);
-  font-size: .68rem;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--accent);
-  text-align: right;
-  line-height: 1.5;
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: .4rem; text-align: right; padding-top: .3rem;
+}
+.skill-cat .n {
+  font-family: var(--mono); font-size: .63rem; letter-spacing: .16em;
+  color: var(--accent); opacity: .9;
+}
+.skill-cat .t {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ink-deep); line-height: 1.5;
+}
+.skill-cat::after {
+  content: ''; width: 24px; height: 2px; border-radius: 2px;
+  background: var(--accent); margin-top: .45rem;
 }
 
-/* Kept as a list for semantics; the separator is generated, not typed, so
-   screen readers announce the items rather than a run of middots. */
 .skill-list {
-  display: flex; flex-wrap: wrap; align-items: baseline;
+  display: flex; flex-wrap: wrap; gap: .5rem;
   list-style: none; margin: 0; padding: 0;
-  font-family: var(--sans);
-  font-size: 1.04rem; font-weight: 400; color: var(--ink);
-  line-height: 1.9;
+  font-family: var(--mono);
 }
-.skill-list li { white-space: nowrap; }
-.skill-list li:not(:last-child)::after {
-  content: '·';
-  margin: 0 .6rem;
-  color: var(--ink-mute);
-  opacity: .75;
+.skill-list li {
+  font-family: var(--mono); font-size: .78rem; letter-spacing: .01em;
+  color: var(--ink); white-space: nowrap; line-height: 1.2;
+  padding: .46rem .82rem; border-radius: 8px;
+  border: 1px solid var(--rule);
+  background: linear-gradient(180deg, #FFFDFA 0%, var(--surface) 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 1px 2px rgba(28,24,17,.045);
+  transition: transform .18s cubic-bezier(.4,0,.2,1), border-color .18s ease,
+              color .18s ease, box-shadow .18s ease;
+}
+.skill-list li::after { content: none !important; }
+.skill-list li:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent); color: var(--accent);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95),
+              0 6px 14px -6px rgba(154,62,18,.35);
 }
 
 @media (max-width: 820px) {
   .skills-section { padding: 3.5rem 0 4rem; }
   .skills-head { margin-bottom: 2.2rem; }
-  .skill-row { grid-template-columns: 1fr; gap: .6rem; padding: 1.4rem 0; }
-  .skill-cat { text-align: left; }
-  .skill-list { font-size: .96rem; line-height: 1.8; }
+  .skill-row { grid-template-columns: 1fr; gap: .9rem; padding: 1.5rem 0 !important; }
+  .skill-cat { align-items: flex-start; text-align: left; flex-direction: row;
+               align-items: baseline; gap: .7rem; }
+  .skill-cat::after { display: none; }
+  .skill-list li { font-size: .74rem; padding: .4rem .7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-list li { transition: none; }
+  .skill-list li:hover { transform: none; }
 }
 
-/* the globe is gone, so About is a single column now */
-.about-grid { grid-template-columns: 1fr !important; }
-.about-text-col { max-width: 72ch; }
+/* ── About ─────────────────────────────────
+   The globe left a 400px hole beside a 72ch paragraph. The portrait moves out
+   of the text flow into a sticky card, followed by an index of the same facts
+   the prose states, so the column scans as well as it reads. */
+.about-grid {
+  grid-template-columns: minmax(0,1fr) 372px !important;
+  gap: 4.5rem !important; align-items: start !important;
+}
+.about-text-col { max-width: 68ch; }
+.about-card {
+  position: sticky; top: 104px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 1.4rem 1.4rem 1.25rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92),
+              0 20px 44px -24px rgba(28,24,17,.42);
+}
+.about-card-photo {
+  display: block; width: 100%; aspect-ratio: 1/1;
+  object-fit: cover; object-position: top center;
+  border-radius: 12px; border: 1px solid var(--rule);
+  margin-bottom: 1.2rem; background: var(--paper);
+}
+.about-card-eyebrow {
+  font-family: var(--mono); font-size: .63rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: .85rem;
+}
+.about-facts { margin: 0; padding: 0; }
+.about-facts > div {
+  display: grid; grid-template-columns: 84px 1fr; gap: .85rem;
+  align-items: baseline;
+  padding: .6rem 0; border-top: 1px solid var(--rule);
+}
+.about-facts > div:first-child { border-top: 0; padding-top: 0; }
+.about-facts > div:last-child { padding-bottom: 0; }
+.about-facts dt {
+  font-family: var(--mono); font-size: .61rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--ink-mute); line-height: 1.7;
+}
+.about-facts dd {
+  margin: 0; font-family: var(--body); font-size: .92rem;
+  color: var(--ink); line-height: 1.5;
+}
+.about-facts dd b { font-weight: 600; color: var(--ink-deep); }
+
+@media (max-width: 980px) {
+  .about-grid { grid-template-columns: 1fr !important; gap: 2.6rem !important; }
+  .about-card { position: static; max-width: 460px; }
+  .about-text-col { max-width: 72ch; }
+}
 
 </style>
 </head>
@@ -2151,7 +2208,7 @@ main:focus { outline: none; }
 <div class="orb orb-3"></div><header class="site-header"><nav id="navbar"><div class="container"><div class="logo" onclick="navigateTo('home')">Haren G.</div><ul class="nav-links"><li><a href="#" onclick="navigateTo('home');return false;" data-page="home" class="active">Home</a></li><li><a href="#" onclick="navigateTo('projects');return false;" data-page="projects">Projects</a></li><li><a href="#" onclick="navigateTo('resume');return false;" data-page="resume">Resume</a></li><li><a href="#" onclick="navigateTo('experience');return false;" data-page="experience">Experience</a></li><li><a href="#" onclick="navigateTo('contact');return false;" data-page="contact">Contact</a></li><li><a href="/blog/">Blog</a></li></ul><button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button></div>
 </nav></header><button class="scroll-top" onclick="scrollToTop()" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button><!-- HOME -->
-<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><img src="headshot.webp" alt="Haren Gannarapu" class="about-photo" width="440" height="440"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p><p class="about-text">Away from the screen I am usually in the gym &mdash; weightlifting is the thing that actually clears my head. The rest of the time it is pickleball, basketball, or whatever game has my attention that month. I am a lifelong LeBron guy and will happily defend that to anyone who brings it up. I also sing, with considerably more enthusiasm than technique.</p></div></div></div></section><section class="skills-section" aria-labelledby="skills-heading"><div class="container"><div class="skills-head"><div class="section-eyebrow">Toolkit</div><h2 class="section-title" id="skills-heading">What I <span class="em">ship with</span>.</h2></div><div class="skill-grid"><div class="skill-row"><div class="skill-cat">Languages</div><ul class="skill-list"><li>Python</li><li>Java</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>HTML/CSS</li></ul></div><div class="skill-row"><div class="skill-cat">Frameworks &amp; ML</div><ul class="skill-list"><li>React</li><li>Next.js</li><li>Spring Boot</li><li>Flask</li><li>PyTorch Geometric</li><li>MediaPipe</li><li>YOLOv5</li><li>Three.js</li><li>Tailwind CSS</li></ul></div><div class="skill-row"><div class="skill-cat">AI &amp; LLM</div><ul class="skill-list"><li>Azure OpenAI</li><li>Gemini 2.5</li><li>OpenAI API</li><li>LiveKit</li><li>ElevenLabs</li><li>Tesseract OCR</li><li>Retrieval-Augmented Generation</li></ul></div><div class="skill-row"><div class="skill-cat">Infrastructure &amp; APIs</div><ul class="skill-list"><li>AWS</li><li>Azure</li><li>Docker</li><li>Kubernetes</li><li>Vercel</li><li>Firebase</li><li>REST</li><li>WebSockets</li></ul></div><div class="skill-row"><div class="skill-cat">Hardware &amp; Robotics</div><ul class="skill-list"><li>Arduino</li><li>iPhone LiDAR</li><li>Web Serial API</li><li>D* Lite</li><li>Computer Vision</li></ul></div><div class="skill-row"><div class="skill-cat">Core CS &amp; DevOps</div><ul class="skill-list"><li>Data Structures &amp; Algorithms</li><li>Git</li><li>Jira / JQL</li><li>CI/CD</li><li>Prometheus</li><li>Grafana</li><li>Vitest</li></ul></div></div></div></section>
+<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p><p class="about-text">Away from the screen I am usually in the gym &mdash; weightlifting is the thing that actually clears my head. The rest of the time it is pickleball, basketball, or whatever game has my attention that month. I am a lifelong LeBron guy and will happily defend that to anyone who brings it up. I also sing, with considerably more enthusiasm than technique.</p></div><aside class="about-card" aria-label="At a glance"><img src="headshot.webp" alt="Haren Gannarapu" class="about-card-photo" width="440" height="440" loading="lazy" decoding="async"><div class="about-card-eyebrow">The short version</div><dl class="about-facts"><div><dt>Now</dt><dd><b>Software Engineer</b> &mdash; Web &amp; eCommerce, Carnival</dd></div><div><dt>Before</dt><dd><b>AI/ML Intern</b> &mdash; Oasis</dd></div><div><dt>School</dt><dd>Computer Science, <b>UCF</b> &middot; 3.8 GPA</dd></div><div><dt>Hackathons</dt><dd><b>2&times; winner</b> &mdash; HackaBULL VII, Hack The Bay</dd></div><div><dt>Off hours</dt><dd>Gym &middot; Pickleball &middot; Basketball &middot; Singing</dd></div><div><dt>Allegiance</dt><dd>LeBron, and I&rsquo;ll defend it</dd></div></dl></aside></div></div></section><section class="skills-section" aria-labelledby="skills-heading"><div class="container"><div class="skills-head"><div class="section-eyebrow">Toolkit</div><h2 class="section-title" id="skills-heading">What I <span class="em">ship with</span>.</h2></div><div class="skill-grid"><div class="skill-row"><div class="skill-cat"><span class="n">01</span><span class="t">Languages</span></div><ul class="skill-list"><li>Python</li><li>Java</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>HTML/CSS</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">02</span><span class="t">Frameworks &amp; ML</span></div><ul class="skill-list"><li>React</li><li>Next.js</li><li>Spring Boot</li><li>Flask</li><li>PyTorch Geometric</li><li>MediaPipe</li><li>YOLOv5</li><li>Three.js</li><li>Tailwind CSS</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">03</span><span class="t">AI &amp; LLM</span></div><ul class="skill-list"><li>Azure OpenAI</li><li>Gemini 2.5</li><li>OpenAI API</li><li>LiveKit</li><li>ElevenLabs</li><li>Tesseract OCR</li><li>Retrieval-Augmented Generation</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">04</span><span class="t">Infrastructure &amp; APIs</span></div><ul class="skill-list"><li>AWS</li><li>Azure</li><li>Docker</li><li>Kubernetes</li><li>Vercel</li><li>Firebase</li><li>REST</li><li>WebSockets</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">05</span><span class="t">Hardware &amp; Robotics</span></div><ul class="skill-list"><li>Arduino</li><li>iPhone LiDAR</li><li>Web Serial API</li><li>D* Lite</li><li>Computer Vision</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">06</span><span class="t">Core CS &amp; DevOps</span></div><ul class="skill-list"><li>Data Structures &amp; Algorithms</li><li>Git</li><li>Jira / JQL</li><li>CI/CD</li><li>Prometheus</li><li>Grafana</li><li>Vitest</li></ul></div></div></div></section>
 </div><!-- RESUME -->
 <main id="main" tabindex="-1"><div class="page" id="resume"><div class="page-content"><div class="container"><div class="section-eyebrow">Resume</div><h2 class="section-title">My <span class="em">credentials</span>, in one place.</h2><div class="resume-embed-wrapper"><div class="resume-actions-bar"><a href="https://drive.google.com/uc?export=download&id=1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW" class="resume-button" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
           </a><button class="resume-button secondary" id="viewResumeBtn" onclick="toggleResumePreview()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span id="viewResumeBtnLabel">View Resume</span></button></div><div class="resume-frame-container" id="resumeFrameContainer" style="display:none;margin-top:0;"><iframe
@@ -2160,7 +2217,7 @@ main:focus { outline: none; }
             class="resume-iframe"
             allow="autoplay"
             title="Haren Gannarapu Resume"
-          ></iframe></div><div class="game-box"><div class="game-bar"><span class="game-bar-label">// side quest — breakout</span><div class="game-hud"><span>Score<span class="game-hud-val" id="brkScore">0</span></span></div></div><div class="game-canvas-wrap"><canvas id="breakoutCanvas"></canvas><div class="game-overlay" id="gameOverlay"><div class="game-overlay-title" id="gameOverlayTitle">Breakout</div><p class="game-overlay-sub" id="gameOverlaySub">Mouse · touch · ← → to move. Break all bricks.</p><div class="game-diff-btns"><button class="diff-btn" id="diffEasy">Easy</button><button class="diff-btn active-diff" id="diffNormal">Normal</button><button class="diff-btn" id="diffHard">Hard</button></div></div></div></div></div></div></div>
+          ></iframe></div><div class="game-box"><div class="game-bar"><span class="game-bar-label">// side quest — shootaround</span><div class="game-hud"><span>Score<span class="game-hud-val" id="hoopScore">0</span></span><span>Streak<span class="game-hud-val" id="hoopStreak">0</span></span><span>Best<span class="game-hud-val" id="hoopBest">0</span></span></div></div><div class="game-canvas-wrap"><canvas id="hoopsCanvas" role="img" aria-label="Basketball shooting game. Drag back from the ball and release to shoot."></canvas><div class="game-overlay" id="gameOverlay"><div class="game-overlay-title" id="gameOverlayTitle">Shootaround</div><p class="game-overlay-sub" id="gameOverlaySub">Drag back from the ball and let go. Swish it for 3, off the rim for 2. Miss and the streak resets.</p><div class="game-diff-btns"><button class="diff-btn" id="diffEasy">Easy</button><button class="diff-btn active-diff" id="diffNormal">Normal</button><button class="diff-btn" id="diffHard">Hard</button></div><button class="hoops-start" id="hoopsStart">Start shooting</button></div></div></div></div></div></div>
 </div><!-- PROJECTS -->
 <div class="page" id="projects"><div class="page-content"><div class="container"><div class="section-eyebrow">Projects</div><div class="projects-heading-wrap"><h2 class="section-title">Things I've <span class="em">built</span>.</h2><div class="projects-ledge"><img src="src/assets/avatar/sitting.webp" alt="" class="sitting-avatar" width="326" height="941"></div></div><div class="project-filters"><button class="filter-pill active" onclick="filterProjects('all', this)">All</button><button class="filter-pill" onclick="filterProjects('featured', this)">Featured</button></div><div class="projects-grid"><!-- REVIVE --><div class="project-card revive-winner-card" data-featured="true"><div class="gold-aura"></div><div class="badge-row"><span class="revive-winner-badge">Winner — HackaBULL VII 2026</span><span class="project-badge featured">Featured</span></div><h3 class="project-title">Revive — Emergency CPR Training System</h3><p class="project-tech">Next.js 16 · React 19 · TypeScript · Arduino UNO R4 Minima · Gemini 2.5 Flash · ElevenLabs TTS · Web Serial API · Tailwind CSS 4 · Vitest</p><p class="project-description">Won HackaBULL VII by building a hardware-software CPR training system that turns $50 of Arduino hardware into a full cardiac emergency simulation. A force-sensitive pad streams compression peaks over Web Serial at 100Hz — Gemini 2.5 Flash generates live patient scenarios, simulates real-time physiology (HR, BP, SpO2, rhythm) based on your depth and rate, and coaches you via three distinct ElevenLabs voices (calm instructor, 911 dispatcher, panicked bystander) with sub-50ms correction latency. Your eyes stay on the patient. Fully scored against AHA protocol with a detailed session debrief. 222 Vitest tests. Triple fallback chain: pad disconnected → keyboard mode, Gemini timeout → cached scenarios, ElevenLabs down → browser SpeechSynthesis.</p><div class="revive-gallery" id="reviveGallery" style="display:none;"><div class="revive-gallery-grid"><div class="revive-gallery-item"><div class="revive-gallery-label">Splash Screen</div><img src="" data-revive="splash" class="revive-img" alt="Revive Splash"/></div><div class="revive-gallery-item"><div class="revive-gallery-label">Live Compression Session</div><img src="" data-revive="session" class="revive-img" alt="Live Session"/></div><div class="revive-gallery-item"><div class="revive-gallery-label">Vital Signs Monitor</div><img src="" data-revive="vitals" class="revive-img" alt="Vitals"/></div><div class="revive-gallery-item"><div class="revive-gallery-label">Session Debrief</div><img src="" data-revive="debrief" class="revive-img" alt="Debrief"/></div></div></div><div class="project-links"><a href="#" class="project-link revive-link" onclick="openVideoModal('https://www.youtube.com/embed/mbjH27CmkY0', 'Revive Demo'); return false;">View Demo</a><a href="https://github.com/Hareng8374/Revive" class="project-link revive-link" target="_blank" rel="noopener noreferrer">GitHub</a><button class="project-link revive-link" onclick="toggleReviveGallery()"> <span id="galleryBtnText">Screenshots</span></button></div></div><!-- REPLAI --><div class="project-card winner-card" data-featured="true"><div class="gold-aura"></div><div class="badge-row"><span class="winner-badge">Winner — Hack The Bay 2026</span><span class="project-badge featured">Featured</span></div><h3 class="project-title">ReplAI — Conversation Practice Platform</h3><p class="project-tech">Next.js · TypeScript · React · Gemini 2.5 Flash · LiveKit · MediaPipe · Three.js · Tailwind CSS</p><p class="project-description">Won Hack The Bay 2026 by building a real-time AI role-play platform for high-stakes conversation practice — salary negotiations, HR disputes, legal client intake. An AI plays the other person while MediaPipe tracks webcam body language (eye contact, posture, fidgeting) and LiveKit analyzes voice (pace, filler words, energy) simultaneously. For the Legal Intake scenario, a custom Levenshtein + Jaccard fuzzy-matching engine extracts named entities from live conversation transcripts and surfaces opposing-party conflicts against a firm database in real time — before the meeting is even over.</p><div class="project-links"><a href="#" class="project-link" onclick="openVideoModal('https://www.youtube.com/embed/8P0dUUCXjxY', 'ReplAI Demo'); return false;">View Demo</a><a href="https://github.com/VickyAnaJ/HackTheBay" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="project-card" data-featured="true"><div class="badge-row"><span class="project-badge featured">Featured</span></div><h3 class="project-title">KnightMobile — Autonomous Robot System</h3><p class="project-tech">Python · Flask · React · YOLOv5 · Arduino · iPhone LiDAR · WebSockets · D* Lite</p><p class="project-description">Built an autonomous robot from scratch that navigates unknown environments using AI vision and spatial mapping. Integrated Arduino motor control with iPhone LiDAR for real-time obstacle avoidance and path planning. Connected Flask API + React dashboard for live telemetry and control with sub-250ms feedback latency. Improved navigation reliability by 40% vs ESP32 prototype through adaptive mapping and motor feedback loops.</p><div class="project-links"><a href="#" class="project-link" onclick="openVideoModal('https://www.youtube.com/embed/ouFIQNFO67w', 'KnightMobile Demo'); return false;">View Demo</a><a href="https://github.com/4shivv/knighthacks_25" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="project-card" data-featured="true"><div class="badge-row"><span class="project-badge featured">Featured</span></div><h3 class="project-title">CardFinder — Smart Card Analysis</h3><p class="project-tech">Next.js · TypeScript · Python · CFPB API · Recharts · Zod · Vercel</p><p class="project-description">Created a fintech web app benchmarking 300+ U.S. credit cards using CFPB data and scraped issuer information, producing a transparent scoring algorithm for informed decision-making. Built interactive sliders and analytics charts for real-time fee, APR, and reward comparisons. Collaborated in a 4-member team following CI/CD practices and type-safe API design with Zod validation. Deployed on Vercel for seamless user experience.</p><div class="project-links"><a href="https://github.com/4shivv/Credit-Card-Finder" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="project-card"><h3 class="project-title">DocuLens — GemiKnights 2025</h3><p class="project-tech">React · Node.js · TypeScript · Firebase · Google Gemini API · Docker · OCR</p><p class="project-description">AI-powered tool helping immigrants identify tax form errors using OCR and natural language processing. Developed an intelligent system to parse and summarize U.S. tax PDFs using Gemini API for document parsing and error explanation. Implemented Firebase rules and audit logging to ensure secure document access. Featured PDF uploads, form detection, fallback logic, and rate-limiting for production-ready deployment. Major university-sponsored project.</p><div class="project-links"><a href="https://github.com/4shivv/DocLens" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="project-card"><h3 class="project-title">ScamBuster AI + Chrome Extension</h3><p class="project-tech">React.js · Node.js · Express · OpenAI API · Tesseract.js · OCR · Tailwind CSS</p><p class="project-description">AI-powered scam detection tool that analyzes suspicious messages, emails, and websites to protect users from fraud. Built an OCR → LLM pipeline with schema validation, fallback logic, and timeout resilience achieving 95% uptime. Created an explainable red-flag panel combining GPT reasoning + regex severity scoring. Developed a Chrome extension for instant webpage analysis with debounced listeners and secure REST calls. Backend deployed on Render for scalability.</p><div class="project-links"><a href="https://scambuster-ai.onrender.com/" class="project-link" target="_blank" rel="noopener noreferrer"> Live Demo</a><a href="https://github.com/Hareng8374/Scambuster-AI" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="project-card"><h3 class="project-title">WeatherDash</h3><p class="project-tech">Python · Flask · OpenWeatherMap API · Matplotlib · REST APIs</p><p class="project-description">Dynamic weather dashboard with real-time data visualization and weather-responsive backgrounds. Features city-based weather search, interactive temperature/humidity charts, and intelligent background changes that adapt to current weather conditions using Flask backend and OpenWeatherMap integration. Demonstrates full-stack capabilities with seamless API integration and responsive design.</p><div class="project-links"><a href="https://weatherdash-srty.onrender.com/" class="project-link" target="_blank" rel="noopener noreferrer"> Live Demo</a><a href="https://github.com/Hareng8374/WeatherDash" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a></div></div><div class="project-card"><h3 class="project-title">AI Tutor-Matching System</h3><p class="project-tech">HTML · CSS · JavaScript · UX Research · UI/UX Design</p><p class="project-description">Co-authored a 9-page research paper for an AI-powered tutor-matching system at UCF. Built an interactive UI demo simulating live tutor-student pairing with subject and availability input fields, responsive output panel, and frontend-only logic. Focuses on improving educational accessibility through intelligent matching algorithms.</p><div class="project-links"><a href="https://drive.google.com/file/d/1iCNhsNHOlqMj450dfhRmbVqeJNVJUEA8/view?usp=drive_link" class="project-link" target="_blank" rel="noopener noreferrer"> Research Paper</a></div></div><div class="project-card"><h3 class="project-title">Python IDLE Guide</h3><p class="project-tech">Python · Markdown · Technical Writing · Documentation</p><p class="project-description">Authored a comprehensive beginner-friendly installation and usage guide for Python's IDLE environment. Included detailed screenshots, simplified setup instructions, and troubleshooting section to help new programmers get started with Python development. Demonstrates technical communication skills and commitment to making programming accessible.</p><div class="project-links"><a href="https://drive.google.com/file/d/15nzBwgeS0INdawKY3d6caIYGvxafUL7h/view?usp=drive_link" class="project-link" target="_blank" rel="noopener noreferrer"> View Guide</a></div></div></div></div></div>
 </div><!-- EXPERIENCE -->
@@ -2192,8 +2249,8 @@ function navigateTo(page){
         const firstPill = document.querySelector('.filter-pill');
         if(firstPill) filterProjects('all', firstPill);
       }
-      if(page === 'resume') Breakout.show();
-      else Breakout.pause();
+      if(page === 'resume') Hoops.show();
+      else Hoops.pause();
     }
   },80);
   document.querySelector('.nav-links').classList.remove('active');
@@ -2303,210 +2360,686 @@ document.querySelectorAll('.project-card, .stat-item').forEach(card=>{
   });
 });
 
-/* ===== BREAKOUT GAME ===== */
-const Breakout = (function(){
-  let cv, cx, STATE='idle', score, bricks, ball, pad, raf, keys={}, CUR_SPD=3.8;
-  const COLS=8, ROWS=5, GAP=6, BR=7;
-  const SPEEDS={easy:2.9, normal:3.8, hard:5.2};
-  const BRICK_COLS=['#D98B5F','#C2744C','#A8501F','#9A3E12','#6E2A0B'];
-  // ---- helpers ----
-  function rr(x,y,w,h,r){
-    cx.beginPath();
-    cx.moveTo(x+r,y); cx.lineTo(x+w-r,y);
-    cx.quadraticCurveTo(x+w,y,x+w,y+r); cx.lineTo(x+w,y+h-r);
-    cx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); cx.lineTo(x+r,y+h);
-    cx.quadraticCurveTo(x,y+h,x,y+h-r); cx.lineTo(x,y+r);
-    cx.quadraticCurveTo(x,y,x+r,y); cx.closePath();
+/* ===== HOOPS =====
+   Side-on shooting game. Drag back from the ball and let go; the pull vector,
+   inverted, is the launch velocity. Everything is expressed as a fraction of
+   canvas height so one set of constants holds from a 320px phone to a 900px
+   desktop, and so the sprite, the loose ball and the rim stay in proportion.
+
+   The sprite sheet is built by tools/avatar/build_shot.py, which normalises the
+   four Gemini renders onto one 230x545 canvas with the feet on a common ground
+   line. Two numbers from that build are load-bearing here: the ball is 66px
+   across in sprite space (0.1211 of sprite height), and the ball leaves the
+   fingertips at (229.37, -47.84) in that same space. SPRITE_* below are those
+   numbers, and they are what keeps the held ball and the physics ball the same
+   size and the handoff seamless. */
+const Hoops = (function () {
+  'use strict';
+
+  // ---- geometry constants, all fractions of canvas height ------------------
+  const SPRITE_W = 230, SPRITE_H = 545;
+  const SPRITE_GROUND = 534.85 / SPRITE_H;   // feet, as a fraction of sprite height
+  const SPRITE_BALL_D = 66 / SPRITE_H;       // held ball diameter
+  const SPRITE_SPAWN_X = 229.37 / SPRITE_W;  // release point, fraction of sprite width
+  const SPRITE_SPAWN_Y = -47.84 / SPRITE_H;  // above the sprite top, hence negative
+  const SPRITE_HELD_X = 150.01 / SPRITE_W;   // ball centre while still in his hands
+  const SPRITE_HELD_Y = 288.28 / SPRITE_H;
+
+  // Proportions are near-real: a 1.9m player against a 3.05m rim is a ratio of
+  // 1.6, and this court runs 1.4 -- flattened just enough that a wide canvas
+  // still frames both. The rim is the one deliberate cheat at 2.1 ball
+  // diameters against a real 1.87; a swept simulation of every angle and power
+  // put the honest rim at a 4-power-step window on the deep shots, which is
+  // more punishing than an arcade shooter should be.
+  const PLAYER_H = 0.44;    // sprite height / canvas height
+  const FLOOR = 0.845;      // ground line
+  const RIM_Y = 0.235;      // rim height
+  const RIM_X = 0.74;       // front of rim, fraction of canvas WIDTH
+  const BALL_R = SPRITE_BALL_D * PLAYER_H / 2;   // 0.0266 of canvas height
+  const RIM_D = BALL_R * 4.20;
+
+  const GRAV = 5.0;         // px/s^2 per unit canvas height
+  const MAX_SPEED = 3.55;   // launch speed cap, canvas heights per second
+  const MAX_DRAG = 0.42;    // drag distance for full power
+  const DRAG_AIR = 0.16;    // linear drag, per second
+  const E_RIM = 0.58, E_BOARD = 0.52, E_FLOOR = 0.66;
+
+  const DIFF = {
+    easy:   { dots: 26, spots: [0.26, 0.42] },
+    normal: { dots: 9,  spots: [0.16, 0.44] },
+    hard:   { dots: 0,  spots: [0.06, 0.42] }
+  };
+
+  // ---- state ---------------------------------------------------------------
+  let cv, cx, court, raf, last = 0, DPR = 1;
+  let STATE = 'idle';               // idle | aim | shoot | resolve
+  let diff = 'normal';
+  let W = 0, H = 0;
+  let score = 0, streak = 0, best = 0, attempts = 0;
+  let player, ball, aim, shotT, frame, hopT;
+  let flashes = [], netWave = 0, rimShake = 0, shake = 0, touchedRim = false;
+  const img = {};
+  let ready = false;
+
+  const FRAMES = ['gather', 'rise', 'release', 'followthru'];
+
+  function load() {
+    let n = 0;
+    const done = () => { if (++n === FRAMES.length + 1) ready = true; };
+    FRAMES.forEach(f => {
+      const i = new Image();
+      i.onload = done; i.onerror = done;
+      i.src = 'src/assets/avatar/shot-' + f + '.webp';
+      img[f] = i;
+    });
+    const b = new Image();
+    b.onload = done; b.onerror = done;
+    b.src = 'src/assets/avatar/ball.webp';
+    img.ball = b;
   }
 
-  function setup(){
-    const wrap=cv.parentElement;
-    const w=Math.max(wrap.offsetWidth||0, wrap.clientWidth||0, 400);
-    cv.width=w; cv.height=Math.min(Math.round(w*0.52),440);
-    const cw=cv.width, ch=cv.height;
-    score=0; keys={};
-    const pw=Math.max(88,cw*0.13);
-    pad={x:(cw-pw)/2, y:ch-50, w:pw, h:12};
-    resetBall();
-    const bW=(cw-(COLS+1)*GAP)/COLS;
-    const bH=Math.max(14,ch*0.043);
-    bricks=[];
-    for(let r=0;r<ROWS;r++)
-      for(let c=0;c<COLS;c++)
-        bricks.push({x:GAP+c*(bW+GAP), y:52+r*(bH+GAP), w:bW, h:bH, col:BRICK_COLS[r], alive:true});
+  // ---- helpers -------------------------------------------------------------
+  const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  function rim() {
+    return { x: RIM_X * W, y: RIM_Y * H, w: RIM_D * H };
+  }
+  function playerBox() {
+    const ph = PLAYER_H * H;
+    return { h: ph, w: ph * SPRITE_W / SPRITE_H, top: FLOOR * H - ph * SPRITE_GROUND };
+  }
+  function spawnPoint() {
+    const b = playerBox();
+    return {
+      x: player.x + SPRITE_SPAWN_X * b.w,
+      y: b.top + hop() + SPRITE_SPAWN_Y * b.h
+    };
+  }
+  // Where the ball actually is while he is still holding it. The aim UI hangs
+  // off this, not off the release point above his head, or the power ring
+  // floats a body-length clear of the ball it belongs to.
+  function heldPoint() {
+    const b = playerBox();
+    return {
+      x: player.x + SPRITE_HELD_X * b.w,
+      y: b.top + hop() + SPRITE_HELD_Y * b.h
+    };
+  }
+  function hop() {
+    if (hopT <= 0) return 0;
+    const t = clamp(hopT / 0.52, 0, 1);
+    return -PLAYER_H * H * 0.045 * Math.sin(Math.PI * t);
+  }
+
+  // ---- static court, painted once per resize -------------------------------
+  function paintCourt() {
+    court = document.createElement('canvas');
+    // Painted at device resolution, not CSS resolution: the main context is
+    // already scaled by DPR, so a 1x court would be blitted up and every
+    // hairline on it would go soft on a retina screen.
+    court.width = Math.round(W * DPR); court.height = Math.round(H * DPR);
+    const c = court.getContext('2d');
+    c.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const fy = FLOOR * H;
+
+    // back wall
+    let g = c.createLinearGradient(0, 0, 0, fy);
+    g.addColorStop(0, '#2A2521'); g.addColorStop(0.55, '#211D19'); g.addColorStop(1, '#171310');
+    c.fillStyle = g; c.fillRect(0, 0, W, fy);
+
+    // ceiling lights, as pools on the wall rather than visible fixtures
+    for (let i = 0; i < 3; i++) {
+      const lx = W * (0.20 + i * 0.30);
+      const rg = c.createRadialGradient(lx, -H * 0.06, 0, lx, -H * 0.06, H * 0.42);
+      rg.addColorStop(0, 'rgba(255,238,205,0.16)');
+      rg.addColorStop(1, 'rgba(255,238,205,0)');
+      c.fillStyle = rg; c.fillRect(0, 0, W, fy);
+    }
+
+    // wall panel seams
+    c.strokeStyle = 'rgba(255,255,255,0.04)'; c.lineWidth = 1;
+    for (let x = 0; x < W; x += H * 0.17) {
+      c.beginPath(); c.moveTo(Math.round(x) + .5, 0);
+      c.lineTo(Math.round(x) + .5, fy * 0.68); c.stroke();
+    }
+    // roof beam
+    c.fillStyle = 'rgba(0,0,0,0.28)'; c.fillRect(0, H * 0.055, W, H * 0.018);
+    c.fillStyle = 'rgba(255,255,255,0.05)'; c.fillRect(0, H * 0.055, W, 1);
+
+    // championship banners -- the small piece of storytelling that stops the
+    // upper wall reading as an empty black rectangle
+    const BAN = [[0.09, '25'], [0.20, '26'], [0.31, '26']];
+    BAN.forEach(function (b) {
+      const bxx = W * b[0], byy = H * 0.085, bw = H * 0.052, bh = H * 0.115;
+      c.fillStyle = '#7E2013'; c.fillRect(bxx, byy, bw, bh);
+      c.fillStyle = 'rgba(0,0,0,0.25)';
+      c.beginPath(); c.moveTo(bxx, byy + bh); c.lineTo(bxx + bw / 2, byy + bh + bh * 0.22);
+      c.lineTo(bxx + bw, byy + bh); c.closePath(); c.fill();
+      c.fillStyle = '#7E2013';
+      c.beginPath(); c.moveTo(bxx, byy + bh); c.lineTo(bxx + bw / 2, byy + bh + bh * 0.20);
+      c.lineTo(bxx + bw, byy + bh); c.closePath(); c.fill();
+      c.fillStyle = 'rgba(246,220,180,0.72)';
+      c.font = '700 ' + Math.round(H * 0.026) + 'px ui-monospace, monospace';
+      c.textAlign = 'center';
+      c.fillText(b[1], bxx + bw / 2, byy + bh * 0.62);
+    });
+    // painted wall wordmark, barely there -- it fills the dead band between the
+    // banners and the padding, which otherwise reads as a black void
+    c.save();
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.font = '800 ' + Math.round(H * 0.20) + 'px "Bricolage Grotesque", Impact, sans-serif';
+    c.fillStyle = 'rgba(255,236,208,0.045)';
+    c.fillText('HAREN', W * 0.46, fy - H * 0.34);
+    c.font = '700 ' + Math.round(H * 0.038) + 'px ui-monospace, monospace';
+    c.fillStyle = 'rgba(255,236,208,0.055)';
+    c.letterSpacing = '0.4em';
+    c.fillText('SHOOTAROUND', W * 0.46, fy - H * 0.225);
+    c.restore();
+    c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+
+    // red padding along the base of the wall
+    const padTop = fy - H * 0.155;
+    g = c.createLinearGradient(0, padTop, 0, fy);
+    g.addColorStop(0, '#9B2A19'); g.addColorStop(0.55, '#7E2013'); g.addColorStop(1, '#5E170E');
+    c.fillStyle = g; c.fillRect(0, padTop, W, fy - padTop);
+    c.fillStyle = 'rgba(255,255,255,0.10)'; c.fillRect(0, padTop, W, 2);
+    c.strokeStyle = 'rgba(0,0,0,0.22)'; c.lineWidth = 1;
+    for (let x = H * 0.16; x < W; x += H * 0.32) {
+      c.beginPath(); c.moveTo(Math.round(x) + .5, padTop);
+      c.lineTo(Math.round(x) + .5, fy); c.stroke();
+    }
+
+    // hardwood
+    g = c.createLinearGradient(0, fy, 0, H);
+    g.addColorStop(0, '#8A5C28'); g.addColorStop(0.12, '#C89B5F');
+    g.addColorStop(0.55, '#BD8C4D'); g.addColorStop(1, '#9E6D33');
+    c.fillStyle = g; c.fillRect(0, fy, W, H - fy);
+
+    // planks recede toward the wall, so their spacing opens up downward
+    c.strokeStyle = 'rgba(70,40,14,0.20)'; c.lineWidth = 1;
+    let step = H * 0.010;
+    for (let y = fy + step; y < H; step *= 1.38, y += step) {
+      c.beginPath(); c.moveTo(0, Math.round(y) + .5); c.lineTo(W, Math.round(y) + .5); c.stroke();
+    }
+    // plank butt-joints, staggered, so the floor is not just stripes
+    c.strokeStyle = 'rgba(70,40,14,0.16)';
+    step = H * 0.010;
+    for (let y = fy + step, k = 0; y < H; step *= 1.38, y += step, k++) {
+      for (let x = (k % 2 ? 0 : H * 0.09); x < W; x += H * 0.20) {
+        c.beginPath(); c.moveTo(Math.round(x) + .5, y - step);
+        c.lineTo(Math.round(x) + .5, y); c.stroke();
+      }
+    }
+    // baseline + the arc, in perspective
+    c.strokeStyle = 'rgba(255,250,240,0.40)'; c.lineWidth = Math.max(1.5, H * 0.005);
+    c.beginPath(); c.moveTo(0, fy + H * 0.030); c.lineTo(W, fy + H * 0.030); c.stroke();
+    c.strokeStyle = 'rgba(255,250,240,0.24)'; c.lineWidth = Math.max(1.5, H * 0.006);
+    c.beginPath();
+    c.ellipse(RIM_X * W, fy + H * 0.020, W * 0.42, H * 0.085, 0, Math.PI, 2 * Math.PI);
+    c.stroke();
+
+    // polished floor: the padding bleeds down, plus a broad specular sheen
+    g = c.createLinearGradient(0, fy, 0, fy + H * 0.070);
+    g.addColorStop(0, 'rgba(140,36,20,0.40)'); g.addColorStop(1, 'rgba(140,36,20,0)');
+    c.fillStyle = g; c.fillRect(0, fy, W, H * 0.070);
+    g = c.createLinearGradient(W * 0.15, 0, W * 0.85, 0);
+    g.addColorStop(0, 'rgba(255,244,222,0)');
+    g.addColorStop(0.45, 'rgba(255,244,222,0.13)');
+    g.addColorStop(1, 'rgba(255,244,222,0)');
+    c.fillStyle = g; c.fillRect(0, fy, W, H - fy);
+    c.fillStyle = 'rgba(255,255,255,0.06)'; c.fillRect(0, fy, W, 1);
+
+    // backboard: frame, glass, then the shooter's square
+    const r = rim();
+    const bw = H * 0.026, bx = r.x + r.w, bTop = r.y - H * 0.175, bBot = r.y + H * 0.045;
+    c.fillStyle = '#2E2A26';                       // support arm back to the wall
+    c.fillRect(bx + bw, r.y - H * 0.075, W - (bx + bw), H * 0.022);
+    c.fillRect(bx + bw + H * 0.06, r.y - H * 0.075, H * 0.02, H * 0.30);
+    g = c.createLinearGradient(bx, bTop, bx + bw, bBot);
+    g.addColorStop(0, 'rgba(226,236,246,0.20)'); g.addColorStop(1, 'rgba(200,214,228,0.10)');
+    c.fillStyle = g; c.fillRect(bx, bTop, bw, bBot - bTop);
+    c.strokeStyle = 'rgba(240,246,252,0.80)'; c.lineWidth = Math.max(2, H * 0.007);
+    c.strokeRect(bx, bTop, bw, bBot - bTop);
+    c.strokeStyle = 'rgba(240,246,252,0.62)'; c.lineWidth = Math.max(1.5, H * 0.005);
+    c.strokeRect(bx + H * 0.005, r.y - H * 0.072, bw - H * 0.010, H * 0.070);
+  }
+
+  // ---- reset / positioning -------------------------------------------------
+  function newSpot() {
+    const d = DIFF[diff];
+    const t = d.spots[0] + Math.random() * (d.spots[1] - d.spots[0]);
+    return t * W;
+  }
+  function resetShot(move) {
+    const b = playerBox();
+    if (move) player.tx = clamp(newSpot(), W * 0.04, RIM_X * W - b.w - H * 0.18);
+    ball = null; aim = null; frame = 'gather'; shotT = 0; hopT = 0;
+    touchedRim = false;
+    STATE = 'aim';
+  }
+
+  // The resume tab is a hidden SPA page until navigateTo runs, so the wrapper
+  // can still be reporting a stale width on the frame after show(). Sizing off
+  // one deferred rAF painted the court narrower than the canvas and left a
+  // seam down the right-hand side; watching the element instead is exact.
+  let ro = null;
+  function observe() {
+    if (ro || typeof ResizeObserver === 'undefined' || !cv || !cv.parentElement) return;
+    ro = new ResizeObserver(function () {
+      if (!cv || !cv.parentElement) return;
+      const wrap = cv.parentElement;
+      const w = Math.max(wrap.offsetWidth || 0, wrap.clientWidth || 0, 320);
+      if (Math.abs(w - W) > 1) setup();
+    });
+    ro.observe(cv.parentElement);
+  }
+
+  function setup() {
+    const wrap = cv.parentElement;
+    const w = Math.max(wrap.offsetWidth || 0, wrap.clientWidth || 0, 320);
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = w; H = Math.min(Math.round(w * 0.62), 540);
+    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+    cv.style.height = H + 'px';
+    cx = cv.getContext('2d');
+    cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const b = playerBox();
+    player = player || { x: 0, tx: 0 };
+    player.tx = clamp(player.tx || W * 0.3, W * 0.04, RIM_X * W - b.w - H * 0.18);
+    player.x = player.tx;
+    paintCourt();
+  }
+
+  // ---- physics -------------------------------------------------------------
+  function shoot(vx, vy) {
+    const p = spawnPoint();
+    ball = { x: p.x, y: p.y, vx: vx, vy: vy, r: BALL_R * H, spin: 0, rot: 0, live: true, rest: 0 };
+    ball.spin = -Math.abs(vx) * 0.010;   // backspin, visual
+    touchedRim = false;
+  }
+
+  function bounceCircle(px, py, e) {
+    const dx = ball.x - px, dy = ball.y - py;
+    const d = Math.hypot(dx, dy);
+    if (d > ball.r || d === 0) return false;
+    const nx = dx / d, ny = dy / d;
+    const vn = ball.vx * nx + ball.vy * ny;
+    if (vn < 0) {
+      ball.vx -= (1 + e) * vn * nx;
+      ball.vy -= (1 + e) * vn * ny;
+      ball.vx *= 0.92; ball.vy *= 0.92;
+    }
+    ball.x = px + nx * ball.r; ball.y = py + ny * ball.r;
+    return true;
+  }
+
+  function step(dt) {
+    if (!ball || !ball.live) return;
+    const g = GRAV * H;
+    const prevY = ball.y, prevX = ball.x;
+
+    ball.vy += g * dt;
+    ball.vx -= ball.vx * DRAG_AIR * dt;
+    ball.vy -= ball.vy * DRAG_AIR * dt;
+    ball.x += ball.vx * dt;
+    ball.y += ball.vy * dt;
+    ball.rot += ball.spin * dt;
+
+    const r = rim();
+    const front = { x: r.x, y: r.y }, back = { x: r.x + r.w, y: r.y };
+
+    // backboard face -- must match the rectangle paintCourt draws
+    const bx = r.x + r.w, bTop = r.y - H * 0.175, bBot = r.y + H * 0.045;
+    if (ball.x + ball.r > bx && prevX + ball.r <= bx + 4 &&
+        ball.y > bTop && ball.y < bBot && ball.vx > 0) {
+      ball.x = bx - ball.r; ball.vx = -ball.vx * E_BOARD; ball.vy *= 0.94;
+      rimShake = 0.22;
+    }
+
+    if (bounceCircle(front.x, front.y, E_RIM)) { touchedRim = true; rimShake = 0.34; }
+    if (bounceCircle(back.x, back.y, E_RIM)) { touchedRim = true; rimShake = 0.34; }
+
+    // through the hoop: crossing the rim plane downward, inside the ring
+    if (ball.live && prevY <= r.y && ball.y > r.y && ball.vy > 0 &&
+        ball.x > r.x + ball.r * 0.25 && ball.x < r.x + r.w - ball.r * 0.25) {
+      made();
+    }
+
+    // floor
+    const fy = FLOOR * H;
+    if (ball.y + ball.r > fy) {
+      ball.y = fy - ball.r;
+      if (Math.abs(ball.vy) > H * 0.12) { ball.vy = -ball.vy * E_FLOOR; ball.vx *= 0.86; }
+      else { ball.vy = 0; ball.vx *= 0.94; ball.rest += dt; }
+      ball.spin = -ball.vx * 0.012;
+    }
+    if (ball.x - ball.r < 0) { ball.x = ball.r; ball.vx = -ball.vx * 0.5; }
+
+    // settled, or off the top/right - either way the shot is over
+    if (ball.live && (ball.rest > 0.75 || ball.x > W + ball.r * 3 || ball.y > H + ball.r * 4)) {
+      missed();
+    }
+  }
+
+  function made() {
+    ball.live = 'through';
+    score += touchedRim ? 2 : 3;
+    streak += 1; attempts += 1;
+    if (streak > best) { best = streak; try { localStorage.setItem('hoopsBest', best); } catch (e) {} }
+    netWave = 1; shake = touchedRim ? 0.35 : 0.55;
+    flash(touchedRim ? '+2' : 'SWISH  +3', touchedRim ? '#F2E4CE' : '#FFC86B');
+    if (streak >= 3) flash(streak + ' IN A ROW', '#FF8A3D', 0.42);
+    setTimeout(() => { if (STATE === 'shoot') { STATE = 'resolve'; resetShot(true); } }, 900);
+    STATE = 'shoot';
+  }
+
+  function missed() {
+    if (ball.live !== true) return;
+    ball.live = false;
+    attempts += 1;
+    if (streak >= 3) flash('STREAK OVER', '#E4CDB4', 0.3);
+    streak = 0;
+    // hold a beat so the brick is legible before the next ball appears
+    setTimeout(function () { if (STATE === 'shoot') resetShot(true); }, 460);
+  }
+
+  function flash(text, col, delay) {
+    flashes.push({ t: -(delay || 0), text: text, col: col, life: 1.15 });
+  }
+
+  // ---- drawing -------------------------------------------------------------
+  function drawBall(x, y, r, rot) {
+    if (img.ball && img.ball.complete && img.ball.naturalWidth) {
+      cx.save(); cx.translate(x, y); cx.rotate(rot);
+      cx.drawImage(img.ball, -r, -r, r * 2, r * 2); cx.restore();
+    } else {
+      cx.beginPath(); cx.arc(x, y, r, 0, 6.284);
+      cx.fillStyle = '#C4682C'; cx.fill();
+    }
+  }
+
+  function drawNet(r, t) {
+    const strands = 9, depth = H * 0.085;
+    cx.strokeStyle = 'rgba(255,252,246,0.62)';
+    cx.lineWidth = Math.max(1, H * 0.0032);
+    for (let i = 0; i <= strands; i++) {
+      const f = i / strands;
+      const x0 = r.x + f * r.w;
+      const sway = Math.sin(t * 15 + f * 5) * netWave * H * 0.02;
+      const x1 = r.x + r.w * (0.30 + f * 0.40) + sway;
+      cx.beginPath();
+      cx.moveTo(x0, r.y);
+      cx.quadraticCurveTo(x0 + (x1 - x0) * 0.5, r.y + depth * 0.62, x1, r.y + depth);
+      cx.stroke();
+    }
+    for (let k = 1; k <= 3; k++) {
+      const f = k / 4, yy = r.y + depth * f;
+      const inset = r.w * 0.30 * f;
+      const sway = Math.sin(t * 15 + f * 4) * netWave * H * 0.016;
+      cx.beginPath();
+      cx.moveTo(r.x + inset, yy);
+      cx.quadraticCurveTo(r.x + r.w / 2 + sway, yy + H * 0.008, r.x + r.w - inset, yy);
+      cx.stroke();
+    }
+  }
+
+  function drawPlayer() {
+    const b = playerBox();
+    const im = img[frame];
+    const y = b.top + hop();
+    if (im && im.complete && im.naturalWidth) {
+      // floor reflection
+      cx.save();
+      cx.globalAlpha = 0.13;
+      cx.translate(0, FLOOR * H * 2);
+      cx.scale(1, -1);
+      cx.drawImage(im, player.x, y, b.w, b.h);
+      cx.restore();
+      cx.drawImage(im, player.x, y, b.w, b.h);
+    }
+  }
+
+  function drawAim() {
+    if (!aim || !aim.drag) return;
+    const d = DIFF[diff];
+    const p = spawnPoint();      // the arc genuinely starts at the release point
+    const h = heldPoint();       // the pull and the meter belong on the held ball
+    const v = launchVec();
+
+    // the pull itself, ball back to thumb, so the slingshot is legible
+    cx.save();
+    cx.setLineDash([4, 5]);
+    cx.strokeStyle = 'rgba(255,224,186,0.34)';
+    cx.lineWidth = Math.max(1.2, H * 0.0038);
+    cx.beginPath(); cx.moveTo(h.x, h.y); cx.lineTo(aim.x, aim.y); cx.stroke();
+    cx.restore();
+
+    if (d.dots > 0) {
+      const g = GRAV * H;
+      cx.fillStyle = 'rgba(255,234,205,0.9)';
+      for (let i = 1; i <= d.dots; i++) {
+        const t = i * 0.030;
+        const x = p.x + v.vx * t, yy = p.y + v.vy * t + 0.5 * g * t * t;
+        if (yy > FLOOR * H || x > W) break;
+        cx.globalAlpha = 0.9 * (1 - i / (d.dots + 4));
+        cx.beginPath(); cx.arc(x, yy, Math.max(1.5, H * 0.0068), 0, 6.284); cx.fill();
+      }
+      cx.globalAlpha = 1;
+    }
+
+    // power ring around the ball, filling clockwise from the top
+    const pw = Math.hypot(v.vx, v.vy) / (MAX_SPEED * H);
+    const br = BALL_R * H;
+    cx.strokeStyle = 'rgba(255,255,255,0.16)';
+    cx.lineWidth = Math.max(2, H * 0.007);
+    cx.beginPath(); cx.arc(h.x, h.y, br * 1.8, 0, 6.284); cx.stroke();
+    cx.strokeStyle = pw > 0.97 ? '#FFD98F' : '#E2622A';
+    cx.lineCap = 'round';
+    cx.beginPath();
+    cx.arc(h.x, h.y, br * 1.8, -Math.PI / 2, -Math.PI / 2 + pw * 6.283);
+    cx.stroke();
+    cx.lineCap = 'butt';
+  }
+
+  function launchVec() {
+    const dx = aim.sx - aim.x, dy = aim.sy - aim.y;
+    const d = Math.hypot(dx, dy);
+    if (d < 1) return { vx: 0, vy: 0 };
+    const p = Math.min(d, MAX_DRAG * H) / (MAX_DRAG * H);
+    const s = p * MAX_SPEED * H;
+    return { vx: dx / d * s, vy: dy / d * s };
+  }
+
+  function draw(t) {
+    cx.save();
+    if (shake > 0) {
+      cx.translate((Math.random() - .5) * shake * H * 0.035,
+                   (Math.random() - .5) * shake * H * 0.035);
+    }
+    cx.drawImage(court, 0, 0, W, H);
+
+    const r = rim();
+    const sh = rimShake > 0 ? Math.sin(t * 60) * rimShake * H * 0.012 : 0;
+
+    drawNet({ x: r.x, y: r.y + sh, w: r.w }, t);
+    drawPlayer();
+
+    if (STATE === 'aim') {
+      // the held ball is baked into gather/rise, so nothing extra to draw
+      drawAim();
+    }
+
+    if (ball) {
+      // shadow on the floor
+      const fy = FLOOR * H;
+      const k = clamp(1 - (fy - ball.y) / (H * 0.7), 0.12, 1);
+      cx.save(); cx.globalAlpha = 0.28 * k;
+      cx.fillStyle = '#3A2408';
+      cx.beginPath();
+      cx.ellipse(ball.x, fy + H * 0.008, ball.r * 1.15 * k, ball.r * 0.34 * k, 0, 0, 6.284);
+      cx.fill(); cx.restore();
+      drawBall(ball.x, ball.y, ball.r, ball.rot);
+    }
+
+    // rim in front of the ball, so a ball passing through reads as behind it
+    cx.strokeStyle = '#E2622A'; cx.lineWidth = Math.max(3, H * 0.011);
+    cx.lineCap = 'round';
+    cx.beginPath(); cx.moveTo(r.x, r.y + sh); cx.lineTo(r.x + r.w, r.y + sh); cx.stroke();
+    cx.strokeStyle = 'rgba(255,180,120,0.55)'; cx.lineWidth = Math.max(1, H * 0.003);
+    cx.beginPath(); cx.moveTo(r.x, r.y + sh - H * 0.004);
+    cx.lineTo(r.x + r.w, r.y + sh - H * 0.004); cx.stroke();
+
+    // flashes
+    cx.textAlign = 'center';
+    flashes.forEach(f => {
+      if (f.t < 0) return;
+      const k = f.t / f.life;
+      cx.globalAlpha = clamp(1 - k, 0, 1) * clamp(k * 6, 0, 1);
+      cx.fillStyle = f.col;
+      cx.font = '700 ' + Math.round(H * 0.062) + 'px "JetBrains Mono", ui-monospace, monospace';
+      cx.fillText(f.text, r.x + r.w / 2, r.y - H * 0.10 - k * H * 0.10);
+    });
+    cx.globalAlpha = 1;
+    cx.restore();
     hud();
   }
 
-  function resetBall(){
-    const cw=cv.width, ch=cv.height;
-    const spd=Math.min(CUR_SPD, cw*0.006);
-    const a=(0.38+Math.random()*0.24)*Math.PI;
-    ball={x:cw/2, y:pad.y-BR-2,
-          vx:Math.cos(a)*spd*(Math.random()>.5?1:-1),
-          vy:-Math.abs(Math.sin(a)*spd), trail:[]};
-  }
-
-  function hud(){
-    const s=document.getElementById('brkScore');
-    if(s) s.textContent=score;
-  }
-
-  function showOverlay(title, sub){
-    const el=document.getElementById('gameOverlay');
-    const t=document.getElementById('gameOverlayTitle');
-    const s=document.getElementById('gameOverlaySub');
-    if(t) t.textContent=title;
-    if(s) s.textContent=sub||'Mouse · touch · ← → to move. Break all bricks.';
-    if(el) el.classList.remove('hidden');
-  }
-  function hideOverlay(){ const el=document.getElementById('gameOverlay'); if(el) el.classList.add('hidden'); }
-
-  function setDiff(level){
-    CUR_SPD=SPEEDS[level];
-    document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active-diff'));
-    const btn=document.getElementById('diff'+level.charAt(0).toUpperCase()+level.slice(1));
-    if(btn) btn.classList.add('active-diff');
-  }
-
-  function startGame(level){
-    if(level) setDiff(level);
-    setup();
-    hideOverlay(); STATE='play'; loop();
-  }
-
-  function loop(){
-    if(STATE!=='play') return;
-    update(); draw();
-    raf=requestAnimationFrame(loop);
-  }
-
-  function update(){
-    const cw=cv.width, ch=cv.height;
-    if(keys['ArrowLeft']||keys['a']) pad.x=Math.max(0,pad.x-9);
-    if(keys['ArrowRight']||keys['d']) pad.x=Math.min(cw-pad.w,pad.x+9);
-    ball.trail.push({x:ball.x,y:ball.y});
-    if(ball.trail.length>8) ball.trail.shift();
-    ball.x+=ball.vx; ball.y+=ball.vy;
-    if(ball.x-BR<0){ball.x=BR;ball.vx=Math.abs(ball.vx);}
-    if(ball.x+BR>cw){ball.x=cw-BR;ball.vx=-Math.abs(ball.vx);}
-    if(ball.y-BR<0){ball.y=BR;ball.vy=Math.abs(ball.vy);}
-    // paddle hit
-    if(ball.vy>0 && ball.y+BR>=pad.y && ball.y-BR<=pad.y+pad.h &&
-       ball.x+BR>pad.x && ball.x-BR<pad.x+pad.w){
-      const t=(ball.x-pad.x)/pad.w;
-      const a=(t-.5)*2.2;
-      const spd=Math.sqrt(ball.vx*ball.vx+ball.vy*ball.vy);
-      ball.vx=Math.sin(a)*spd;
-      ball.vy=-Math.abs(Math.cos(a)*spd);
-      ball.y=pad.y-BR-1;
+  const hudEl = {};
+  let hudLast = '';
+  function hud() {
+    const s = score + '|' + streak + '|' + best;
+    if (s === hudLast) return;                 // the DOM only changes on a shot
+    hudLast = s;
+    if (!hudEl.score) {
+      hudEl.score = document.getElementById('hoopScore');
+      hudEl.streak = document.getElementById('hoopStreak');
+      hudEl.best = document.getElementById('hoopBest');
     }
-    // bottom — reset (one life)
-    if(ball.y-BR>ch){
-      cancelAnimationFrame(raf);
-      score=0; hud();
-      resetBall();
-      STATE='idle'; draw();
-      showOverlay('Ball Lost!','Score reset. Pick a difficulty to try again.');
-      return;
-    }
-    // bricks
-    for(const b of bricks){
-      if(!b.alive) continue;
-      if(ball.x+BR>b.x && ball.x-BR<b.x+b.w && ball.y+BR>b.y && ball.y-BR<b.y+b.h){
-        b.alive=false; score+=10; hud();
-        const ol=ball.x+BR-b.x,or2=b.x+b.w-(ball.x-BR);
-        const ot=ball.y+BR-b.y,ob=b.y+b.h-(ball.y-BR);
-        if(Math.min(ol,or2)<Math.min(ot,ob)) ball.vx=-ball.vx; else ball.vy=-ball.vy;
-        break;
-      }
-    }
-    if(bricks.every(b=>!b.alive)){
-      STATE='win'; cancelAnimationFrame(raf); draw();
-      showOverlay('You cleared it! ','Score: '+score+'  —  pick a difficulty to play again.');
-    }
+    if (hudEl.score) hudEl.score.textContent = score;
+    if (hudEl.streak) hudEl.streak.textContent = streak + (streak >= 3 ? ' ▲' : '');
+    if (hudEl.best) hudEl.best.textContent = best;
   }
 
-  function draw(){
-    const cw=cv.width,ch=cv.height;
-    cx.fillStyle='#f5f4f2'; cx.fillRect(0,0,cw,ch);
-    cx.strokeStyle='rgba(112,110,108,0.04)'; cx.lineWidth=1;
-    for(let x=0;x<cw;x+=60){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,ch);cx.stroke();}
-    for(let y=0;y<ch;y+=60){cx.beginPath();cx.moveTo(0,y);cx.lineTo(cw,y);cx.stroke();}
-    for(const b of bricks){
-      if(!b.alive) continue;
-      cx.fillStyle=b.col; rr(b.x,b.y,b.w,b.h,4); cx.fill();
-      cx.fillStyle='rgba(26,23,20,0.15)'; rr(b.x+2,b.y+2,b.w-4,b.h*.34,3); cx.fill();
+  // ---- loop ----------------------------------------------------------------
+  function tick(now) {
+    raf = requestAnimationFrame(tick);
+    const dt = Math.min((now - last) / 1000, 0.033);
+    last = now;
+    if (!ready) return;
+
+    player.x = lerp(player.x, player.tx, 1 - Math.pow(0.001, dt));
+
+    if (STATE === 'shoot') {
+      shotT += dt;
+      hopT = shotT;
+      if (shotT >= 0.09 && frame === 'rise') { frame = 'release'; shoot(aim.v.vx, aim.v.vy); }
+      else if (shotT >= 0.22 && frame === 'release') frame = 'followthru';
     }
-    ball.trail.forEach((p,i)=>{
-      const t=i/ball.trail.length;
-      cx.beginPath(); cx.arc(p.x,p.y,BR*t*0.6,0,Math.PI*2);
-      cx.fillStyle=`rgba(112,110,108,${t*0.3})`; cx.fill();
+    step(dt);
+
+    netWave = Math.max(0, netWave - dt * 1.6);
+    rimShake = Math.max(0, rimShake - dt * 1.4);
+    shake = Math.max(0, shake - dt * 2.4);
+    flashes.forEach(f => f.t += dt);
+    flashes = flashes.filter(f => f.t < f.life);
+
+    draw(now / 1000);
+  }
+
+  // ---- input ---------------------------------------------------------------
+  function pos(e) {
+    const r = cv.getBoundingClientRect();
+    const p = e.touches ? e.touches[0] : e;
+    return { x: (p.clientX - r.left) * (W / r.width), y: (p.clientY - r.top) * (H / r.height) };
+  }
+  function down(e) {
+    if (STATE === 'idle') { start(); return; }
+    if (STATE !== 'aim') return;
+    const p = pos(e);
+    aim = { sx: p.x, sy: p.y, x: p.x, y: p.y, drag: false };
+    e.preventDefault();
+  }
+  function move(e) {
+    if (!aim || STATE !== 'aim') return;
+    const p = pos(e);
+    aim.x = p.x; aim.y = p.y;
+    if (Math.hypot(aim.sx - p.x, aim.sy - p.y) > H * 0.02) aim.drag = true;
+    e.preventDefault();
+  }
+  function up(e) {
+    if (!aim || STATE !== 'aim') return;
+    const v = launchVec();
+    if (!aim.drag || Math.hypot(v.vx, v.vy) < H * 0.4) { aim = null; return; }
+    aim.v = v;
+    frame = 'rise'; shotT = 0; hopT = 0; STATE = 'shoot';
+    if (e) e.preventDefault();
+  }
+
+  let bound = false;
+  function attach() {
+    if (bound) return; bound = true;
+    cv.addEventListener('mousedown', down);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    cv.addEventListener('touchstart', down, { passive: false });
+    cv.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('touchend', up);
+    ['diffEasy', 'diffNormal', 'diffHard'].forEach(function (idn, i) {
+      const b = document.getElementById(idn);
+      if (!b) return;
+      b.addEventListener('click', function () {
+        diff = ['easy', 'normal', 'hard'][i];
+        document.querySelectorAll('.game-diff-btns .diff-btn')
+          .forEach(x => x.classList.remove('active-diff'));
+        b.classList.add('active-diff');
+        if (STATE !== 'idle') { score = 0; streak = 0; attempts = 0; resetShot(true); }
+      });
     });
-    const g=cx.createRadialGradient(ball.x,ball.y,0,ball.x,ball.y,BR*4);
-    g.addColorStop(0,'rgba(112,110,108,0.38)'); g.addColorStop(1,'rgba(112,110,108,0)');
-    cx.fillStyle=g; cx.beginPath(); cx.arc(ball.x,ball.y,BR*4,0,Math.PI*2); cx.fill();
-    cx.beginPath(); cx.arc(ball.x,ball.y,BR,0,Math.PI*2); cx.fillStyle='#9A3E12'; cx.fill();
-    cx.beginPath(); cx.arc(ball.x-2,ball.y-2,2.4,0,Math.PI*2); cx.fillStyle='#9A3E12'; cx.fill();
-    const pg2=cx.createRadialGradient(pad.x+pad.w/2,pad.y,0,pad.x+pad.w/2,pad.y,pad.w*.7);
-    pg2.addColorStop(0,'rgba(138,136,134,0.2)'); pg2.addColorStop(1,'rgba(138,136,134,0)');
-    cx.fillStyle=pg2; cx.fillRect(pad.x-30,pad.y-12,pad.w+60,24);
-    const pg=cx.createLinearGradient(pad.x,0,pad.x+pad.w,0);
-    pg.addColorStop(0,'#b3b1af'); pg.addColorStop(.5,'#8a8886'); pg.addColorStop(1,'#b3b1af');
-    cx.fillStyle=pg; rr(pad.x,pad.y,pad.w,pad.h,6); cx.fill();
-    cx.fillStyle='rgba(26,23,20,0.2)'; rr(pad.x+4,pad.y+2,pad.w-8,3,2); cx.fill();
+    // The overlay sits over the canvas, so the first tap has to be caught here.
+    const ov = document.getElementById('gameOverlay');
+    if (ov) ov.addEventListener('click', function (e) {
+      if (e.target.closest('.diff-btn')) return;   // choosing a level is not a start
+      start();
+    });
+    window.addEventListener('resize', function () {
+      if (typeof currentPage !== 'undefined' && currentPage !== 'resume') return;
+      if (!cv) return;
+      setup();
+    });
   }
 
-  let attached=false;
-  function attach(){
-    if(attached) return; attached=true;
-    cv.addEventListener('mousemove',e=>{
-      const r=cv.getBoundingClientRect();
-      const mx=(e.clientX-r.left)*(cv.width/r.width);
-      if(STATE==='play') pad.x=Math.max(0,Math.min(cv.width-pad.w,mx-pad.w/2));
-    });
-    cv.addEventListener('touchmove',e=>{
-      e.preventDefault();
-      const r=cv.getBoundingClientRect();
-      const mx=(e.touches[0].clientX-r.left)*(cv.width/r.width);
-      if(STATE==='play') pad.x=Math.max(0,Math.min(cv.width-pad.w,mx-pad.w/2));
-    },{passive:false});
-    document.addEventListener('keydown',e=>{
-      keys[e.key]=true;
-      if(e.key===' '&&currentPage==='resume'){e.preventDefault();startGame();}
-    });
-    document.addEventListener('keyup',e=>{ keys[e.key]=false; });
-    const easy=document.getElementById('diffEasy');
-    const normal=document.getElementById('diffNormal');
-    const hard=document.getElementById('diffHard');
-    if(easy) easy.addEventListener('click',()=>startGame('easy'));
-    if(normal) normal.addEventListener('click',()=>startGame('normal'));
-    if(hard) hard.addEventListener('click',()=>startGame('hard'));
-    window.addEventListener('resize',()=>{
-      if(currentPage!=='resume'||STATE==='play') return;
-      setup(); draw();
-    });
+  function overlay(show) {
+    const o = document.getElementById('gameOverlay');
+    if (o) o.classList.toggle('hidden', !show);
+  }
+  function start() {
+    overlay(false);
+    score = 0; streak = 0; attempts = 0;
+    resetShot(true);
   }
 
   return {
-    show(){
-      cv=document.getElementById('breakoutCanvas');
-      if(!cv) return;
-      if(!cx) cx=cv.getContext('2d');
+    show: function () {
+      cv = document.getElementById('hoopsCanvas');
+      if (!cv) return;
+      if (!img.gather) load();
+      try { best = parseInt(localStorage.getItem('hoopsBest') || '0', 10) || 0; } catch (e) {}
       attach();
+      observe();
       cancelAnimationFrame(raf);
-      STATE='idle';
-      // Defer setup 1 frame so the page is visible and has layout
-      requestAnimationFrame(()=>{
-        setup(); draw();
-        showOverlay('Breakout');
+      STATE = 'idle';
+      requestAnimationFrame(function () {
+        setup();
+        frame = 'gather';
+        overlay(true);
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
       });
     },
-    pause(){
-      if(STATE==='play'){ STATE='paused'; cancelAnimationFrame(raf); }
-    }
+    pause: function () { cancelAnimationFrame(raf); raf = 0; },
+    _debug: function () { return { STATE: STATE, score: score, streak: streak, W: W, H: H }; }
   };
-
-
 })();
 
 /* ===== SKILL GLOBE ===== */
