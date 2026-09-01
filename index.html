@@ -202,7 +202,7 @@ nav .container{display:flex;justify-content:space-between;align-items:center;}
 .hero{min-height:calc(100vh - 96px);display:flex;align-items:center;padding:3rem 0 5rem;position:relative;}
 .hero-grid{display:grid;grid-template-columns:1fr 340px;gap:4rem;align-items:center;width:100%;}
 .hero-avatar-col{display:flex;align-items:center;justify-content:center;}
-.hero-avatar-col .hg-avatar{--hg-avatar-width:340px;}
+.hero-avatar-col .hg-avatar{--hg-avatar-width:460px;}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:0.6rem;
   font-family:var(--mono);font-size:0.72rem;
@@ -1255,7 +1255,7 @@ footer .heart{color:var(--emerald-bright);}
   .stats-grid{grid-template-columns:1fr;max-width:400px;}
   .hero-grid{grid-template-columns:1fr;gap:2rem;}
   .hero-avatar-col{order:-1;}
-  .hero-avatar-col .hg-avatar{--hg-avatar-width:200px;}
+  .hero-avatar-col .hg-avatar{--hg-avatar-width:270px;}
   .about-grid{grid-template-columns:1fr;}
   .about-globe-col{position:static;transform:none;}
   .projects-grid{grid-template-columns:1fr;}
@@ -1268,7 +1268,7 @@ footer .heart{color:var(--emerald-bright);}
 @media (max-width: 640px){
   .container{padding:0 1.3rem;}
   .project-card,.experience-card{padding:1.8rem;}
-  .hero-avatar-col .hg-avatar{--hg-avatar-width:150px;}
+  .hero-avatar-col .hg-avatar{--hg-avatar-width:210px;}
   .hero h1{font-size:clamp(2.6rem,11vw,4.5rem);}
 }
 
@@ -1785,7 +1785,7 @@ p, .about-text, .project-description, .hero .subtitle, .exp-desc {
   .cta-button, .resume-button { width: 100%; justify-content: center; padding: .95rem 1.2rem; }
 
   /* He is the reason anyone remembers the page -- give him room. */
-  .hero-avatar-col .hg-avatar { --hg-avatar-width: 208px; }
+  .hero-avatar-col .hg-avatar { --hg-avatar-width: 270px; }
 
   /* Stats read fine as a compact row and save most of a screen. */
   .stats-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important;
@@ -2211,7 +2211,7 @@ main:focus { outline: none; }
 <div class="orb orb-3"></div><header class="site-header"><nav id="navbar"><div class="container"><div class="logo" onclick="navigateTo('home')">Haren G.</div><ul class="nav-links"><li><a href="#" onclick="navigateTo('home');return false;" data-page="home" class="active">Home</a></li><li><a href="#" onclick="navigateTo('projects');return false;" data-page="projects">Projects</a></li><li><a href="#" onclick="navigateTo('resume');return false;" data-page="resume">Resume</a></li><li><a href="#" onclick="navigateTo('experience');return false;" data-page="experience">Experience</a></li><li><a href="#" onclick="navigateTo('contact');return false;" data-page="contact">Contact</a></li><li><a href="/blog/">Blog</a></li></ul><button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button></div>
 </nav></header><button class="scroll-top" onclick="scrollToTop()" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button><!-- HOME -->
-<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p><p class="about-text">Away from the screen I am usually in the gym &mdash; weightlifting is the thing that actually clears my head. The rest of the time it is pickleball, basketball, or whatever game has my attention that month. I am a lifelong LeBron guy and will happily defend that to anyone who brings it up. I also sing, with considerably more enthusiasm than technique.</p></div><aside class="about-card" aria-label="At a glance"><img src="headshot.webp" alt="Haren Gannarapu" class="about-card-photo" width="440" height="440" loading="lazy" decoding="async"><div class="about-card-eyebrow">The short version</div><dl class="about-facts"><div><dt>Now</dt><dd><b>Software Engineer</b> &mdash; Web &amp; eCommerce, Carnival</dd></div><div><dt>Before</dt><dd><b>AI/ML Intern</b> &mdash; Oasis</dd></div><div><dt>School</dt><dd>Computer Science, <b>UCF</b> &middot; 3.8 GPA</dd></div><div><dt>Hackathons</dt><dd><b>2&times; winner</b> &mdash; HackaBULL VII, Hack The Bay</dd></div><div><dt>Off hours</dt><dd>Gym &middot; Pickleball &middot; Basketball &middot; Singing</dd></div><div><dt>Allegiance</dt><dd>LeBron, and I&rsquo;ll defend it</dd></div></dl></aside></div></div></section><section class="skills-section" aria-labelledby="skills-heading"><div class="container"><div class="skills-head"><div class="section-eyebrow">Toolkit</div><h2 class="section-title" id="skills-heading">What I <span class="em">ship with</span>.</h2></div><div class="skill-grid"><div class="skill-row"><div class="skill-cat"><span class="n">01</span><span class="t">Languages</span></div><ul class="skill-list"><li>Python</li><li>Java</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>HTML/CSS</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">02</span><span class="t">Frameworks &amp; ML</span></div><ul class="skill-list"><li>React</li><li>Next.js</li><li>Spring Boot</li><li>Flask</li><li>PyTorch Geometric</li><li>MediaPipe</li><li>YOLOv5</li><li>Three.js</li><li>Tailwind CSS</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">03</span><span class="t">AI &amp; LLM</span></div><ul class="skill-list"><li>Azure OpenAI</li><li>Gemini 2.5</li><li>OpenAI API</li><li>LiveKit</li><li>ElevenLabs</li><li>Tesseract OCR</li><li>Retrieval-Augmented Generation</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">04</span><span class="t">Infrastructure &amp; APIs</span></div><ul class="skill-list"><li>AWS</li><li>Azure</li><li>Docker</li><li>Kubernetes</li><li>Vercel</li><li>Firebase</li><li>REST</li><li>WebSockets</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">05</span><span class="t">Hardware &amp; Robotics</span></div><ul class="skill-list"><li>Arduino</li><li>iPhone LiDAR</li><li>Web Serial API</li><li>D* Lite</li><li>Computer Vision</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">06</span><span class="t">Core CS &amp; DevOps</span></div><ul class="skill-list"><li>Data Structures &amp; Algorithms</li><li>Git</li><li>Jira / JQL</li><li>CI/CD</li><li>Prometheus</li><li>Grafana</li><li>Vitest</li></ul></div></div></div></section>
+<div class="page active" id="home"><section class="hero"><div class="container"><div class="hero-grid"><div><h1>Haren <span class="name-italic">Gannarapu</span></h1><p class="subtitle">SWE @ Carnival · Prev AI/ML Intern @ Oasis · CS @ UCF. I build <span class="em">AI-powered systems</span> at the intersection of full-stack engineering and creative problem-solving.</p><div class="cta-buttons"><button class="cta-button" data-avatar-react="thumbsup" onclick="navigateTo('projects')">View Projects →</button><button class="cta-button secondary" data-avatar-react="point" onclick="navigateTo('contact')">Get In Touch</button></div><div class="stats-grid"><div class="stat-item" data-avatar-react="thumbsup"><span class="stat-number">2×</span><span class="stat-label">Hackathon Winner</span></div><div class="stat-item"><span class="stat-number">3.8</span><span class="stat-label">UCF GPA</span></div><div class="stat-item"><span class="stat-number">20+</span><span class="stat-label">Technologies</span></div></div></div><div class="hero-avatar-col"><div id="heroAvatar"></div></div></div></div></section><section class="about-section"><div class="container"><div class="about-grid"><div class="about-text-col"><div class="about-label">About</div><h2 class="about-title">Building at the intersection of <span class="em">AI</span>, engineering, and <span class="em">real-world</span> impact.</h2><p class="about-text">I'm a Computer Science student at UCF who builds AI-powered systems that solve real problems. On the Web &amp; eCommerce team at <strong>Princess Cruises</strong> I build AI agents that cut down lower-environment support work &mdash; a retrieval-augmented assistant in Java/Spring Boot and Python on Azure that pulls live Jira and Confluence context so engineers stop digging for it. Before that I built a heterogeneous GNN recommendation engine from scratch at <strong>Oasis</strong>.</p><p class="about-text">My work spans <strong>AI/ML</strong>, <strong>full-stack development</strong>, and <strong>robotics</strong>. I've won back-to-back hackathons building hardware-software systems under 24 hours. I care about how the code is built, not just whether it runs.</p><p class="about-text">Away from the screen I am usually in the gym and weightlifting is the thing that actually clears my head. The rest of the time it is pickleball, basketball, or whatever game has my attention that month. I am a lifelong LeBron guy and will happily defend that to anyone who brings it up. I also sing, with considerably more enthusiasm than technique.</p></div><aside class="about-card" aria-label="At a glance"><img src="headshot.webp" alt="Haren Gannarapu" class="about-card-photo" width="440" height="440" loading="lazy" decoding="async"><div class="about-card-eyebrow">The short version</div><dl class="about-facts"><div><dt>Now</dt><dd><b>Software Engineer</b> &mdash; Web &amp; eCommerce, Carnival</dd></div><div><dt>Before</dt><dd><b>AI/ML Intern</b> &mdash; Oasis</dd></div><div><dt>School</dt><dd>Computer Science, <b>UCF</b> &middot; 3.8 GPA</dd></div><div><dt>Hackathons</dt><dd><b>2&times; winner</b> &mdash; HackaBULL VII, Hack The Bay</dd></div><div><dt>Off hours</dt><dd>Gym &middot; Pickleball &middot; Basketball &middot; Singing</dd></div><div><dt>Allegiance</dt><dd>LeBron, and I&rsquo;ll defend it</dd></div></dl></aside></div></div></section><section class="skills-section" aria-labelledby="skills-heading"><div class="container"><div class="skills-head"><div class="section-eyebrow">Toolkit</div><h2 class="section-title" id="skills-heading">What I <span class="em">ship with</span>.</h2></div><div class="skill-grid"><div class="skill-row"><div class="skill-cat"><span class="n">01</span><span class="t">Languages</span></div><ul class="skill-list"><li>Python</li><li>Java</li><li>TypeScript</li><li>JavaScript</li><li>SQL</li><li>HTML/CSS</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">02</span><span class="t">Frameworks &amp; ML</span></div><ul class="skill-list"><li>React</li><li>Next.js</li><li>Spring Boot</li><li>Flask</li><li>PyTorch Geometric</li><li>MediaPipe</li><li>YOLOv5</li><li>Three.js</li><li>Tailwind CSS</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">03</span><span class="t">AI &amp; LLM</span></div><ul class="skill-list"><li>Azure OpenAI</li><li>Gemini 2.5</li><li>OpenAI API</li><li>LiveKit</li><li>ElevenLabs</li><li>Tesseract OCR</li><li>Retrieval-Augmented Generation</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">04</span><span class="t">Infrastructure &amp; APIs</span></div><ul class="skill-list"><li>AWS</li><li>Azure</li><li>Docker</li><li>Kubernetes</li><li>Vercel</li><li>Firebase</li><li>REST</li><li>WebSockets</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">05</span><span class="t">Hardware &amp; Robotics</span></div><ul class="skill-list"><li>Arduino</li><li>iPhone LiDAR</li><li>Web Serial API</li><li>D* Lite</li><li>Computer Vision</li></ul></div><div class="skill-row"><div class="skill-cat"><span class="n">06</span><span class="t">Core CS &amp; DevOps</span></div><ul class="skill-list"><li>Data Structures &amp; Algorithms</li><li>Git</li><li>Jira / JQL</li><li>CI/CD</li><li>Prometheus</li><li>Grafana</li><li>Vitest</li></ul></div></div></div></section>
 </div><!-- RESUME -->
 <main id="main" tabindex="-1"><div class="page" id="resume"><div class="page-content"><div class="container"><div class="section-eyebrow">Resume</div><h2 class="section-title">My <span class="em">credentials</span>, in one place.</h2><div class="resume-embed-wrapper"><div class="resume-actions-bar"><a href="https://drive.google.com/uc?export=download&id=1ry6q-6WwXMiLN24UPezkyQO-oEo9bVOW" class="resume-button" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
           </a><button class="resume-button secondary" id="viewResumeBtn" onclick="toggleResumePreview()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span id="viewResumeBtnLabel">View Resume</span></button></div><div class="resume-frame-container" id="resumeFrameContainer" style="display:none;margin-top:0;"><iframe
@@ -2403,7 +2403,7 @@ const Hoops = (function () {
 
   const GRAV = 5.0;         // px/s^2 per unit canvas height
   const MAX_SPEED = 3.55;   // launch speed cap, canvas heights per second
-  const MAX_DRAG = 0.42;    // drag distance for full power
+  const MAX_DRAG = 0.34;    // drag distance for full power
   const DRAG_AIR = 0.16;    // linear drag, per second
   const E_RIM = 0.58, E_BOARD = 0.52, E_FLOOR = 0.66;
 
@@ -2689,7 +2689,9 @@ const Hoops = (function () {
 
     // backboard: frame, glass, then the shooter's square
     const r = rim();
-    const bw = H * 0.026, bx = r.x + r.w, bTop = r.y - H * 0.175, bBot = r.y + H * 0.045;
+    // bBot matches the collision box in integrate(); the rim stroke covers the
+    // junction, so the board still reads as continuing behind the hoop
+    const bw = H * 0.026, bx = r.x + r.w, bTop = r.y - H * 0.175, bBot = r.y + H * 0.008;
     c.fillStyle = '#2E2A26';                       // support arm back to the wall
     c.fillRect(bx + bw, r.y - H * 0.075, W - (bx + bw), H * 0.022);
     c.fillRect(bx + bw + H * 0.06, r.y - H * 0.075, H * 0.02, H * 0.30);
@@ -2779,8 +2781,17 @@ const Hoops = (function () {
 
   function step(dt) {
     if (!ball || !ball.live) return;
+    // Substep so a fast ball cannot tunnel: at full power it covers ~32px a
+    // frame, against a 29px ball and a 14px-thick backboard. Cap each substep
+    // at a third of the radius.
+    const sp = Math.hypot(ball.vx, ball.vy);
+    const n = Math.max(1, Math.min(8, Math.ceil(sp * dt / (ball.r * 0.34))));
+    for (let i = 0; i < n && ball && ball.live; i++) integrate(dt / n);
+  }
+
+  function integrate(dt) {
     const g = GRAV * H;
-    const prevY = ball.y, prevX = ball.x;
+    const prevY = ball.y;
 
     ball.vy += g * dt;
     ball.vx -= ball.vx * DRAG_AIR * dt;
@@ -2792,11 +2803,41 @@ const Hoops = (function () {
     const r = rim();
     const front = { x: r.x, y: r.y }, back = { x: r.x + r.w, y: r.y };
 
-    // backboard face -- must match the rectangle paintCourt draws
-    const bx = r.x + r.w, bTop = r.y - H * 0.175, bBot = r.y + H * 0.045;
-    if (ball.x + ball.r > bx && prevX + ball.r <= bx + 4 &&
-        ball.y > bTop && ball.y < bBot && ball.vx > 0) {
-      ball.x = bx - ball.r; ball.vx = -ball.vx * E_BOARD; ball.vy *= 0.94;
+    /* Backboard, resolved as circle-vs-rectangle. The previous version tested
+       only the left face and only for a ball travelling right, so a shot that
+       cleared the top edge and dropped in behind the board passed straight
+       through it -- a 310-shot sweep found 50 frames with the ball inside the
+       slab, up to 52px deep. All four faces and the corners are handled now.
+
+       The collision box stops at the rim line even though the drawn board hangs
+       a little lower, because below that is the hoop itself and a ball dropping
+       cleanly through the back of it should not be batted away by the board. */
+    const bw = H * 0.026;
+    const bx0 = r.x + r.w, bx1 = bx0 + bw;
+    const bTop = r.y - H * 0.175, bBot = r.y;
+    const qx = clamp(ball.x, bx0, bx1), qy = clamp(ball.y, bTop, bBot);
+    const ddx = ball.x - qx, ddy = ball.y - qy;
+    const dd2 = ddx * ddx + ddy * ddy;
+    if (dd2 < ball.r * ball.r) {
+      if (dd2 > 1e-6) {
+        const dl = Math.sqrt(dd2), nx = ddx / dl, ny = ddy / dl;
+        const vn = ball.vx * nx + ball.vy * ny;
+        if (vn < 0) {
+          ball.vx -= (1 + E_BOARD) * vn * nx;
+          ball.vy -= (1 + E_BOARD) * vn * ny;
+        }
+        ball.x = qx + nx * ball.r; ball.y = qy + ny * ball.r;
+      } else {
+        // dead centre inside the slab: eject through the nearest face
+        const toL = ball.x - bx0, toR = bx1 - ball.x;
+        const toT = ball.y - bTop, toB = bBot - ball.y;
+        const m = Math.min(toL, toR, toT, toB);
+        if (m === toL) { ball.x = bx0 - ball.r; ball.vx = -Math.abs(ball.vx) * E_BOARD; }
+        else if (m === toR) { ball.x = bx1 + ball.r; ball.vx = Math.abs(ball.vx) * E_BOARD; }
+        else if (m === toT) { ball.y = bTop - ball.r; ball.vy = -Math.abs(ball.vy) * E_BOARD; }
+        else { ball.y = bBot + ball.r; ball.vy = Math.abs(ball.vy) * E_BOARD; }
+      }
+      ball.vy *= 0.96;
       rimShake = 0.22; SFX.board();
     }
 
@@ -2945,7 +2986,11 @@ const Hoops = (function () {
     cx.setLineDash([4, 5]);
     cx.strokeStyle = 'rgba(255,224,186,0.34)';
     cx.lineWidth = Math.max(1.2, H * 0.0038);
-    cx.beginPath(); cx.moveTo(h.x, h.y); cx.lineTo(aim.x, aim.y); cx.stroke();
+    // anchored at the ball, not at the touch point: the gesture is a relative
+    // vector, so you can start it anywhere there is room and still read it
+    cx.beginPath(); cx.moveTo(h.x, h.y);
+    cx.lineTo(h.x + (aim.x - aim.sx), h.y + (aim.y - aim.sy));
+    cx.stroke();
     cx.restore();
 
     if (d.dots > 0) {
@@ -3066,10 +3111,11 @@ const Hoops = (function () {
       cx.lineWidth = Math.max(1.6, H * 0.0055);
       cx.lineCap = 'round'; cx.lineJoin = 'round';
       const cxx = p[1].x + p[1].w / 2, cyy = p[1].y + p[1].h / 2, s = p[1].w * 0.17;
+      // apex points the way the button walks: dir -1 puts it on the left
       cx.beginPath();
-      cx.moveTo(cxx + s * p[2], cyy - s);
-      cx.lineTo(cxx - s * p[2], cyy);
-      cx.lineTo(cxx + s * p[2], cyy + s);
+      cx.moveTo(cxx - s * p[2], cyy - s);
+      cx.lineTo(cxx + s * p[2], cyy);
+      cx.lineTo(cxx - s * p[2], cyy + s);
       cx.stroke();
       cx.lineCap = 'butt';
     });
@@ -3159,9 +3205,11 @@ const Hoops = (function () {
   // spoken for by the shot, so walking left and right needs its own targets.
   function pads() {
     const s = H * 0.105, m = H * 0.028, y = H - s - m;
+    // Bottom right, deliberately: the shot is pulled down and to the LEFT, so
+    // anything in the bottom-left corner intercepts the start of a low drag.
     return {
-      l: { x: m, y: y, w: s, h: s },
-      r: { x: m * 2 + s, y: y, w: s, h: s },
+      r: { x: W - m - s, y: y, w: s, h: s },
+      l: { x: W - m * 2 - s * 2, y: y, w: s, h: s },
       mute: { x: W - s * 0.8 - m, y: m, w: s * 0.8, h: s * 0.8 }
     };
   }
@@ -3280,8 +3328,14 @@ const Hoops = (function () {
       });
     },
     pause: function () { cancelAnimationFrame(raf); raf = 0; },
-    _debug: function () { return { STATE: STATE, score: score, streak: streak,
-      W: W, H: H, x: player ? Math.round(player.x) : -1, muted: muted }; }
+    _debug: function () {
+      const r = rim();
+      return { STATE: STATE, score: score, streak: streak, diff: diff,
+        W: W, H: H, x: player ? Math.round(player.x) : -1, muted: muted,
+        held: player ? heldPoint() : null, pads: W ? pads() : null,
+        rim: r, board: { x: r.x + r.w, top: r.y - H * 0.175, bot: r.y, w: H * 0.026 },
+        ball: ball ? { x: ball.x, y: ball.y, r: ball.r, live: ball.live } : null };
+    }
   };
 })();
 

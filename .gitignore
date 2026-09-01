@@ -26,3 +26,8 @@ dist/
 # The one exception: an NBA 2K screenshot, kept locally as a style reference for
 # the court. This repo is public, and that is someone else's copyrighted art.
 src/assets/avatar/courtviz.png
+
+# A full clone of this repo ended up nested inside itself. It carries its own
+# .git, so `git add -A` stages it as a gitlink and anyone cloning gets a broken
+# empty submodule. Safe to delete the directory; ignored so it cannot sneak in.
+hareng8374.github.io/
