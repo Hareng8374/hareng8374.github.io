@@ -2407,10 +2407,14 @@ const Hoops = (function () {
   const DRAG_AIR = 0.16;    // linear drag, per second
   const E_RIM = 0.58, E_BOARD = 0.52, E_FLOOR = 0.66;
 
+  /* Every mode gets an arc; what changes is how far down it you can see. Hard
+     used to draw none at all, which did not make it harder so much as blank --
+     with no arc and no dots there was nothing on screen to aim with. Six dots
+     still hides the landing point, which is the part that carries the skill. */
   const DIFF = {
-    easy:   { dots: 26, spots: [0.26, 0.42] },
-    normal: { dots: 9,  spots: [0.16, 0.44] },
-    hard:   { dots: 0,  spots: [0.06, 0.42] }
+    easy:   { dots: 30, spots: [0.26, 0.42] },
+    normal: { dots: 14, spots: [0.16, 0.44] },
+    hard:   { dots: 6,  spots: [0.06, 0.42] }
   };
 
   // ---- state ---------------------------------------------------------------
@@ -3020,13 +3024,14 @@ const Hoops = (function () {
 
     if (d.dots > 0) {
       const g = GRAV * H;
-      cx.fillStyle = 'rgba(255,234,205,0.9)';
+      cx.fillStyle = 'rgba(255,238,212,0.95)';
       for (let i = 1; i <= d.dots; i++) {
         const t = i * 0.030;
         const x = p.x + v.vx * t, yy = p.y + v.vy * t + 0.5 * g * t * t;
         if (yy > FLOOR * H || x > W) break;
-        cx.globalAlpha = 0.9 * (1 - i / (d.dots + 4));
-        cx.beginPath(); cx.arc(x, yy, Math.max(1.5, H * 0.0068), 0, 6.284); cx.fill();
+        // fade along the arc, but never so far that the tail vanishes
+        cx.globalAlpha = 0.95 * (1 - 0.55 * i / (d.dots + 1));
+        cx.beginPath(); cx.arc(x, yy, Math.max(1.7, H * 0.0074), 0, 6.284); cx.fill();
       }
       cx.globalAlpha = 1;
     }
