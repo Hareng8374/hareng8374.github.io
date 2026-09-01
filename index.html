@@ -2424,7 +2424,8 @@ const Hoops = (function () {
   let W = 0, H = 0;
   let score = 0, streak = 0, best = 0, attempts = 0;
   let player, ball, aim, shotT, frame, hopT;
-  let flashes = [], netWave = 0, rimShake = 0, shake = 0, touchedRim = false;
+  let flashes = [], netWave = 0, rimShake = 0, shake = 0;
+  let touchedRim = false, touchedBoard = false, lastKind = null;
   let moveDir = 0, muted = false;
   const img = {};
   let ready = false;
@@ -2716,7 +2717,7 @@ const Hoops = (function () {
   function resetShot(move) {
     if (move) player.tx = clamp(player.tx, minX(), maxX());
     ball = null; aim = null; frame = 'gather'; shotT = 0; hopT = 0;
-    touchedRim = false;
+    touchedRim = false; touchedBoard = false;
     STATE = 'aim';
   }
 
@@ -2765,7 +2766,7 @@ const Hoops = (function () {
     const p = spawnPoint();
     ball = { x: p.x, y: p.y, vx: vx, vy: vy, r: BALL_R * H, spin: 0, rot: 0, live: true, rest: 0 };
     ball.spin = -Math.abs(vx) * 0.010;   // backspin, visual
-    touchedRim = false;
+    touchedRim = false; touchedBoard = false;
   }
 
   function bounceCircle(px, py, e) {
@@ -2842,6 +2843,7 @@ const Hoops = (function () {
         else { ball.y = bBot + ball.r; ball.vy = Math.abs(ball.vy) * E_BOARD; }
       }
       ball.vy *= 0.96;
+      touchedBoard = true;
       rimShake = 0.22; SFX.board();
     }
 
@@ -2872,13 +2874,19 @@ const Hoops = (function () {
 
   function made() {
     ball.live = 'through';
-    score += touchedRim ? 2 : 3;
+    // Nothing but net is a swish. Off the glass is a bank, whether or not it
+    // also rattled the iron -- that is the shot people name. Everything else
+    // just went in.
+    const clean = !touchedRim && !touchedBoard;
+    lastKind = clean ? 'swish' : touchedBoard ? 'bank' : 'rim';
+    score += clean ? 3 : 2;
     streak += 1; attempts += 1;
     if (streak > best) { best = streak; try { localStorage.setItem('hoopsBest', best); } catch (e) {} }
-    netWave = 1; shake = touchedRim ? 0.35 : 0.55;
-    if (!touchedRim) SFX.swish();
-    SFX.crowd(Math.min(1, (touchedRim ? 0.25 : 0.6) + streak * 0.12));
-    flash(touchedRim ? '+2' : 'SWISH  +3', touchedRim ? '#F2E4CE' : '#FFC86B');
+    netWave = 1; shake = clean ? 0.55 : 0.35;
+    if (clean) SFX.swish();
+    SFX.crowd(Math.min(1, (clean ? 0.6 : 0.25) + streak * 0.12));
+    flash(clean ? 'SWISH  +3' : touchedBoard ? 'BANK  +2' : '+2',
+          clean ? '#FFC86B' : touchedBoard ? '#F6B87A' : '#F2E4CE');
     if (streak >= 3) flash(streak + ' IN A ROW', '#FF8A3D', 0.42);
     setTimeout(() => { if (STATE === 'shoot') { STATE = 'resolve'; resetShot(true); } }, 900);
     STATE = 'shoot';
@@ -3362,6 +3370,7 @@ const Hoops = (function () {
       const r = rim();
       return { STATE: STATE, score: score, streak: streak, diff: diff,
         W: W, H: H, x: player ? Math.round(player.x) : -1, muted: muted,
+        rimHit: touchedRim, boardHit: touchedBoard, lastKind: lastKind,
         held: player ? heldPoint() : null, pads: W ? pads() : null,
         rim: r, board: { x: r.x + r.w, top: r.y - H * 0.175, bot: r.y, w: H * 0.026 },
         ball: ball ? { x: ball.x, y: ball.y, r: ball.r, live: ball.live } : null };
