@@ -1,0 +1,137 @@
+/* ===== FOREST THEME =====
+   The page stays light -- off-white paper, not a green wash. Forest green is
+   the accent and the botany is decoration growing into the margins: grass along
+   the bottom edge, vines down the sides, a far treeline. That keeps the reading
+   surface calm and puts the colour where it signals rather than where it has to
+   be read through. */
+:root{
+  --paper:#F7F4EC;  --paper-2:#F0EBE0;  --surface:#FFFDF8;  --surface-2:#FAF7F0;
+  --rule:#DFD9CB;   --rule-2:#CFC7B5;
+  --ink:#1E2B24;    --ink-deep:#101A15;  --ink-mute:#5E6A61;
+  /* forest, from deep to light, taken off the supplied swatch */
+  --forest:#164A42;  --forest-2:#1E6354;  --forest-3:#2F7A5C;
+  --moss:#4C9A6E;    --sage:#8FB89A;      --bark:#7A5B33;
+  --gold:#C98A3C;
+  --accent:#164A42;  --accent-wash:rgba(22,74,66,.07);
+  --bg-0:#F7F4EC; --bg-1:#FBF8F2; --bg-2:#F0EBE0; --bg-3:#E8E2D4;
+  --line:rgba(30,43,36,.10); --line-strong:rgba(30,43,36,.22);
+  --text:#1E2B24; --text-dim:#55615A; --text-faint:#808C84;
+  --emerald:#164A42; --emerald-bright:#164A42; --emerald-soft:#2F7A5C;
+  --emerald-deep:#0E342E; --emerald-glow:rgba(22,74,66,.12);
+  --ink-figure:#101A15;
+}
+
+/* ── the scene ───────────────────────────────────────────────────────────
+   Fixed behind everything, pointer-events off, so it never interferes with
+   the page it sits under. */
+/* Foreground, not background. Behind the content the grass loses every
+   stacking fight with the first opaque card that parks on it; in front it reads
+   as foliage the page sits in. It takes no pointer events, so nothing under it
+   becomes unclickable, and the nav and modals still sit above. */
+#forestCanvas{position:fixed;inset:0;z-index:5;pointer-events:none}
+/* The grass lives at the bottom of the viewport, so the page needs a margin it
+   never writes into -- otherwise an opaque card simply parks on top of it. */
+.page{padding-bottom:168px!important}
+@media(max-width:720px){.page{padding-bottom:116px!important}}
+.forest-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.forest-layer svg{position:absolute;display:block}
+
+/* a far treeline along the bottom, hazy so it sits behind the grass */
+.treeline{bottom:0;left:50%;transform:translateX(-50%);width:max(1500px,104vw);
+  opacity:.17;color:var(--forest)}
+/* vines down both margins, where no content lives */
+.vine{top:-30px;width:132px;color:var(--forest-3);opacity:.5;
+  transform-origin:top center;animation:vine-sway 11s ease-in-out infinite}
+.vine-l{left:-16px}
+.vine-r{right:-16px;transform:scaleX(-1);animation-duration:14s;animation-delay:-3s}
+@keyframes vine-sway{0%,100%{transform:rotate(-1.1deg)}50%{transform:rotate(1.4deg)}}
+.vine-r{animation-name:vine-sway-r}
+@keyframes vine-sway-r{0%,100%{transform:scaleX(-1) rotate(-1.3deg)}
+  50%{transform:scaleX(-1) rotate(1.1deg)}}
+/* warm light pooling at the top, like sun through a canopy */
+.canopy-light{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 48% at 18% -6%,rgba(201,138,60,.13),transparent 62%),
+    radial-gradient(ellipse 60% 44% at 88% 2%,rgba(47,122,92,.11),transparent 60%)}
+@media(max-width:860px){.vine{width:88px;opacity:.36}.treeline{opacity:.13}}
+@media(prefers-reduced-motion:reduce){.vine{animation:none}}
+
+/* The paper moves to <html>. While it lives on <body> it propagates to the
+   root and is painted as the viewport backdrop, which buries a fixed canvas
+   sitting at z-index 0 inside <body>. On <html> the canvas paints over it. */
+html{background:var(--paper)}
+body{background:transparent!important}
+body>*:not(#forestCanvas):not(.forest-layer):not(.canopy-light){position:relative;z-index:1}
+.ambient,.mesh-grid,.orb{display:none!important}
+.grain{opacity:.025!important}
+
+#navbar,.site-header{background:rgba(247,244,236,.82)!important;
+  backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid var(--rule)!important}
+.nav-links a{color:var(--ink-mute)!important}
+.nav-links a:hover,.nav-links a.active{color:var(--forest)!important}
+
+.project-card,.experience-card,.blog-card,.game-box,.about-card,.resume-viewer{
+  background:linear-gradient(176deg,var(--surface) 0%,var(--surface-2) 100%)!important;
+  border:1px solid var(--rule)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 2px 3px rgba(30,43,36,.04),
+    0 20px 38px -26px rgba(22,74,66,.30)!important}
+.project-card:hover,.experience-card:hover,.blog-card:hover{
+  border-color:var(--forest-3)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),
+    0 30px 54px -26px rgba(22,74,66,.40)!important}
+
+/* award winners: forest fill, gold badge -- the one place colour goes solid */
+.project-card.winner-card,.project-card.revive-winner-card{
+  background:linear-gradient(166deg,#1B5648 0%,#103A32 58%,#16463C 100%)!important;
+  border-color:rgba(143,184,154,.34)!important;
+  box-shadow:0 0 0 1px rgba(143,184,154,.12),
+    0 30px 58px -28px rgba(10,34,28,.75)!important}
+.project-card.winner-card:hover,.project-card.revive-winner-card:hover{
+  border-color:rgba(201,138,60,.62)!important;
+  box-shadow:0 0 0 1px rgba(201,138,60,.22),
+    0 40px 70px -28px rgba(10,34,28,.85)!important}
+.winner-card .project-title,.revive-winner-card .project-title{color:#F3F1E6!important}
+.winner-card .project-tech,.revive-winner-card .project-tech{color:#E3B978!important}
+.winner-card .project-description,.revive-winner-card .project-description{
+  color:rgba(238,240,231,.80)!important}
+.winner-card .project-description strong,
+.revive-winner-card .project-description strong{color:#FBE8C4!important}
+.winner-card .project-link,.revive-winner-card .project-link{
+  background:rgba(255,255,255,.07)!important;color:#EFEFE4!important;
+  border:1px solid rgba(240,240,228,.24)!important}
+.winner-card .project-link:hover,.revive-winner-card .project-link:hover{
+  background:rgba(201,138,60,.24)!important;border-color:var(--gold)!important;
+  color:#FFF0D6!important}
+.winner-card .shot-hint,.revive-winner-card .shot-hint{color:rgba(238,240,231,.55)!important}
+.winner-badge,.revive-winner-badge{
+  background:linear-gradient(180deg,#E7B96E,#C98A3C)!important;color:#2A1B06!important;
+  border:0!important;font-weight:700!important;letter-spacing:.085em!important;
+  box-shadow:0 3px 12px -3px rgba(201,138,60,.7)!important}
+.winner-card .project-badge.featured,.revive-winner-card .project-badge.featured{
+  background:rgba(255,255,255,.08)!important;color:#DDE3D8!important;
+  border-color:rgba(240,240,228,.22)!important}
+
+.project-title,.section-title,.experience-title,.about-title{color:var(--ink-deep)!important}
+.section-title .em,.about-title .em,.name-italic{color:var(--forest)!important}
+.project-tech{color:var(--forest-3)!important}
+.project-description,.about-text,.experience-description{color:var(--text-dim)!important}
+.section-eyebrow,.about-label{color:var(--forest-3)!important}
+.skill-cat .n{color:var(--forest)!important}
+.skill-list li:hover{color:var(--forest)!important}
+.skill-list li::before{background:var(--forest)!important}
+.about-card-photo{box-shadow:0 0 0 1px rgba(30,43,36,.12),0 0 0 7px var(--surface),
+  0 0 0 8px var(--forest-3),0 16px 30px -16px rgba(22,74,66,.42)!important}
+
+.cta-button,.filter-pill.active,.resume-button:not(.secondary){
+  background:var(--forest)!important;color:#F4F2E8!important;border-color:var(--forest)!important}
+.cta-button:hover{background:var(--forest-2)!important}
+.cta-button.secondary{background:transparent!important;color:var(--forest)!important;
+  border:1px solid var(--forest)!important}
+.project-link,.contact-link,.filter-pill{border-color:var(--rule-2)!important;
+  color:var(--ink)!important}
+.project-link:hover,.contact-link:hover,.filter-pill:hover{
+  border-color:var(--forest)!important;color:var(--forest)!important}
+.stat-number{color:var(--forest)!important}
+
+/* the court is a lit gym and stays one -- the one room that is not the forest */
+.game-canvas-wrap{background:#191512!important}
