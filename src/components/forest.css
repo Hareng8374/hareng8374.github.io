@@ -60,7 +60,14 @@
    sitting at z-index 0 inside <body>. On <html> the canvas paints over it. */
 html{background:var(--paper)}
 body{background:transparent!important}
-body>*:not(#forestCanvas):not(.forest-layer):not(.canopy-light){position:relative;z-index:1}
+/* No blanket z-index on body's children. That was written while the grass still
+   sat behind the page, and it flattened the fixed header from 1000 to 1 so the
+   content scrolled straight over the nav and took its clicks with it. The grass
+   is in the foreground now and takes no pointer events, so nothing needs
+   lifting -- only the few things that must stay above it are named. */
+.site-header,#navbar{z-index:1000!important}
+.scroll-top{z-index:900!important}
+.video-modal,.lb{z-index:2000!important}
 .ambient,.mesh-grid,.orb{display:none!important}
 .grain{opacity:.025!important}
 
