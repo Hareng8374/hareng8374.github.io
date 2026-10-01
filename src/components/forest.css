@@ -135,3 +135,10 @@ body>*:not(#forestCanvas):not(.forest-layer):not(.canopy-light){position:relativ
 
 /* the court is a lit gym and stays one -- the one room that is not the forest */
 .game-canvas-wrap{background:#191512!important}
+
+/* word-level heading reveal: inline-block so each word can be transformed,
+   with the spaces between them left as real text nodes so the line still wraps
+   and still selects and reads as one string */
+.fw{display:inline-block;will-change:transform,opacity}
+.fw.pre{opacity:0}
+@media(prefers-reduced-motion:reduce){.fw{opacity:1!important;transform:none!important}}

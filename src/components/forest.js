@@ -191,13 +191,78 @@
      sections so the nav, the modals and anything inside the game canvas are
      left alone -- animating those would fight their own state. */
   var SEL = [
-    '.page-content h2', '.page-content h3', '.page-content p', '.page-content li',
-    '.section-title', '.section-eyebrow', '.projects-heading-wrap',
+    '.page-content p', '.page-content li',
+    '.section-eyebrow', '.projects-heading-wrap',
     '.project-card', '.experience-card', '.blog-card', '.game-box',
-    '.skill-row', '.about-card', '.about-text-col>*', '.about-title', '.about-label',
+    '.skill-row', '.about-card', '.about-text-col>*', '.about-label',
     '.about-text', '.about-facts>div', '.stat-item', '.contact-link', '.contact-text',
     '.resume-button', '.filter-pill', '.timeline-item', '.exp-card'
   ].join(',');
+  /* Headings come in a word at a time. Only text nodes are touched, and the
+     element structure around them is left alone, so <span class="em"> and links
+     inside a heading keep working and the text still reads as one string to a
+     screen reader. */
+  function splitWords(root) {
+    if (root.dataset.split) return [];
+    root.dataset.split = '1';
+    var out = [];
+    (function walk(node) {
+      var kids = [].slice.call(node.childNodes);
+      kids.forEach(function (n) {
+        if (n.nodeType === 3) {
+          var parts = n.nodeValue.split(/(\s+)/);
+          if (!parts.length) return;
+          var frag = document.createDocumentFragment();
+          parts.forEach(function (w) {
+            if (!w) return;
+            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+            var sp = document.createElement('span');
+            sp.className = 'fw';
+            sp.textContent = w;
+            frag.appendChild(sp);
+            out.push(sp);
+          });
+          node.replaceChild(frag, n);
+        } else if (n.nodeType === 1 && !/^(BR|IMG|SVG)$/.test(n.tagName)) {
+          walk(n);
+        }
+      });
+    })(root);
+    return out;
+  }
+
+  var SPLIT = '.section-title,.about-title,.hero h1,.project-title,' +
+              '.experience-title,.contact-title,.resume-title';
+
+  function armWords() {
+    if (reduced || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var ws = en.target._words || [];
+        ws.forEach(function (w, i) {
+          w.classList.remove('pre');
+          w.animate([{ opacity: 0, transform: 'translateY(0.5em) rotate(2deg)' },
+                     { opacity: 1, transform: 'none' }],
+            { duration: SPRING.duration, easing: SPRING.easing,
+              delay: Math.min(i, 16) * 42, fill: 'backwards' });
+        });
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+
+    document.querySelectorAll(SPLIT).forEach(function (h) {
+      if (h.dataset.split) return;
+      var ws = splitWords(h);
+      if (!ws.length) return;
+      h._words = ws;
+      ws.forEach(function (w) { w.classList.add('pre'); });
+      h.style.opacity = '1';
+      h.style.animation = 'none';          // the heading's own fade would fight this
+      io.observe(h);
+    });
+  }
+
   function arm() {
     if (reduced || !('IntersectionObserver' in window)) return;
     var els = [].filter.call(document.querySelectorAll(SEL), function (e) {
@@ -219,8 +284,9 @@
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
     els.forEach(function (e) { io.observe(e); });
   }
-  if (document.readyState === 'loading') addEventListener('DOMContentLoaded', arm);
-  else arm();
+  function armAll() { armWords(); arm(); }
+  if (document.readyState === 'loading') addEventListener('DOMContentLoaded', armAll);
+  else armAll();
   // SPA tabs swap content in, so re-arm whenever a page becomes active
-  window.forestRearm = arm;
+  window.forestRearm = armAll;
 })();
