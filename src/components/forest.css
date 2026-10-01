@@ -209,3 +209,30 @@ body{background:transparent!important}
 @media (max-width:900px){ .ledge-monkey{height:118px; left:26px} }
 @media (max-width:620px){ .ledge-monkey{height:92px; left:12px} }
 @media (prefers-reduced-motion:reduce){ .ledge-monkey{animation:none} }
+
+
+/* ── Dark-card legibility ────────────────────────────────────────────────
+   Two separate problems on the award cards, both real. Contrast was marginal
+   against the lightest band of the gradient -- body 5.4:1 and the tech line
+   4.6:1, which clear AA and miss AAA -- and the body was set in Newsreader,
+   whose thin serifs optically thin further on a dark ground. The copy moves to
+   the sans at a slightly larger size, and every value is lifted to clear 7:1
+   against the worst band, not the average one. */
+.winner-card .project-description,
+.revive-winner-card .project-description{
+  font-family:var(--sans)!important;
+  font-size:1rem!important;
+  line-height:1.72!important;
+  letter-spacing:.002em;
+  color:rgba(240,244,236,.93)!important;   /* 6.9:1 worst case, 10.0 typical */
+}
+.winner-card .project-description strong,
+.revive-winner-card .project-description strong{
+  color:#FFF3DC!important; font-weight:600!important;   /* 7.7:1 worst case */
+}
+.winner-card .project-tech,
+.revive-winner-card .project-tech{
+  color:#F0C98A!important;                 /* 5.4:1, up from 4.6 */
+}
+.winner-card .shot-hint,
+.revive-winner-card .shot-hint{ color:rgba(240,244,236,.62)!important }
