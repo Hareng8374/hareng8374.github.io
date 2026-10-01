@@ -62,12 +62,14 @@
                    s: rand(0.07, 0.22), d: Math.random() * 6.283, a: rand(0.10, 0.40) });
     }
     flies = [];
-    var fn = Math.round(Math.min(11, W / 150));
+    var fn = Math.round(Math.min(34, Math.max(12, W / 48)));
+    var HUES = ['#2F7A5C', '#2F7A5C', '#1E6354', '#4C9A6E', '#B8894A', '#8FB89A'];
     for (var f = 0; f < fn; f++) {
-      flies.push({ x: Math.random() * W, y: rand(-H * 0.3, H),
-                   vy: rand(0.16, 0.42), sw: rand(18, 52), ph: Math.random() * 6.283,
-                   rot: Math.random() * 6.283, vr: rand(-0.012, 0.012),
-                   sz: rand(5, 10), hue: Math.random() < 0.3 ? '#B8894A' : '#2F7A5C' });
+      flies.push({ x: Math.random() * W, y: rand(-H * 0.6, H),
+                   vy: rand(0.12, 0.50), ph: Math.random() * 6.283,
+                   rot: Math.random() * 6.283, vr: rand(-0.018, 0.018),
+                   sz: rand(4, 12), a: rand(0.18, 0.46),
+                   hue: HUES[(Math.random() * HUES.length) | 0] });
     }
   }
 
@@ -115,7 +117,7 @@
       if (L.x < -30) L.x = W + 30; if (L.x > W + 30) L.x = -30;
       cx.save();
       cx.translate(L.x, L.y); cx.rotate(L.rot);
-      cx.globalAlpha = 0.34;
+      cx.globalAlpha = L.a;
       cx.beginPath();
       cx.moveTo(0, -L.sz);
       cx.quadraticCurveTo(L.sz * 0.78, 0, 0, L.sz);
@@ -185,20 +187,33 @@
   }
   var SPRING = springEase(150, 20, 1);
 
-  var SEL = '.project-card,.experience-card,.blog-card,.skill-row,.about-text-col>*,' +
-            '.about-card,.section-title,.section-eyebrow,.stat-item,.contact-link,' +
-            '.resume-button,.game-box,.projects-heading-wrap';
+  /* Every block of copy, not only the cards. Scoped to .page-content and the
+     sections so the nav, the modals and anything inside the game canvas are
+     left alone -- animating those would fight their own state. */
+  var SEL = [
+    '.page-content h2', '.page-content h3', '.page-content p', '.page-content li',
+    '.section-title', '.section-eyebrow', '.projects-heading-wrap',
+    '.project-card', '.experience-card', '.blog-card', '.game-box',
+    '.skill-row', '.about-card', '.about-text-col>*', '.about-title', '.about-label',
+    '.about-text', '.about-facts>div', '.stat-item', '.contact-link', '.contact-text',
+    '.resume-button', '.filter-pill', '.timeline-item', '.exp-card'
+  ].join(',');
   function arm() {
-    var els = document.querySelectorAll(SEL);
     if (reduced || !('IntersectionObserver' in window)) return;
+    var els = [].filter.call(document.querySelectorAll(SEL), function (e) {
+      if (e.dataset.revealed) return false;      // re-armed on every SPA nav
+      e.dataset.revealed = '1';
+      return true;
+    });
     var io = new IntersectionObserver(function (es) {
       var n = 0;
       es.forEach(function (en) {
         if (!en.isIntersecting) return;
         io.unobserve(en.target);
         en.target.animate(
-          [{ opacity: 0, transform: 'translateY(22px)' }, { opacity: 1, transform: 'none' }],
-          { duration: SPRING.duration, easing: SPRING.easing, delay: n * 60, fill: 'both' });
+          [{ opacity: 0, transform: 'translateY(30px)' }, { opacity: 1, transform: 'none' }],
+          { duration: SPRING.duration, easing: SPRING.easing,
+            delay: Math.min(n, 7) * 55, fill: 'both' });
         n++;
       });
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
