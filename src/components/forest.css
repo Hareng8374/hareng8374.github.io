@@ -31,8 +31,8 @@
 #forestCanvas{position:fixed;inset:0;z-index:5;pointer-events:none}
 /* The grass lives at the bottom of the viewport, so the page needs a margin it
    never writes into -- otherwise an opaque card simply parks on top of it. */
-.page{padding-bottom:168px!important}
-@media(max-width:720px){.page{padding-bottom:116px!important}}
+.page,.blog-main,.post-main{padding-bottom:168px!important}
+@media(max-width:720px){.page,.blog-main,.post-main{padding-bottom:116px!important}}
 .forest-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .forest-layer svg{position:absolute;display:block}
 
@@ -236,3 +236,22 @@ body{background:transparent!important}
 }
 .winner-card .shot-hint,
 .revive-winner-card .shot-hint{ color:rgba(240,244,236,.62)!important }
+
+
+/* ── Longform: the scene sits at the foot of the article ─────────────────
+   Fixed to the viewport the grass crossed the prose on every scroll step. On
+   the blog it becomes a band at the end of the document, and the vines and
+   treeline drop back so a column of text has nothing moving behind it. */
+html.forest-longform body{position:relative}
+html.forest-longform #forestCanvas{
+  position:absolute!important; inset:auto 0 0 0!important;
+  height:300px!important; z-index:0!important;
+}
+/* the treeline spans the full width and sat behind the text column; the
+   grass band at the foot already anchors the page */
+html.forest-longform .treeline{display:none}
+html.forest-longform .vine{opacity:.30}
+html.forest-longform .canopy-light{opacity:.6}
+@media(max-width:720px){
+  html.forest-longform #forestCanvas{height:200px!important}
+}

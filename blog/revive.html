@@ -9,9 +9,40 @@
 <meta property="og:description" content="Most CPR training tools are expensive, clinic-only, or don't feel real enough to stick. We thought we could fix that.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hareng.dev/blog/revive.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="blog.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="blog.css"><link rel="stylesheet" href="../src/components/forest.css">
 </head>
 <body>
+<canvas id="forestCanvas" aria-hidden="true"></canvas>
+<div class="canopy-light" aria-hidden="true"></div>
+<div class="forest-layer" aria-hidden="true">
+<svg class="treeline" viewBox="0 0 1500 220" preserveAspectRatio="xMidYMax meet" fill="currentColor"><path d="M0 220 L-40 202 L-15 119 L10 202 L-5 206 L28 143 L61 206 L36 206 L68 144 L101 206 L70 200 L94 109 L117 200 L96 200 L135 110 L174 200 L139 204 L174 129 L210 204 L193 198 L223 95 L254 198 L240 207 L280 146 L320 207 L288 205 L312 136 L337 205 L317 193 L343 72 L369 193 L352 196 L382 89 L411 196 L391 206 L414 144 L438 206 L418 196 L449 85 L480 196 L455 197 L487 94 L518 197 L493 194 L530 75 L566 194 L536 198 L569 95 L602 198 L585 195 L613 81 L641 195 L629 205 L659 139 L690 205 L673 205 L705 136 L737 205 L707 196 L745 87 L783 196 L758 192 L786 67 L815 192 L798 197 L832 94 L866 197 L841 193 L883 70 L925 193 L895 196 L919 87 L942 196 L928 196 L971 89 L1014 196 L991 203 L1021 123 L1051 203 L1033 207 L1064 148 L1096 207 L1068 205 L1092 139 L1115 205 L1102 205 L1129 138 L1156 205 L1136 192 L1159 67 L1183 192 L1166 198 L1206 98 L1247 198 L1225 193 L1253 68 L1281 193 L1260 201 L1301 116 L1341 201 L1323 205 L1348 136 L1374 205 L1352 203 L1385 128 L1417 203 L1396 203 L1418 125 L1440 203 L1424 201 L1457 115 L1491 201 L1476 196 L1508 84 L1541 196 L1520 196 L1543 86 L1567 196 L1555 194 L1596 76 L1636 194 L1500 220 L1500 220 Z"/></svg>
+<svg class="vine vine-l" viewBox="0 0 132 900" fill="none" aria-hidden="true">
+<path d="M46 0c14 90-16 140 2 226s34 120 10 206 20 142 2 220-6 140-6 248" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<g fill="currentColor">
+<ellipse cx="24" cy="118" rx="22" ry="11" transform="rotate(-24 24 118)"/>
+<ellipse cx="74" cy="196" rx="20" ry="10" transform="rotate(22 74 196)"/>
+<ellipse cx="22" cy="286" rx="23" ry="11" transform="rotate(-18 22 286)"/>
+<ellipse cx="76" cy="372" rx="19" ry="10" transform="rotate(26 76 372)"/>
+<ellipse cx="24" cy="462" rx="22" ry="11" transform="rotate(-22 24 462)"/>
+<ellipse cx="72" cy="548" rx="20" ry="10" transform="rotate(20 72 548)"/>
+<ellipse cx="26" cy="640" rx="21" ry="10" transform="rotate(-20 26 640)"/>
+<ellipse cx="74" cy="726" rx="19" ry="9" transform="rotate(24 74 726)"/>
+<ellipse cx="28" cy="812" rx="20" ry="10" transform="rotate(-18 28 812)"/>
+</g></svg>
+<svg class="vine vine-r" viewBox="0 0 132 900" fill="none" aria-hidden="true">
+<path d="M46 0c14 90-16 140 2 226s34 120 10 206 20 142 2 220-6 140-6 248" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<g fill="currentColor">
+<ellipse cx="24" cy="92" rx="21" ry="10" transform="rotate(-20 24 92)"/>
+<ellipse cx="74" cy="174" rx="19" ry="10" transform="rotate(24 74 174)"/>
+<ellipse cx="22" cy="262" rx="22" ry="11" transform="rotate(-22 22 262)"/>
+<ellipse cx="76" cy="350" rx="20" ry="10" transform="rotate(20 76 350)"/>
+<ellipse cx="24" cy="440" rx="21" ry="10" transform="rotate(-24 24 440)"/>
+<ellipse cx="72" cy="528" rx="19" ry="9" transform="rotate(22 72 528)"/>
+<ellipse cx="26" cy="618" rx="22" ry="11" transform="rotate(-18 26 618)"/>
+<ellipse cx="74" cy="704" rx="20" ry="10" transform="rotate(26 74 704)"/>
+</g></svg>
+</div>
+
 
 <div class="ambient"></div>
 
@@ -123,5 +154,6 @@
   </div>
 </footer>
 
+<script src="../src/components/forest.js" defer></script>
 </body>
 </html>

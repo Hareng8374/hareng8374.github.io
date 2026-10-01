@@ -19,17 +19,33 @@
 
   // Grass sits in three depth bands. The far band is darker, shorter and sways
   // less, which is what reads as distance -- not blur.
+  /* The blog is long-form prose, and prose scrolling underneath a quarter of a
+     screen of grass is simply hard to read. There it becomes a short band at
+     the very bottom instead -- the same scene, turned down to a border. */
+  /* On an article the scene anchors to the end of the document instead of the
+     viewport. Fixed to the viewport it crossed the prose on every scroll step,
+     and shrinking it only made the collision smaller, not gone. */
+  var LONGFORM = !!document.querySelector('.blog-main,.post-main');
+  if (LONGFORM) document.documentElement.classList.add('forest-longform');
+  var K = LONGFORM ? 0.42 : 1;
   var BANDS = [
-    { n: 0.40, h: [0.050, 0.095], col: 'rgba(60,124,96,.40)',  sway: 0.45, y: 0.00 },
-    { n: 0.34, h: [0.080, 0.150], col: 'rgba(34,96,73,.62)',   sway: 0.75, y: 0.03 },
-    { n: 0.26, h: [0.120, 0.225], col: 'rgba(20,74,56,.86)',   sway: 1.00, y: 0.07 }
+    { n: 0.40, h: [0.050 * K, 0.095 * K], col: 'rgba(60,124,96,' + (LONGFORM ? .28 : .40) + ')',
+      sway: 0.45, y: 0.00 },
+    { n: 0.34, h: [0.080 * K, 0.150 * K], col: 'rgba(34,96,73,' + (LONGFORM ? .44 : .62) + ')',
+      sway: 0.75, y: 0.03 },
+    { n: 0.26, h: [0.120 * K, 0.225 * K], col: 'rgba(20,74,56,' + (LONGFORM ? .62 : .86) + ')',
+      sway: 1.00, y: 0.07 }
   ];
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 
   function build() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = innerWidth; H = innerHeight;
+    // measure the canvas, which is the viewport normally and a band at the foot
+    // of the page in longform
+    var box = cv.getBoundingClientRect();
+    W = Math.round(box.width) || innerWidth;
+    H = Math.round(box.height) || innerHeight;
     cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
     cv.style.width = W + 'px'; cv.style.height = H + 'px';
     cx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -62,7 +78,7 @@
                    s: rand(0.07, 0.22), d: Math.random() * 6.283, a: rand(0.10, 0.40) });
     }
     flies = [];
-    var fn = Math.round(Math.min(34, Math.max(12, W / 48)));
+    var fn = Math.round(Math.min(34, Math.max(12, W / 48)) * (LONGFORM ? 0.5 : 1));
     var HUES = ['#2F7A5C', '#2F7A5C', '#1E6354', '#4C9A6E', '#B8894A', '#8FB89A'];
     for (var f = 0; f < fn; f++) {
       flies.push({ x: Math.random() * W, y: rand(-H * 0.6, H),
