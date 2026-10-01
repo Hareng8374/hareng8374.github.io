@@ -43,9 +43,20 @@
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     // measure the canvas, which is the viewport normally and a band at the foot
     // of the page in longform
-    var box = cv.getBoundingClientRect();
-    W = Math.round(box.width) || innerWidth;
-    H = Math.round(box.height) || innerHeight;
+    /* A canvas is a replaced element: with inset:0 and height:auto it falls back
+       to its intrinsic 300x150 rather than stretching, so the inline height is
+       what actually makes it fill the viewport. It therefore cannot be measured
+       to decide its own size -- that reads back our own last answer. The
+       viewport drives the fixed case; the CSS band drives longform, read once
+       with the inline size cleared so it is the stylesheet's number and not
+       ours. */
+    cv.style.width = ''; cv.style.height = '';
+    if (LONGFORM) {
+      W = innerWidth;
+      H = parseInt(getComputedStyle(cv).height, 10) || 300;
+    } else {
+      W = innerWidth; H = innerHeight;
+    }
     cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
     cv.style.width = W + 'px'; cv.style.height = H + 'px';
     cx.setTransform(DPR, 0, 0, DPR, 0, 0);
