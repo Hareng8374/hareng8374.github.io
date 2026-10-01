@@ -188,3 +188,24 @@ body{background:transparent!important}
 
 /* the stack sits in italics beside the company, as \emph{} sets it on the resume */
 .experience-company em{font-style:italic;color:var(--forest-3)!important;font-weight:400}
+
+
+/* ── Monkey on the branch ────────────────────────────────────────────────
+   Drawn here rather than dropped in: the reference was Curious George, who is
+   Houghton Mifflin Harcourt's, and this is a public portfolio. He sits at the
+   opposite end to Haren and sways very slightly, so the branch feels occupied
+   rather than decorated. */
+.ledge-monkey{
+  position:absolute; left:58px; bottom:10px;
+  height:168px; width:auto; z-index:2;
+  pointer-events:none; user-select:none;
+  transform-origin:52% 86%;
+  animation:monkey-sway 6.5s ease-in-out infinite;
+}
+@keyframes monkey-sway{
+  0%,100%{transform:rotate(-1.6deg) translateY(0)}
+  50%{transform:rotate(1.6deg) translateY(-3px)}
+}
+@media (max-width:900px){ .ledge-monkey{height:118px; left:26px} }
+@media (max-width:620px){ .ledge-monkey{height:92px; left:12px} }
+@media (prefers-reduced-motion:reduce){ .ledge-monkey{animation:none} }
