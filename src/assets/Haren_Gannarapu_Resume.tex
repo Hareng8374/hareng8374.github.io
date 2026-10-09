@@ -1,0 +1,150 @@
+%-------------------------
+% Resume in LaTeX
+% Author : Haren Gannarapu
+%-------------------------
+
+\documentclass[letterpaper,10pt]{article}
+\usepackage{cmap}          % ATS: maps ligatures (fi, ff, fl) back to their letters; must load before fontenc
+\usepackage[T1]{fontenc}   % ATS: real characters in the PDF, not old-style glyph slots
+\usepackage{lmodern}       % the same Computer Modern look, as a proper scalable font
+\usepackage{textcomp}      % ATS: text-mode symbols with clean Unicode mappings
+\usepackage{latexsym,enumitem,tabularx,xcolor,fancyhdr,titlesec,babel}
+\usepackage[empty]{fullpage}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=black, linkcolor=black, pdftitle={Haren Gannarapu Resume}, pdfauthor={Haren Gannarapu}}
+\newcommand{\headerlink}[2]{\textcolor{blue}{\underline{\href{#1}{#2}}}}
+\input{glyphtounicode}
+
+% Margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-.75in}
+\addtolength{\textheight}{1.5in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\urlstyle{same}
+
+\titleformat{\section}{\vspace{-4pt}\scshape\raggedright\large}{}{0em}{}[\color{black}\titlerule\vspace{-4pt}]
+\pdfgentounicode=1
+
+% Custom Commands
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeItem}[1]{\item\small{#1\vspace{-1pt}}}
+
+\newcommand{\resumeSubheading}[4]{%
+  \vspace{1pt}\item
+  \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \small #2 \\
+    \textit{\small #3} & \textit{\small #4}
+  \end{tabular*}\vspace{-5pt}}
+
+\newcommand{\resumeProjectHeading}[2]{%
+  \vspace{1pt}\item
+  \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \small #1 & \small #2
+  \end{tabular*}\vspace{-5pt}}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in,label={},topsep=0pt,partopsep=0pt,parsep=0pt,itemsep=0pt]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}\vspace{-3pt}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=*,topsep=1pt,itemsep=0pt,parsep=0pt]}
+\newcommand{\resumeProjectItemListStart}{\begin{itemize}[leftmargin=*,topsep=1pt,itemsep=0pt,parsep=0pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\newcommand{\resumeProjectItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\begin{document}
+%-----------HEADER-----------
+
+\begin{center}
+  {\LARGE \scshape Haren Gannarapu} \\[1pt]
+  \small Orlando, FL $\vert$ (954) 338-0067 $\vert$
+  \href{mailto:gannarapuharen@gmail.com}{\textcolor{black}{gannarapuharen@gmail.com}} $\vert$
+  \headerlink{https://hareng.dev}{hareng.dev} $\vert$
+  \headerlink{https://github.com/hareng8374}{github.com/hareng8374} $\vert$
+  \headerlink{https://www.linkedin.com/in/haren-gannarapu}{linkedin.com/in/haren-gannarapu}
+\end{center}
+\vspace{-6pt}
+
+%-----------EDUCATION-----------
+\section{Education}
+\resumeSubHeadingListStart
+  \resumeSubheading{University of Central Florida}{Orlando, FL}{Bachelor of Science in Computer Science}{Expected Dec 2027}
+  \resumeItemListStart
+    \resumeItem{\textbf{GPA: 3.8} $|$ Dean's List (All Semesters) $|$ Bright Futures Scholar}
+    \resumeItem{Coursework: Data Structures \& Algorithms, Operating Systems, Systems Software, Object-Oriented Programming, NLP}
+    \resumeItem{Activities: \textbf{AI@UCF} --- Vice President (Fall 2026), \textbf{KnightHacks} --- Operations Team}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+\resumeSubHeadingListStart
+  \resumeSubheading{Software Engineering Intern}{Aug 2026 -- Present}{Nebo Agency $|$ PHP, MySQL/MariaDB, Docker, WSL2, Azure Front Door, SCSS, Gulp}{Remote}
+  \resumeItemListStart
+    \resumeItem{Cut page loads \textbf{15x} (26s to 1.7s) by profiling a Dockerized \textbf{PHP/MariaDB} stack to separate filesystem I/O (\textbf{24.3s}) from database latency (\textbf{0.05s} across 96 queries), then migrating the bind mount to a WSL2 ext4 volume.}
+    \resumeItem{Diagnosed a silent production deploy failure behind an \textbf{Azure Front Door} CDN by analyzing cache headers against origin, isolating the fault to the SFTP target environment and unblocking the backend team.}
+    \resumeItem{Ship full-stack features across \textbf{100 components} on \textbf{2 retainer clients'} production sites --- server-rendered PHP, MySQL-backed content models, SCSS/Gulp build pipelines --- via feature branches and staging review.}
+  \resumeItemListEnd
+  \resumeSubheading{Software Engineering Intern}{Jun 2026 -- Aug 2026}{Carnival Corporation (Princess Cruises) $|$ Java, Spring Boot, Python, Azure OpenAI, Atlassian Rovo, MCP}{Fort Lauderdale, FL}
+  \resumeItemListStart
+    \resumeItem{Built a Retrieval-Augmented Generation (RAG) assistant for \textbf{100+ engineers}: wrote the Python retrieval service grounding \textbf{Azure OpenAI} answers in Jira and Confluence, the \textbf{Spring Boot API} on Azure, secret redaction, and hallucination tests.}
+    \resumeItem{Architected an event-driven agentic pipeline on \textbf{Atlassian Rovo} that matches new Jira bugs to past fixes by root cause and auto-drafts Confluence runbooks; \textbf{14 adversarial test tickets} caught 4 bugs, incl. 2 redaction failures.}
+    \resumeItem{Built a Microsoft Copilot Studio agent that queries live Jira and Confluence from Teams over Atlassian's Model Context Protocol (MCP) server with secret redaction, after a 68-bug audit found only \textbf{1 in 8} past fixes reusable.}
+  \resumeItemListEnd
+  \resumeSubheading{Machine Learning Engineering Intern}{May 2025 -- Aug 2025}{Oasis (AI Travel Startup) $|$ Python, PyTorch Geometric, NVIDIA Triton, AWS EKS, KEDA, SQS}{}
+  \resumeItemListStart
+    \resumeItem{Cut the nightly ML pipeline from \textbf{45 to 8 minutes} by swapping full PostgreSQL dumps for incremental loads and S3 caching.}
+    \resumeItem{Built a heterogeneous GraphSAGE graph neural network (GNN) in PyTorch Geometric for link-prediction recommendations on a \textbf{2M-edge} user--post--tag graph, served in real time via NVIDIA Triton.}
+    \resumeItem{Configured KEDA autoscaling on SQS queue depth to scale Triton inference pods on Amazon EKS from \textbf{2 to 20 replicas}, matching GPU capacity to traffic instead of provisioning for peak.}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+\resumeSubHeadingListStart
+  \resumeProjectHeading
+    {\href{https://github.com/Akhileshreddym/Haptik}{\underline{\textbf{Paradise}}} --- \emph{ShellHacks 2026} $|$ \emph{Node.js, ONNX Runtime, YOLOv10, Grounding DINO, CLIP, Depth Anything, WebHID}}
+    {Sep 2026}
+  \resumeProjectItemListStart
+    \resumeItem{Won \textbf{3rd Place Overall} at ShellHacks 2026, Florida's largest hackathon, among \textbf{300+ projects} and \textbf{1,400+ hackers}.}
+    \resumeItem{Built touch-only navigation for DeafBlind users that walks them to a Waymo and steers their hand onto its door handle through Joy-Con haptics, fusing \textbf{5 computer vision models} across a chest phone and laptop in a \textbf{50ms} guidance loop.}
+    \resumeItem{Trained a Waymo classifier (logistic regression on frozen CLIP ViT-B/32 embeddings) on \textbf{779 vehicle crops} incl. look-alike robotaxis, reaching \textbf{\textasciitilde{}90\% recall} with \textbf{4 false positives in 654} negatives under 5-fold grouped cross-validation.}
+    \resumeItem{Converted relative Depth Anything V2 output into metric obstacle stops at \textbf{80ms/frame} with a RANSAC floor-plane fit, and cut open-vocabulary detection from \textbf{14s to 1.2s/frame} by moving Grounding DINO to ONNX Runtime workers.}
+  \resumeProjectItemListEnd
+  \resumeProjectHeading
+    {\href{https://github.com/hareng8374/ReplAI}{\underline{\textbf{ReplAI}}} --- \emph{Hack The Bay 2026} $|$ \emph{Next.js, TypeScript, Gemini 2.5 Flash, LiveKit, MediaPipe, Three.js}}
+    {Apr 2026}
+  \resumeProjectItemListStart
+    \resumeItem{Won \textbf{1st Place} in the \textbf{Zenardy Challenge} and \textbf{Best Use of Gemini}, and placed \textbf{3rd Overall}.}
+    \resumeItem{Held speech-to-feedback latency under \textbf{300ms} in a browser conversation coach fusing Gemini 2.5 Flash dialogue, MediaPipe Face Mesh eye-contact tracking, and LiveKit prosody analysis over a shared event emitter with LLM backpressure.}
+    \resumeItem{Flagged adverse parties with \textbf{sub-second} detection via a real-time conflict-of-interest pipeline that used Named Entity Recognition (NER) on live transcripts and matched parties to a firm database with a hybrid Levenshtein + Jaccard scorer.}
+  \resumeProjectItemListEnd
+  \resumeProjectHeading
+    {\href{https://github.com/hareng8374/Revive}{\underline{\textbf{Revive}}} --- \emph{HackaBull VII 2026} $|$ \emph{Next.js, TypeScript, Arduino, FSR 406, Gemini, ElevenLabs, Web Serial}}
+    {Apr 2026}
+  \resumeProjectItemListStart
+    \resumeItem{Won \textbf{Best Use of ElevenLabs} at HackaBull VII among \textbf{58 competing projects}.}
+    \resumeItem{Suppressed \textbf{30\%+} of false compression counts in a CPR coaching device by streaming \textbf{200Hz} force-sensor data over Web Serial into a ring buffer with dual-threshold hysteresis in Arduino firmware.}
+    \resumeItem{Held compression-to-coaching latency under \textbf{2 seconds} by orchestrating \textbf{3 specialized Gemini agents} (patient physiology, AHA-target evaluation, scenario progression) behind an event bus batching every \textbf{500ms}.}
+  \resumeProjectItemListEnd
+\resumeSubHeadingListEnd
+
+%-----------SKILLS-----------
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}, itemsep=0pt, topsep=1pt, parsep=0pt]
+  \small
+  \item \textbf{Languages:} Java, Python, TypeScript, JavaScript, PHP, C, C++, SQL, HTML/CSS (SCSS)
+  \item \textbf{AI/ML:} PyTorch, PyTorch Geometric, Large Language Models (LLMs), RAG, Computer Vision, ONNX Runtime, Hugging Face
+  \item \textbf{Frameworks:} Spring Boot, React, Next.js, Node.js, Express, FastAPI, WordPress, jQuery, Three.js
+  \item \textbf{Cloud \& DevOps:} AWS (EKS, S3, EC2, RDS, SQS, VPC, IAM), Azure, Kubernetes, Docker, Terraform, CI/CD (GitHub Actions)
+  \item \textbf{Tools:} Git, Linux, PostgreSQL, MySQL/MariaDB, REST APIs, Prometheus, Grafana, Jira, Confluence, MCP
+\end{itemize}
+
+\end{document}
