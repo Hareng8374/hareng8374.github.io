@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paradise: Navigating by Touch When You Can't See or Hear | Haren Gannarapu</title>
+<meta name="description" content="How we built haptic navigation for DeafBlind users at ShellHacks 2026, took 3rd overall out of 300+ projects, and everything that broke on the way.">
+<meta property="og:title" content="Paradise: Navigating by Touch When You Can't See or Hear">
+<meta property="og:description" content="We blindfolded our teammate, put headphones on him, and sent him across a parking garage at midnight with two Joy-Cons. He found the car. Mostly.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hareng.dev/blog/paradise.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="blog.css"><link rel="stylesheet" href="../src/components/forest.css">
+</head>
+<body>
+<canvas id="forestCanvas" aria-hidden="true"></canvas>
+<div class="canopy-light" aria-hidden="true"></div>
+<div class="forest-layer" aria-hidden="true">
+<svg class="treeline" viewBox="0 0 1500 220" preserveAspectRatio="xMidYMax meet" fill="currentColor"><path d="M0 220 L-40 202 L-15 119 L10 202 L-5 206 L28 143 L61 206 L36 206 L68 144 L101 206 L70 200 L94 109 L117 200 L96 200 L135 110 L174 200 L139 204 L174 129 L210 204 L193 198 L223 95 L254 198 L240 207 L280 146 L320 207 L288 205 L312 136 L337 205 L317 193 L343 72 L369 193 L352 196 L382 89 L411 196 L391 206 L414 144 L438 206 L418 196 L449 85 L480 196 L455 197 L487 94 L518 197 L493 194 L530 75 L566 194 L536 198 L569 95 L602 198 L585 195 L613 81 L641 195 L629 205 L659 139 L690 205 L673 205 L705 136 L737 205 L707 196 L745 87 L783 196 L758 192 L786 67 L815 192 L798 197 L832 94 L866 197 L841 193 L883 70 L925 193 L895 196 L919 87 L942 196 L928 196 L971 89 L1014 196 L991 203 L1021 123 L1051 203 L1033 207 L1064 148 L1096 207 L1068 205 L1092 139 L1115 205 L1102 205 L1129 138 L1156 205 L1136 192 L1159 67 L1183 192 L1166 198 L1206 98 L1247 198 L1225 193 L1253 68 L1281 193 L1260 201 L1301 116 L1341 201 L1323 205 L1348 136 L1374 205 L1352 203 L1385 128 L1417 203 L1396 203 L1418 125 L1440 203 L1424 201 L1457 115 L1491 201 L1476 196 L1508 84 L1541 196 L1520 196 L1543 86 L1567 196 L1555 194 L1596 76 L1636 194 L1500 220 L1500 220 Z"/></svg>
+<svg class="vine vine-l" viewBox="0 0 132 900" fill="none" aria-hidden="true">
+<path d="M46 0c14 90-16 140 2 226s34 120 10 206 20 142 2 220-6 140-6 248" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<g fill="currentColor">
+<ellipse cx="24" cy="118" rx="22" ry="11" transform="rotate(-24 24 118)"/>
+<ellipse cx="74" cy="196" rx="20" ry="10" transform="rotate(22 74 196)"/>
+<ellipse cx="22" cy="286" rx="23" ry="11" transform="rotate(-18 22 286)"/>
+<ellipse cx="76" cy="372" rx="19" ry="10" transform="rotate(26 76 372)"/>
+<ellipse cx="24" cy="462" rx="22" ry="11" transform="rotate(-22 24 462)"/>
+<ellipse cx="72" cy="548" rx="20" ry="10" transform="rotate(20 72 548)"/>
+<ellipse cx="26" cy="640" rx="21" ry="10" transform="rotate(-20 26 640)"/>
+<ellipse cx="74" cy="726" rx="19" ry="9" transform="rotate(24 74 726)"/>
+<ellipse cx="28" cy="812" rx="20" ry="10" transform="rotate(-18 28 812)"/>
+</g></svg>
+<svg class="vine vine-r" viewBox="0 0 132 900" fill="none" aria-hidden="true">
+<path d="M46 0c14 90-16 140 2 226s34 120 10 206 20 142 2 220-6 140-6 248" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<g fill="currentColor">
+<ellipse cx="24" cy="92" rx="21" ry="10" transform="rotate(-20 24 92)"/>
+<ellipse cx="74" cy="174" rx="19" ry="10" transform="rotate(24 74 174)"/>
+<ellipse cx="22" cy="262" rx="22" ry="11" transform="rotate(-22 22 262)"/>
+<ellipse cx="76" cy="350" rx="20" ry="10" transform="rotate(20 76 350)"/>
+<ellipse cx="24" cy="440" rx="21" ry="10" transform="rotate(-24 24 440)"/>
+<ellipse cx="72" cy="528" rx="19" ry="9" transform="rotate(22 72 528)"/>
+<ellipse cx="26" cy="618" rx="22" ry="11" transform="rotate(-18 26 618)"/>
+<ellipse cx="74" cy="704" rx="20" ry="10" transform="rotate(26 74 704)"/>
+</g></svg>
+</div>
+
+
+<div class="ambient"></div>
+
+<nav class="blog-nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">Haren G.</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="post-main">
+  <div class="post-container">
+
+    <div class="post-back">
+      <a href="index.html" class="back-link">← Back to blog</a>
+    </div>
+
+    <header class="post-header">
+      <div class="post-card-meta">
+        <time class="post-date">Sep 2026</time>
+        <div class="tags">
+          <span class="tag">hackathon</span>
+          <span class="tag">accessibility</span>
+          <span class="tag">computer vision</span>
+          <span class="tag">ShellHacks 2026</span>
+        </div>
+      </div>
+      <h1>Paradise: Navigating by Touch When You Can't See or Hear</h1>
+      <p class="post-lede">We spent the weekend blindfolding our teammate, putting noise-cancelling headphones on him, and sending him across a parking garage at midnight with two Joy-Cons strapped to his wrists. He found the car. Mostly.</p>
+    </header>
+
+    <div class="prose">
+
+      <p>It's midnight at ShellHacks and we're in a parking garage. My teammate is standing there blindfolded with noise-cancelling headphones on and a Nintendo Joy-Con strapped to each wrist. I'm about forty feet away, next to a car. Nobody is allowed to say anything, because the entire point is that he can't hear us.</p>
+
+      <p>His left wrist buzzes. He turns left. Both wrists buzz. He starts walking. Thirty seconds later his hand is on the car door.</p>
+
+      <p>That's Paradise. It took 3rd overall at ShellHacks 2026 out of 300+ projects and 1,400+ hackers, which lowkey still hasn't sunk in. But the demo is the easy part to write about. I want to talk about the stuff that almost didn't work.</p>
+
+      <hr>
+
+      <h2>The gap nobody builds for</h2>
+
+      <p>About 50,000 Americans are fully DeafBlind. Around 2.4 million have serious vision and hearing loss together.</p>
+
+      <p>Here's the part that got me. Almost every navigation app built for blind people <em>talks</em> to you. Almost every app built for deaf people <em>shows</em> you something. If both of those are out, you don't get a worse version of the app. You get nothing. The whole category just stops.</p>
+
+      <p>So we set one rule: no sound, no screen. Everything arrives through skin.</p>
+
+      <hr>
+
+      <h2>The entire language is five signals</h2>
+
+      <ul>
+        <li>Left wrist buzzes &rarr; turn left</li>
+        <li>Right wrist buzzes &rarr; turn right</li>
+        <li>Both wrists buzz &rarr; walk forward</li>
+        <li>Double buzz on both &rarr; you're there</li>
+        <li>Nothing &rarr; don't walk</li>
+      </ul>
+
+      <p>That's it. You can learn it in about thirty seconds, which we tested on basically everyone who walked past our table.</p>
+
+      <p>The non-obvious decision is that we built <em>more</em> patterns and then deliberately turned them off. There's code in there for an obstacle stop (three pulses), a searching pattern, a found-it pattern, a choice echo that pulses N times. All of it works. All of it is switched off.</p>
+
+      <p>Because the second you have eight signals instead of five, the person has to stop and think. And a vibration you have to decode is worse than no vibration at all when you're standing in a parking lot. A small vocabulary is faster to learn and much harder to confuse. That was probably our best call of the weekend, and it was a call to <em>delete</em> things.</p>
+
+      <hr>
+
+      <h2>Why Nintendo Joy-Cons</h2>
+
+      <p>People asked this constantly and the answer is boring: two independent rumble motors, Bluetooth, physical buttons, and you can buy them today at Target. A real product would be a custom wristband. We had a weekend.</p>
+
+      <p>The annoying part is that driving them from a browser needs WebHID, which is Chrome-only. iPhone Safari can't do it. So the system ended up split across three devices: an iPhone strapped to your chest doing the seeing, a MacBook in a backpack doing the heavy thinking and running the Joy-Cons, and a third phone acting as a beacon that pretends to be the car. There's no public Waymo API, so somebody just has to stand there holding a phone.</p>
+
+      <p>It is not elegant. It worked.</p>
+
+      <hr>
+
+      <h2>The bug that steered us into a wall</h2>
+
+      <p>This one cost us hours and it's my favorite thing I learned all weekend.</p>
+
+      <p>GPS tells you where north is. The iPhone compass also tells you where north is. They are not the same north.</p>
+
+      <p>GPS uses <strong>true north</strong>, the actual top of the planet. A compass points at <strong>magnetic north</strong>, which is somewhere else entirely, and how far off it is depends on where you're standing. In Miami it's about 6.8 degrees.</p>
+
+      <p>Six degrees sounds like nothing. It isn't. Over 40 meters, 6.8 degrees puts you about 5 meters off target, which is a lane of traffic. And because the error is <em>consistent</em>, it doesn't look like a bug. It looks like the system confidently walking you slightly wrong, every single time, forever. Those are the worst ones to find, because nothing ever crashes.</p>
+
+      <p>The fix is one number in one file. Finding it is the entire job.</p>
+
+      <hr>
+
+      <h2>Using the floor as a ruler</h2>
+
+      <p>Next problem. We're running YOLO, which looks at a camera frame and draws boxes around things it recognizes. It knows 80 everyday objects: person, chair, bottle, car.</p>
+
+      <p>Walls are not on that list. Neither are poles, or the concrete pillar in the middle of the garage. YOLO will happily walk you straight into a wall, because as far as it's concerned there is nothing there.</p>
+
+      <p>So we added a depth model, Depth Anything V2, which guesses how far away every single pixel is. That solves it, except for one thing: a single camera has no sense of <em>scale</em>. It can tell you pixel A is farther than pixel B. It cannot tell you whether you're looking at a real hallway or a very good photo of a hallway. And iPhones don't let web pages touch the LiDAR sensor, so we couldn't cheat our way out.</p>
+
+      <p>What we did instead was find the floor and use the floor as the ruler. The system fits a flat plane to the ground, and once you know where the floor is and roughly how high the camera sits above it, "farther than" turns into actual meters. Anything between 12cm and 2.1m above the floor, inside a narrow corridor directly ahead, between 0.3 and 4 meters out, counts as an obstacle. Stop at 0.8m. Walk around it between 0.8 and 2.5m.</p>
+
+      <p>The floor trick works well. It also means if you type your chest height in wrong, every distance in the entire system is wrong, which is a genuinely fun thing to debug at 3am.</p>
+
+      <hr>
+
+      <h2>We had to train our own Waymo detector</h2>
+
+      <p>Finding a car is easy. Finding <em>the</em> car is not.</p>
+
+      <p>First approach was open-vocabulary detection, where you literally type "Waymo sensor dome" in plain English and the model finds it. Grounding DINO does this and it's very cool.</p>
+
+      <p>It also scored car side mirrors higher than actual sensor domes. Repeatedly. A mirror is a shiny rounded thing sticking off a car, so you can see how it got there. But "you can see how it got there" doesn't help a blindfolded person walking toward the wrong vehicle.</p>
+
+      <p>So we trained our own. We took CLIP, which turns an image into a list of 512 numbers describing what's in it, and put a tiny classifier on top that learns which combinations of those numbers mean Waymo. Training data was 125 photos of Waymos (the Jaguar I-Pace, the Pacifica, the Zeekr) and 654 photos of other cars, deliberately including look-alikes.</p>
+
+      <p>It lands at <strong>89% recall and 96% precision</strong>, about 4.7 false positives across 654 non-Waymos, and it runs in 11.6ms, which is faster than everything else in the stack by a mile.</p>
+
+      <p>The detail I'm actually proud of is the validation. We grouped the cross-validation folds <em>by source photo</em>, so two crops from the same original image can never land on both sides of the split. Without that, the model gets to see a corner of a test image during training, and your numbers come out beautiful and completely fake. Grouping cost us a couple of points on paper and made the number mean something. Tbh that's the part I'd want someone to ask me about.</p>
+
+      <hr>
+
+      <h2>Stuff that is still broken</h2>
+
+      <p>I'd rather write this section than skip it.</p>
+
+      <p><strong>The door handle finder never fires.</strong> We built it. Grounding DINO loads, it's sitting right there in the repo, and it has never once run in a real session. The car search hands off to close-range detection at 25 meters, but the handle detector doesn't open its window until 4 meters. The handoff happens before the thing that needs it is allowed to start. Pure sequencing bug, and we ran out of hours.</p>
+
+      <p><strong>Hand-reaching is turned off.</strong> There's a flag in the code, <code>REACH = false</code>. MediaPipe hand tracking is wired up and would guide your actual arm onto the handle using higher and lower buzzes for up and down. Disabled. Arrival just ends guidance and you're on your own for the last 30cm, which is exactly the part that's hardest.</p>
+
+      <p><strong>Silence means too many things.</strong> This is the design flaw that bothers me most. Right now "nothing" means: waiting, stopped, obstacle ahead, signal lost, and finished. Five different states, one sensation. If you're DeafBlind, the device going quiet should never be ambiguous, and right now it completely is.</p>
+
+      <p><strong>The depth model can't see the dangerous stuff.</strong> Low curbs around 15cm, steps going down, holes, glass doors, overhangs. All invisible to it. Which is to say, the things most likely to actually hurt someone are the things it's worst at.</p>
+
+      <p><strong>We have not tested this with a single DeafBlind user.</strong> Everything so far is simulations, photo tests, benchmarks, and us blindfolding each other in a parking garage. That makes it a prototype, not a product, and I don't want to describe it as anything more than that.</p>
+
+      <hr>
+
+      <h2>The conversation that changed it</h2>
+
+      <p>One of the judges, Anudeep Goud, spent a while pushing us on who we were actually building for. Not in a gotcha way. He just kept asking questions we didn't have clean answers to. Who's holding the beacon phone in real life. What happens when the device goes quiet and you don't know why. Whether a sighted person's idea of "arrived" is the same as arriving when you can't see anything.</p>
+
+      <p>We changed how we talked about the project after that, and honestly how we thought about it. Best fifteen minutes of the weekend.</p>
+
+      <hr>
+
+      <h2>The billboard</h2>
+
+      <p>On the drive down to ShellHacks we passed a van that said Paradise Garage Doors. About a mile later, a billboard: "Paradise is only 10 minutes away."</p>
+
+      <p>We hadn't named it yet. We took it as a sign. Turned out to be right.</p>
+
+      <p>Built with Akhilesh Reddy Mallu, Devam Dholakia and Pranavsai Gandikota. Three hackathons, three wins this year, and I genuinely could not have done any of them on my own.</p>
+
+      <p>There's a <a href="https://www.youtube.com/watch?v=BVIRTrum1OM" target="_blank" rel="noopener noreferrer">demo video</a>, and the full writeup is <a href="https://devpost.com/software/paradise-n0i7of" target="_blank" rel="noopener noreferrer">on Devpost</a>.</p>
+
+    </div>
+
+    <footer class="post-footer">
+      <a href="index.html" class="back-link">&larr; Back to blog</a>
+      <a href="https://github.com/Akhileshreddym/Paradise" class="repo-link" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        View on GitHub
+      </a>
+    </footer>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Haren Gannarapu · <a href="/">hareng.dev</a></p>
+  </div>
+</footer>
+
+<script src="../src/components/forest.js" defer></script>
+</body>
+</html>
