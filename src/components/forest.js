@@ -49,8 +49,10 @@
      clientY would be measuring from the wrong origin. */
   var ptr = { x: -1e4, y: -1e4, vx: 0, vy: 0, on: false };
   var gusts = [];
-  var PTR_R = 170;          // leaves feel the cursor inside this radius
-  var PTR_G2 = 230 * 230;   // grass radius, pre-squared for the per-blade test
+  var PTR_R = 300;          /* leaves feel the cursor inside this radius.
+                               At 170 the harness caught 1 leaf in 25 -- the
+                               effect was real and invisible. */
+  var PTR_G2 = 300 * 300;   // grass radius, pre-squared for the per-blade test
   var GUST_LIFE = 1.5;      // seconds for a gust ring to cross and fade
 
   function onMove(e) {
@@ -145,7 +147,7 @@
                    s: rand(0.07, 0.22), d: Math.random() * 6.283, a: rand(0.10, 0.40) });
     }
     flies = [];
-    var fn = Math.round(Math.min(34, Math.max(12, W / 48)) * (LONGFORM ? 0.5 : 1));
+    var fn = Math.round(Math.min(64, Math.max(26, W / 24)) * (LONGFORM ? 0.5 : 1));
     var HUES = ['#2F7A5C', '#2F7A5C', '#1E6354', '#4C9A6E', '#B8894A', '#8FB89A'];
     for (var f = 0; f < fn; f++) {
       flies.push({ x: Math.random() * W, y: rand(-H * 0.6, H),
@@ -178,7 +180,7 @@
          screen. The vertical term is scaled down so passing above the grass
          still disturbs it, which is what it looks like from overhead. */
       if (ptr.on) {
-        var gdx = b.x - ptr.x, gdy = (b.base - b.len - ptr.y) * 0.75;
+        var gdx = b.x - ptr.x, gdy = (b.base - b.len - ptr.y) * 0.42;
         var gd2 = gdx * gdx + gdy * gdy;
         if (gd2 < PTR_G2) {
           var gf = 1 - gd2 / PTR_G2;
@@ -230,9 +232,9 @@
         var ld = Math.sqrt(ldx * ldx + ldy * ldy);
         if (ld < PTR_R) {
           var lf = 1 - ld / PTR_R, inv = 1 / (ld + 0.001);
-          L.x += ldx * inv * lf * 2.8 + ptr.vx * lf * 0.36;
-          L.y += ldy * inv * lf * 2.1 + ptr.vy * lf * 0.36;
-          L.rot += lf * 0.07;
+          L.x += ldx * inv * lf * 5.2 + ptr.vx * lf * 0.55;
+          L.y += ldy * inv * lf * 3.8 + ptr.vy * lf * 0.55;
+          L.rot += lf * 0.12;
         }
       }
       var lg = gustAt(now, L.x, L.y);

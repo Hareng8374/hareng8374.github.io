@@ -314,3 +314,45 @@ html.forest-longform .canopy-light{opacity:.6}
 @media (prefers-reduced-motion:reduce){
   .lit-layer{ display:none; }
 }
+
+/* ── Winning the transform back ──────────────────────────────────────────
+   The sheet contains, among several passes of hover styling:
+       .project-card:hover { transform: none !important; }
+       .blog-card:hover    { transform: none !important; }
+   !important beats an inline declaration, so interact.js was computing a
+   tilt every frame and having it thrown away on precisely the cards worth
+   tilting. These rules are also !important and later in the cascade, and
+   they read the value the script writes, so the two stop fighting.
+
+   --tilt falls back to none, which is exactly the resting state. */
+.project-card:hover,.blog-card:hover,.post-card:hover,
+.experience-card:hover,.about-card:hover,.stat-item:hover,
+.skill-row:hover,.game-box:hover{
+  transform:var(--tilt,none) !important;
+}
+/* The lift those :hover rules used to give is folded into --tilt itself, so
+   dropping them loses nothing. Transition stays off transform: the script
+   eases it on a rAF and a CSS transition on the same property adds lag. */
+.project-card,.blog-card,.post-card,.experience-card,
+.about-card,.stat-item,.skill-row,.game-box{
+  transform:var(--tilt,none);
+}
+
+.cta-button,.resume-button,.project-link,.contact-link,
+.filter-pill,.repo-link,.read-more{
+  transform:var(--mag,none);
+}
+.cta-button:hover,.resume-button:hover,.project-link:hover,
+.contact-link:hover,.filter-pill:hover,.repo-link:hover,.read-more:hover{
+  transform:var(--mag,none) !important;
+}
+
+/* The base sheet transitions transform at 0.42s on cards. interact.js already
+   eases transform on a rAF, so a CSS transition on the same property runs a
+   second, slower interpolation on top of the first -- the tilt arrives late
+   and keeps drifting after the cursor stops. Everything else still animates;
+   transform is simply handed to the script. */
+.project-card,.blog-card,.post-card,.experience-card,
+.about-card,.stat-item,.skill-row,.game-box{
+  transition-property:box-shadow,border-color,background,color !important;
+}

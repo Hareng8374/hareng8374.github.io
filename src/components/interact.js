@@ -30,14 +30,34 @@
      refuse to tilt. Bake the final frame into the element and drop the
      animation, which hands transform back to us. Base CSS already has these at
      opacity 1, so there is nothing to flash. */
-  function settle(el) {
+  function settle(el, force) {
+    /* A CSS animation outranks an inline style, so while one is alive -- and
+       these fill -- neither style.transform nor a var() the CSS reads can
+       paint. The Web Animations API cannot stand it down either: cancelling a
+       CSS animation whose animation-name is still set just restarts it, which
+       is observable as getAnimations() going 1 -> 4. Removing the declaration
+       is the only thing that works, and it is safe here because these are
+       one-shot entrances that have already played by the time you hover. */
+    if (force) el.style.animation = 'none';
+
     var as = el.getAnimations();
     for (var i = 0; i < as.length; i++) {
       var a = as[i];
-      if (a.playState === 'finished') {
-        try { a.commitStyles(); } catch (e) { /* cross-origin or detached */ }
-        a.cancel();
-      }
+      try {
+        /* A WAAPI animation outranks even !important CSS while it is alive,
+           and these fill forever -- so a card hovered mid-reveal would stay
+           pinned at translateY(30px) with the tilt silently ignored. On a
+           deliberate hover, snap the reveal to its end and bake it; you are
+           looking straight at the card, so finishing early is invisible and
+           far better than a dead card. finish() throws on an infinite
+           animation, hence the guard. */
+        if (a.playState !== 'finished') {
+          if (!force) continue;
+          a.finish();
+        }
+        a.commitStyles();
+      } catch (e) { continue; }   // detached, infinite, or cross-origin
+      a.cancel();
     }
   }
 
@@ -84,14 +104,24 @@
     var st = {
       el: el, x: 0, y: 0, z: 0, tx: 0, ty: 0, tz: 0,
       apply: function (s) {
-        s.el.style.transform =
+        /* Written to a custom property, not to style.transform. The sheet has
+           `.project-card:hover{transform:none!important}` (and the same for
+           .blog-card), and !important beats an inline declaration -- the tilt
+           was being set every frame and thrown away on exactly the cards most
+           worth tilting. The CSS reads var(--tilt) inside its own !important
+           rule, so the cascade stops fighting us.
+
+           translateY keeps the lift those :hover rules used to provide, since
+           var(--tilt) now replaces them outright. */
+        s.el.style.setProperty('--tilt',
           'perspective(900px) rotateX(' + s.x.toFixed(3) + 'deg) rotateY(' +
-          s.y.toFixed(3) + 'deg) translateZ(' + s.z.toFixed(2) + 'px)';
+          s.y.toFixed(3) + 'deg) translateY(' + (-0.7 * s.z).toFixed(2) +
+          'px) translateZ(' + s.z.toFixed(2) + 'px)');
       }
     };
 
     el.addEventListener('pointerenter', function () {
-      settle(el);
+      settle(el, true);
       el.style.willChange = 'transform';
       el.classList.add('is-lit');
     });
@@ -129,8 +159,8 @@
     var st = {
       el: el, x: 0, y: 0, z: 0, tx: 0, ty: 0, tz: 0,
       apply: function (s) {
-        s.el.style.transform = 'translate(' + s.x.toFixed(2) + 'px,' +
-                               s.y.toFixed(2) + 'px)';
+        s.el.style.setProperty('--mag', 'translate(' + s.x.toFixed(2) + 'px,' +
+                               s.y.toFixed(2) + 'px)');
       }
     };
     el.__mag = st;
@@ -153,7 +183,7 @@
       // cheap reject before the sqrt: most buttons are nowhere near the cursor
       if (mx < r.left - MAG_R || mx > r.right + MAG_R ||
           my < r.top - MAG_R || my > r.bottom + MAG_R) {
-        if (s.tx || s.ty) { s.tx = s.ty = 0; settle(el); join(s); }
+        if (s.tx || s.ty) { s.tx = s.ty = 0; join(s); }
         continue;
       }
       var cxp = r.left + r.width / 2, cyp = r.top + r.height / 2;
@@ -161,7 +191,9 @@
       var d = Math.sqrt(dx * dx + dy * dy);
       var reach = Math.max(r.width, r.height) / 2 + MAG_R;
       var f = Math.max(0, 1 - d / reach);
-      settle(el);
+      /* Forced once, on first approach: buttons inherit an entrance animation
+         from .cta-buttons, and the same cascade problem applies. */
+      if (!s.freed) { settle(el, true); s.freed = true; }
       el.style.willChange = 'transform';
       s.tx = dx * MAG_PULL * f;
       s.ty = dy * MAG_PULL * f;
