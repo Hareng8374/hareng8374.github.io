@@ -265,7 +265,7 @@ html.forest-longform .canopy-light{opacity:.6}
    because ::before and ::after are already carrying borders and glows on
    project-card, experience-card and stat-item. */
 .project-card,.experience-card,.blog-card,.post-card,
-.about-card,.stat-item,.skill-row,.game-box{
+.about-card,.stat-item,.skill-row{
   position:relative;
   transform-style:preserve-3d;
 }
@@ -282,7 +282,7 @@ html.forest-longform .canopy-light{opacity:.6}
 .project-card>*:not(.lit-layer),.experience-card>*:not(.lit-layer),
 .blog-card>*:not(.lit-layer),.post-card>*:not(.lit-layer),
 .about-card>*:not(.lit-layer),.stat-item>*:not(.lit-layer),
-.skill-row>*:not(.lit-layer),.game-box>*:not(.lit-layer){
+.skill-row>*:not(.lit-layer){
   position:relative; z-index:1;
 }
 
@@ -327,14 +327,14 @@ html.forest-longform .canopy-light{opacity:.6}
    --tilt falls back to none, which is exactly the resting state. */
 .project-card:hover,.blog-card:hover,.post-card:hover,
 .experience-card:hover,.about-card:hover,.stat-item:hover,
-.skill-row:hover,.game-box:hover{
+.skill-row:hover{
   transform:var(--tilt,none) !important;
 }
 /* The lift those :hover rules used to give is folded into --tilt itself, so
    dropping them loses nothing. Transition stays off transform: the script
    eases it on a rAF and a CSS transition on the same property adds lag. */
 .project-card,.blog-card,.post-card,.experience-card,
-.about-card,.stat-item,.skill-row,.game-box{
+.about-card,.stat-item,.skill-row{
   transform:var(--tilt,none);
 }
 
@@ -353,6 +353,6 @@ html.forest-longform .canopy-light{opacity:.6}
    and keeps drifting after the cursor stops. Everything else still animates;
    transform is simply handed to the script. */
 .project-card,.blog-card,.post-card,.experience-card,
-.about-card,.stat-item,.skill-row,.game-box{
+.about-card,.stat-item,.skill-row{
   transition-property:box-shadow,border-color,background,color !important;
 }

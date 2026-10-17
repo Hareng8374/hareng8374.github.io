@@ -12,12 +12,28 @@
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!('getAnimations' in Element.prototype)) return;
 
+  /* .game-box is deliberately absent. It contains the shootaround canvas, and
+     the drag-to-shoot aiming reads clientX minus the canvas rect -- which is
+     only correct while the element is unrotated. Tilting it would quietly
+     skew every shot. */
   var CARDS = '.project-card,.experience-card,.blog-card,.post-card,' +
-              '.about-card,.stat-item,.skill-row,.game-box';
+              '.about-card,.stat-item,.skill-row';
   var MAGNETS = '.cta-button,.resume-button,.project-link,.contact-link,' +
                 '.filter-pill,.repo-link,.read-more';
 
-  var MAX_TILT = 6;      // degrees; past ~8 the text starts to look warped
+  /* Degrees. The home page is a showcase and can carry the full tilt; the
+     working pages -- projects, resume, experience -- are there to be read,
+     and the same angle on a wall of dense cards reads as restless rather
+     than alive. Past ~8 the text starts to look warped anywhere. */
+  var MAX_TILT = 6;
+  var MAX_TILT_QUIET = 2.2;
+  var LIFT = 6, LIFT_QUIET = 2.5;
+
+  // which page a card lives on decides how far it is allowed to move
+  function showy(el) {
+    var page = el.closest ? el.closest('.page') : null;
+    return !page || page.id === 'home';
+  }
   var MAG_R = 90;        // px: how close the cursor gets before a button leans
   var MAG_PULL = 0.32;   // fraction of the offset the button actually travels
 
@@ -103,6 +119,7 @@
 
     var st = {
       el: el, x: 0, y: 0, z: 0, tx: 0, ty: 0, tz: 0,
+      showy: showy(el),
       apply: function (s) {
         /* Written to a custom property, not to style.transform. The sheet has
            `.project-card:hover{transform:none!important}` (and the same for
@@ -134,9 +151,10 @@
       // the light tracks the raw pointer; the tilt is eased
       el.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
       el.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-      st.tx = (py - 0.5) * -2 * MAX_TILT;
-      st.ty = (px - 0.5) * 2 * MAX_TILT;
-      st.tz = 6;
+      var amp = st.showy ? MAX_TILT : MAX_TILT_QUIET;
+      st.tx = (py - 0.5) * -2 * amp;
+      st.ty = (px - 0.5) * 2 * amp;
+      st.tz = st.showy ? LIFT : LIFT_QUIET;
       join(st);
     }, { passive: true });
 
