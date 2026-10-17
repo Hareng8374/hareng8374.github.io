@@ -1,0 +1,433 @@
+/* ===== EPIC =====
+   A firelit re-skin of the whole site: basalt and gold instead of paper and
+   forest green. Loaded AFTER the inline <style> in the page, which matters --
+   forest.css once shipped linked before it and silently lost every override.
+
+   The site is entirely custom-property driven, so the palette block below
+   re-themes every section at once. Everything after it is for components that
+   hardcoded a light-theme colour and therefore cannot follow a variable.
+
+   No asset here is traced from or sampled out of any film. The look is a
+   palette (molten gold on basalt), a light rule (warm from below, cold from
+   above) and a motion rule (weight, not bounce). */
+
+:root{
+  /* ground: basalt, warm-shifted so it sits under gold rather than fighting it */
+  --paper:#15110C;   --paper-2:#1B1610;  --surface:#1F1912;  --surface-2:#171209;
+  --rule:#3A2E1E;    --rule-2:#4E3C25;
+
+  /* text: bone and parchment. 14.5:1 on --paper, so the dark theme is not a
+     legibility downgrade the way the first dark cards were. */
+  --ink:#EDE1CA;     --ink-deep:#FFF6E4;  --ink-mute:#B3A58A;
+  --ink-figure:#EDE1CA;
+  --text:#EDE1CA;    --text-dim:#B3A58A;  --text-faint:#8A7D69;
+
+  /* one accent, molten gold, with an ember second for heat */
+  --gold:#D4A24C;    --gold-bright:#F0D28A;  --gold-deep:#8A6424;
+  --ember:#E8703A;   --ember-deep:#C9502A;   --blood:#8E2A1E;
+  --accent:#D4A24C;  --accent-wash:rgba(212,162,76,.10);
+
+  --bg-0:#15110C; --bg-1:#1A150E; --bg-2:#201A12; --bg-3:#2A2217;
+  --line:rgba(212,162,76,.16); --line-strong:rgba(212,162,76,.34);
+
+  /* the base sheet uses --emerald* as its accent family; alias them to gold so
+     every button, pill and underline follows without touching the base rules */
+  --emerald:#D4A24C; --emerald-bright:#F0D28A; --emerald-soft:#E8C06A;
+  --emerald-deep:#8A6424; --emerald-glow:rgba(212,162,76,.16);
+
+  /* forest leftovers, remapped so any stray reference lands in-palette */
+  --forest:#2A2217; --forest-2:#3A2E1E; --forest-3:#4E3C25;
+  --moss:#8A6424;   --sage:#B3A58A;     --bark:#6B4A28;
+
+  color-scheme:dark;
+}
+
+/* ── Ground ──────────────────────────────────────────────────────────────
+   A flat fill reads as a dark rectangle. Two very wide, very low-opacity
+   radials put a warm floor-up glow and a cold ceiling, which is what makes it
+   read as a lit room instead of a black page. */
+body{
+  background:
+    radial-gradient(120% 70% at 50% 108%, rgba(232,112,58,.16) 0%, rgba(232,112,58,0) 60%),
+    radial-gradient(100% 60% at 50% -10%, rgba(120,150,190,.07) 0%, rgba(120,150,190,0) 55%),
+    var(--paper) !important;
+  color:var(--text);
+}
+
+#epicCanvas{
+  position:fixed; inset:0; width:100%; height:100%;
+  pointer-events:none; z-index:5;
+}
+html.epic-longform #epicCanvas{
+  position:absolute; top:auto; bottom:0; left:0; right:0;
+  height:200px; width:100%;
+}
+html.epic-longform .blog-main,
+html.epic-longform .post-main{ padding-bottom:168px; }
+
+/* ── Backdrop: cliff, falls, hanging braziers ────────────────────────────
+   Hand-drawn SVG in the page, parked behind the content. The cliff is a flat
+   silhouette on purpose: detail here competes with the text, and the scene
+   only has to suggest depth, not render it. */
+.epic-layer{
+  position:fixed; inset:0; z-index:1;
+  pointer-events:none; overflow:hidden;
+}
+.epic-cliff{
+  position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+  width:max(1500px,104vw); height:auto; color:#0D0A07;
+  opacity:.9;
+}
+.epic-cliff-far{ color:#1A1410; opacity:.55; bottom:4%; width:max(1700px,118vw); }
+.epic-falls{
+  position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+  width:max(1500px,104vw); height:auto; opacity:.5; mix-blend-mode:screen;
+}
+.epic-falls .fall{ animation:fall-drift 9s linear infinite; }
+.epic-falls .fall-b{ animation-duration:13s; animation-delay:-4s; }
+@keyframes fall-drift{ from{transform:translateY(-6%)} to{transform:translateY(6%)} }
+
+/* A warm wash that breathes, so the whole page has a slow pulse like
+   firelight rather than sitting at one fixed brightness. */
+.epic-heat{
+  position:fixed; inset:0; z-index:2; pointer-events:none;
+  background:radial-gradient(90% 55% at 50% 102%, rgba(232,112,58,.20), rgba(232,112,58,0) 62%);
+  animation:heat-breathe 7.5s ease-in-out infinite;
+}
+@keyframes heat-breathe{ 0%,100%{opacity:.75} 50%{opacity:1} }
+
+/* ── Chrome ──────────────────────────────────────────────────────────────
+   The nav sat on a near-white blur; on basalt it needs the opposite, plus a
+   gold hairline so it still separates from the content behind it. */
+.navbar,.blog-nav{
+  background:rgba(14,11,8,.82) !important;
+  backdrop-filter:blur(14px) saturate(1.1);
+  border-bottom:1px solid var(--line) !important;
+}
+.navbar a,.blog-nav a,.nav-links a{ color:var(--text-dim) !important; }
+.navbar a:hover,.blog-nav a:hover,.nav-links a:hover,
+.nav-links a.active{ color:var(--gold-bright) !important; }
+.logo{ color:var(--gold) !important; letter-spacing:.02em; }
+
+/* ── Surfaces ────────────────────────────────────────────────────────────
+   Every card in the base sheet assumes a light fill. One rule for all of them,
+   so they stay a family rather than drifting apart as they're each patched. */
+.project-card,.experience-card,.blog-card,.post-card,.about-card,
+.game-box,.skill-row,.resume-preview,.stat-item,.contact-link,
+.cruise-stat,.highlight,.exp-card,.timeline-item{
+  background:linear-gradient(170deg,#211A12 0%,#1A1510 58%,#15110C 100%) !important;
+  border:1px solid var(--line) !important;
+  color:var(--text) !important;
+  box-shadow:0 1px 0 rgba(240,210,138,.07) inset, 0 18px 40px -28px rgba(0,0,0,.9);
+}
+.project-card:hover,.experience-card:hover,.post-card:hover,.contact-link:hover{
+  border-color:var(--line-strong) !important;
+  box-shadow:0 1px 0 rgba(240,210,138,.13) inset, 0 26px 56px -30px rgba(232,112,58,.42);
+}
+
+/* ── Type ────────────────────────────────────────────────────────────────
+   Headings get the gold-leaf treatment: a vertical gradient clipped to the
+   glyphs, which is what gives the struck-metal look rather than flat ochre. */
+.section-title,.about-title,.hero h1,.contact-title,.resume-title,.blog-title{
+  background:linear-gradient(176deg,#FFF3D6 0%,#E8C06A 42%,#C08A32 78%,#8A6424 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent;
+  letter-spacing:-.015em;
+}
+.section-title .em,.about-title .em,.hero h1 .em{
+  -webkit-text-fill-color:#E8703A; color:#E8703A;
+}
+.section-eyebrow,.blog-eyebrow,.about-label{
+  color:var(--gold) !important;
+  letter-spacing:.3em; text-transform:uppercase;
+}
+/* a gold rule under each eyebrow, fading out -- a section marker, not a box */
+.section-eyebrow::after,.blog-eyebrow::after{
+  content:''; display:block; height:1px; margin-top:.7rem;
+  background:linear-gradient(90deg,var(--gold),rgba(212,162,76,0));
+}
+.subtitle,.post-hook,.post-lede,.about-text,.experience-description,.project-desc{
+  color:var(--text-dim) !important;
+}
+strong,b{ color:var(--gold-bright); }
+
+/* ── Controls ────────────────────────────────────────────────────────────
+   Primary is struck bronze with a lit top edge; secondary is an outline that
+   fills on hover. Both keep the base sheet's geometry so nothing reflows. */
+.cta-button,.resume-button,.read-more,.repo-link,.back-link{
+  background:linear-gradient(176deg,#E8C06A,#C08A32 52%,#8A6424);
+  color:#1A1309 !important; border:1px solid #8A6424 !important;
+  font-weight:650; letter-spacing:.01em;
+  box-shadow:0 1px 0 rgba(255,243,214,.45) inset, 0 12px 26px -16px rgba(232,112,58,.7);
+}
+.cta-button:hover,.resume-button:hover{
+  background:linear-gradient(176deg,#FFF3D6,#E8C06A 52%,#C08A32);
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 16px 34px -14px rgba(232,112,58,.9);
+}
+.cta-button.secondary{
+  background:transparent; color:var(--gold-bright) !important;
+  border:1px solid var(--line-strong) !important; box-shadow:none;
+}
+.cta-button.secondary:hover{
+  background:rgba(212,162,76,.1); border-color:var(--gold) !important;
+}
+.filter-pill,.tag,.exp-tag,.tech-tag{
+  background:rgba(212,162,76,.07) !important;
+  border:1px solid var(--line) !important;
+  color:var(--text-dim) !important;
+}
+.filter-pill.active,.filter-pill[aria-pressed="true"]{
+  background:rgba(212,162,76,.18) !important;
+  border-color:var(--gold) !important; color:var(--gold-bright) !important;
+}
+
+/* ── Stat numerals ───────────────────────────────────────────────────────
+   The three hero figures are the loudest thing on the page after the title,
+   so they get the full gold-leaf clip too. */
+.stat-number,.cruise-stat b{
+  background:linear-gradient(176deg,#FFF3D6,#E8C06A 48%,#C08A32);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.stat-label,.cruise-stat span{ color:var(--text-faint) !important; }
+
+/* ── The avatar, armed ───────────────────────────────────────────────────
+   The blade is drawn in the page rather than generated: an original SVG laid
+   over the existing sprite at the sprite's own hand position, so it tracks the
+   avatar at every size instead of being burned into a new bitmap. */
+.epic-avatar-wrap{ position:relative; display:inline-block; }
+.epic-sword{
+  position:absolute; left:58%; top:30%;
+  width:46%; height:auto; z-index:3;
+  transform-origin:18% 82%;
+  animation:sword-breathe 5.5s ease-in-out infinite;
+  filter:drop-shadow(0 0 10px rgba(232,192,106,.55));
+  pointer-events:none;
+}
+@keyframes sword-breathe{
+  0%,100%{ transform:rotate(-3deg) translateY(0) }
+  50%    { transform:rotate(1.5deg) translateY(-5px) }
+}
+/* a warm rim on the sprite so he belongs in the firelight instead of sitting
+   on top of it as a cut-out */
+.hero-avatar-col img,#heroAvatar img,.sitting-avatar{
+  filter:drop-shadow(0 0 26px rgba(232,112,58,.26)) saturate(1.06) contrast(1.03);
+}
+
+/* ── Rules and dividers ──────────────────────────────────────────────────*/
+hr,.prose hr{
+  border:0; height:1px;
+  background:linear-gradient(90deg,rgba(212,162,76,0),var(--gold),rgba(212,162,76,0));
+}
+::selection{ background:rgba(232,112,58,.34); color:#FFF6E4; }
+
+/* ── Word reveal pre-state ───────────────────────────────────────────────
+   Pre-hiding lives on a class, not an inline style: inline opacity:0 outranked
+   the filling animation and the words never came back. */
+.fw{ display:inline-block; will-change:transform,opacity,filter; }
+.fw.pre{ opacity:0; }
+
+/* ── Footer ──────────────────────────────────────────────────────────────*/
+.site-footer{
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(21,17,12,0),rgba(13,10,7,.9));
+  color:var(--text-faint);
+}
+.site-footer a{ color:var(--gold) !important; }
+
+/* Keep the content above the scene. A blanket body>* rule once flattened the
+   fixed header's z-index from 1000 to 1 and the page scrolled over the nav,
+   eating its clicks -- so this is scoped to the content wrappers only. */
+main,.page,.blog-main,.post-main,.container{ position:relative; z-index:6; }
+.navbar,.blog-nav{ z-index:1000 !important; }
+
+@media (prefers-reduced-motion:reduce){
+  .epic-heat,.epic-falls .fall,.epic-sword{ animation:none !important; }
+}
+
+/* ── Fixes found by looking at the rendered page ─────────────────────────
+
+   1. Gold-leaf clip vs. the word reveal.
+   The heading rule sets -webkit-text-fill-color:transparent and clips a
+   gradient to the glyphs. epic.js then splits the heading into per-word .fw
+   spans, and those children inherit the transparent fill WITHOUT inheriting a
+   background to clip -- so every split heading rendered as empty space. The
+   spans need the gradient themselves. Each word paints its own copy, which is
+   indistinguishable here because the gradient runs vertically and every word
+   on a line is the same height. */
+.section-title .fw,.about-title .fw,.hero h1 .fw,
+.contact-title .fw,.resume-title .fw,.blog-title .fw{
+  background:linear-gradient(176deg,#FFF3D6 0%,#E8C06A 42%,#C08A32 78%,#8A6424 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero h1 .em .fw,.section-title .em .fw,.about-title .em .fw{
+  background:none; -webkit-text-fill-color:#E8703A;
+}
+
+/* 2. The hero's own scrim was opaque.
+   .hero::before lays a full-bleed linear-gradient in --paper across the hero
+   to settle the old light theme. On basalt it just buried the backdrop. Keep
+   it as a vignette -- it still anchors the text -- but let the gorge through. */
+.hero::before{
+  background:linear-gradient(180deg,
+    rgba(21,17,12,.72) 0%, rgba(21,17,12,.30) 42%,
+    rgba(21,17,12,.58) 78%, rgba(21,17,12,.92) 100%) !important;
+}
+
+/* 3. Stacking.
+   The content wrappers were pushed above the ember canvas, which hid it
+   completely. forest.css learned this the hard way: cards here have opaque
+   fills, so the particle layer has to sit in FRONT of the content and stay
+   out of the hit-testing. Embers are sparse and translucent, so drifting over
+   text reads as atmosphere rather than noise. The nav keeps its own z-index --
+   a blanket rule once flattened it to 1 and the page ate its clicks. */
+main,.page,.blog-main,.post-main,.container{ z-index:auto; }
+.page,.page-content,section,.hero{ background:transparent !important; }
+#epicCanvas{ z-index:5; }
+.epic-layer{ z-index:0; }
+
+/* ── Second pass, also from the rendered page ────────────────────────────
+
+   4. The blade anchors to the avatar column, not a wrapper.
+   .hg-avatar is width:100% with a max-width, so wrapping it in a shrink-to-fit
+   inline-block left it with no containing width to resolve against and it
+   collapsed to 0x0. The sword is a sibling now and positions against the
+   column itself. */
+.hero-avatar-col{ position:relative; }
+.epic-sword{
+  position:absolute; left:63%; top:24%;
+  width:30%; max-width:150px; height:auto; z-index:3;
+}
+
+/* 5. The primary button.
+   The base sheet sets .cta-button background with !important (twice), so the
+   bronze needs the same weight or --ink-deep wins and the button renders bone. */
+.cta-button:not(.secondary),.resume-button:not(.secondary){
+  background:linear-gradient(176deg,#F0D28A,#C08A32 52%,#8A6424) !important;
+  color:#1A1309 !important; border-color:#8A6424 !important;
+}
+.cta-button:not(.secondary):hover,.resume-button:not(.secondary):hover{
+  background:linear-gradient(176deg,#FFF3D6,#E8C06A 52%,#C08A32) !important;
+}
+.cta-button.secondary{ color:var(--gold-bright) !important; }
+
+/* 6. The gorge was invisible.
+   Silhouettes at #0D0A07 on a #15110C ground is dark-on-dark -- the shapes
+   were drawing, there was just nothing behind them to read against. A cool
+   shaft of mist in the gap gives the cliffs an edge, and reads as depth
+   because it is the one cold thing in a warm scene. */
+.epic-layer::before{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(42% 58% at 50% 46%, rgba(150,186,214,.20) 0%, rgba(150,186,214,0) 70%),
+    radial-gradient(26% 40% at 50% 70%, rgba(190,214,232,.16) 0%, rgba(190,214,232,0) 72%);
+}
+.epic-cliff{ color:#0A0806; opacity:1; }
+.epic-cliff-far{ color:#191310; opacity:.8; }
+
+/* 7. Blade sizing.
+   Width-constrained, the blade overran short viewports and the hilt fell off
+   the bottom. Height-constrained it always fits the column, and sits planted
+   beside him rather than floating across him. */
+.epic-sword{
+  top:auto; bottom:6%; left:auto; right:2%;
+  width:auto; max-width:none; height:66%;
+  transform-origin:50% 92%;
+}
+@media (max-width:900px){ .epic-sword{ height:52%; right:0; } }
+
+/* 8. Making the gorge read.
+   The cliffs were laying out correctly (1812x507, measured in the page) and
+   still invisible: a near-black silhouette on a near-black ground has nothing
+   to separate it. Two changes rather than lightening the rock, which would
+   have killed the depth -- widen the mist so it actually reaches the flanking
+   cliffs instead of pooling in the centre, and catch the ridge line in gold,
+   which is what firelight on a skyline actually does. */
+.epic-layer::before{
+  background:
+    radial-gradient(72% 72% at 50% 50%, rgba(158,196,226,.26) 0%, rgba(158,196,226,0) 72%),
+    radial-gradient(30% 44% at 50% 72%, rgba(198,220,238,.20) 0%, rgba(198,220,238,0) 74%);
+}
+.epic-cliff path{
+  stroke:rgba(232,192,106,.38);
+  stroke-width:2.5;
+  paint-order:stroke fill;
+}
+.epic-cliff-far path{ stroke:rgba(232,192,106,.16); stroke-width:2; }
+
+/* ── Structural rules carried over from forest.css ───────────────────────
+   These were never palette -- they are layout and behaviour that the base
+   sheet leaves to the theme. Dropping forest.css dropped them too, which is
+   why the monkey rendered at its intrinsic size instead of 168px. */
+.ledge-monkey{
+  position:absolute; left:58px; bottom:10px;
+  height:168px; width:auto; z-index:2;
+  pointer-events:none; user-select:none;
+  transform-origin:52% 86%;
+  animation:monkey-sway 6.5s ease-in-out infinite;
+  filter:drop-shadow(0 0 16px rgba(232,112,58,.3));
+}
+@keyframes monkey-sway{
+  0%,100%{ transform:rotate(-1.6deg) translateY(0) }
+  50%    { transform:rotate(1.6deg) translateY(-3px) }
+}
+@media (max-width:900px){ .ledge-monkey{ height:118px; left:26px } }
+@media (max-width:620px){ .ledge-monkey{ height:92px;  left:12px } }
+
+/* the play pill expands from an icon to a labelled button on hover */
+.card-play{
+  left:auto!important; top:auto!important;
+  right:.95rem!important; bottom:.95rem!important;
+  transform:none!important; padding:.72rem!important; gap:0!important;
+  overflow:hidden; max-width:44px;
+  transition:max-width .42s cubic-bezier(.2,.9,.25,1), padding .42s cubic-bezier(.2,.9,.25,1);
+  background:linear-gradient(176deg,#F0D28A,#C08A32 54%,#8A6424)!important;
+  color:#1A1309!important;
+}
+.card-play .lbl{
+  font-style:normal; white-space:nowrap; opacity:0; margin-left:0;
+  transition:opacity .3s ease .06s, margin-left .42s cubic-bezier(.2,.9,.25,1);
+}
+.card-media:hover .card-play,.card-media:focus-visible .card-play{
+  max-width:230px; padding:.72rem 1.15rem .72rem .95rem!important;
+}
+.card-media:hover .card-play .lbl,.card-media:focus-visible .card-play .lbl{
+  opacity:1; margin-left:.55rem;
+}
+
+/* legacy decorations from an older pass; the scene replaces them */
+.ambient,.mesh-grid,.orb{ display:none!important; }
+.grain{ opacity:.03!important; }
+.scroll-top{ z-index:900!important; }
+.game-canvas-wrap{ background:#120E0A!important; }
+.about-card-photo{
+  box-shadow:0 0 0 1px rgba(212,162,76,.22), 0 0 0 7px #1A1510,
+             0 0 0 8px var(--gold-deep), 0 16px 34px -16px rgba(232,112,58,.5)!important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .ledge-monkey{ animation:none }
+  .card-play,.card-play .lbl{ transition:none!important }
+}
+
+/* 9. The doubled heading.
+   Both the h2 AND its .fw word-spans carried background-clip:text, so the
+   gold gradient was painted twice over the same element -- once clipped to
+   the h2's own glyph run and once per span -- and the two passes did not land
+   in the same place, leaving a smeared ghost at the element's left edge.
+   Hit-testing put the ghost inside H2.section-title, which ruled out a
+   duplicate node.
+
+   The clip belongs on exactly one of them. It goes on the spans, because that
+   is what is actually animating; the parent keeps a solid gold so an unsplit
+   heading (reduced motion, or no IntersectionObserver) still looks right. */
+.section-title,.about-title,.hero h1,.contact-title,.resume-title,.blog-title{
+  background:none;
+  -webkit-text-fill-color:#E8C06A; color:#E8C06A;
+}
+.section-title .em,.about-title .em,.hero h1 .em,
+.section-title .em .fw,.about-title .em .fw,.hero h1 .em .fw{
+  background:none !important;
+  -webkit-text-fill-color:#E8703A; color:#E8703A;
+}
