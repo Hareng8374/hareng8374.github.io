@@ -39,6 +39,62 @@
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 
+  /* ---- pointer ------------------------------------------------------------
+     The scene answers the cursor. Leaves are pushed out of its path and
+     carried in its wake; grass parts as it passes near the ground; a click
+     sends a gust out across the band.
+
+     Coordinates are taken against the canvas box rather than the viewport,
+     because in longform the canvas is a strip at the foot of the document and
+     clientY would be measuring from the wrong origin. */
+  var ptr = { x: -1e4, y: -1e4, vx: 0, vy: 0, on: false };
+  var gusts = [];
+  var PTR_R = 170;          // leaves feel the cursor inside this radius
+  var PTR_G2 = 230 * 230;   // grass radius, pre-squared for the per-blade test
+  var GUST_LIFE = 1.5;      // seconds for a gust ring to cross and fade
+
+  function onMove(e) {
+    var r = cv.getBoundingClientRect();
+    var nx = e.clientX - r.left, ny = e.clientY - r.top;
+    // first sample after entering has no meaningful velocity
+    ptr.vx = ptr.on ? nx - ptr.x : 0;
+    ptr.vy = ptr.on ? ny - ptr.y : 0;
+    ptr.x = nx; ptr.y = ny; ptr.on = true;
+  }
+  function onLeave() { ptr.on = false; ptr.x = ptr.y = -1e4; ptr.vx = ptr.vy = 0; }
+  function onDown(e) {
+    var r = cv.getBoundingClientRect();
+    gusts.push({ x: e.clientX - r.left, y: e.clientY - r.top, born: performance.now() });
+    if (gusts.length > 5) gusts.shift();   // a burst of clicks must not pile up
+  }
+
+  /* Listeners go on the window, not the canvas: the canvas is pointer-events:
+     none so it never steals a click from the content underneath it. */
+  addEventListener('pointermove', onMove, { passive: true });
+  addEventListener('pointerdown', onDown, { passive: true });
+  addEventListener('pointerleave', onLeave, { passive: true });
+  addEventListener('blur', onLeave);
+
+  /* A gust's contribution at a point: a ring that expands from the click and
+     thins as it goes, so what you feel is a wave passing rather than a blast
+     that fades in place. Returns a signed horizontal push. */
+  function gustAt(now, x, y) {
+    var push = 0;
+    for (var i = gusts.length - 1; i >= 0; i--) {
+      var g = gusts[i], age = (now - g.born) / 1000;
+      if (age > GUST_LIFE) { gusts.splice(i, 1); continue; }
+      var k = age / GUST_LIFE;
+      var radius = k * Math.max(W, H) * 0.85;
+      var dx = x - g.x, dy = (y - g.y) * 0.55;        // flattened: gusts travel wide
+      var d = Math.sqrt(dx * dx + dy * dy);
+      var band = Math.abs(d - radius);
+      if (band > 190) continue;
+      var strength = (1 - band / 190) * (1 - k) * (1 - k);
+      push += (dx >= 0 ? 1 : -1) * strength;
+    }
+    return push;
+  }
+
   function build() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     // measure the canvas, which is the viewport normally and a band at the foot
@@ -109,9 +165,33 @@
     // never settles into an obvious loop
     var wind = Math.sin(t * 0.26) * 0.62 + Math.sin(t * 0.73 + 1.3) * 0.26;
 
+    // the cursor's wake decays, so the push fades when the mouse stops moving
+    ptr.vx *= 0.86; ptr.vy *= 0.86;
+
     for (var i = 0; i < blades.length; i++) {
       var b = blades[i];
       var bend = (wind + Math.sin(t * 1.15 + b.phase) * 0.34) * b.sway;
+
+      /* The cursor parts the grass it passes over. Measured against the blade
+         TIP rather than its root: roots sit at or below the bottom edge, so
+         root-distance meant the grass only answered a cursor already off the
+         screen. The vertical term is scaled down so passing above the grass
+         still disturbs it, which is what it looks like from overhead. */
+      if (ptr.on) {
+        var gdx = b.x - ptr.x, gdy = (b.base - b.len - ptr.y) * 0.75;
+        var gd2 = gdx * gdx + gdy * gdy;
+        if (gd2 < PTR_G2) {
+          var gf = 1 - gd2 / PTR_G2;
+          bend += (gdx >= 0 ? 1 : -1) * gf * gf * 1.6;
+        }
+      }
+      bend += gustAt(now, b.x, b.base - b.len * 0.5) * 1.9;
+      /* Clamp. Wind, cursor and gust all add into the same term, and at
+         full stack a blade would swing past 4 radians of bend -- the
+         quadratic would turn inside out and the grass would read as
+         stretched rubber rather than bent. */
+      if (bend > 2.2) bend = 2.2; else if (bend < -2.2) bend = -2.2;
+
       var tipX = b.x + b.lean * b.len + bend * b.len * 0.42;
       var tipY = b.base - b.len;
       var midX = b.x + b.lean * b.len * 0.34 + bend * b.len * 0.12;
@@ -140,7 +220,27 @@
       L.y += L.vy;
       L.x += Math.sin(t * 0.6 + L.ph) * 0.5 + wind * 0.55;
       L.rot += L.vr + wind * 0.004;
+
+      /* Leaves are shouldered out of the cursor's path and dragged along in
+         its wake. Unlike the grass this works anywhere on the page, which is
+         what makes the whole background feel touchable rather than only the
+         strip near the bottom. */
+      if (ptr.on) {
+        var ldx = L.x - ptr.x, ldy = L.y - ptr.y;
+        var ld = Math.sqrt(ldx * ldx + ldy * ldy);
+        if (ld < PTR_R) {
+          var lf = 1 - ld / PTR_R, inv = 1 / (ld + 0.001);
+          L.x += ldx * inv * lf * 2.8 + ptr.vx * lf * 0.36;
+          L.y += ldy * inv * lf * 2.1 + ptr.vy * lf * 0.36;
+          L.rot += lf * 0.07;
+        }
+      }
+      var lg = gustAt(now, L.x, L.y);
+      L.x += lg * 6; L.rot += lg * 0.055;
       if (L.y > H + 24) { L.y = -24; L.x = Math.random() * W; }
+      // the cursor can shove a leaf upward; without a ceiling it would
+      // coast far above the canvas and take seconds to fall back in
+      else if (L.y < -120) { L.y = -24; }
       if (L.x < -30) L.x = W + 30; if (L.x > W + 30) L.x = -30;
       cx.save();
       cx.translate(L.x, L.y); cx.rotate(L.rot);

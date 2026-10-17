@@ -255,3 +255,62 @@ html.forest-longform .canopy-light{opacity:.6}
 @media(max-width:720px){
   html.forest-longform #forestCanvas{height:200px!important}
 }
+
+/* ── Hover physics ───────────────────────────────────────────────────────
+   Cards tilt toward the cursor and carry a light that follows it; buttons
+   lean as the pointer approaches. The transforms are driven from
+   interact.js -- these rules only supply the surfaces and the easing.
+
+   The light lives on an injected .lit-layer rather than a pseudo-element,
+   because ::before and ::after are already carrying borders and glows on
+   project-card, experience-card and stat-item. */
+.project-card,.experience-card,.blog-card,.post-card,
+.about-card,.stat-item,.skill-row,.game-box{
+  position:relative;
+  transform-style:preserve-3d;
+}
+.lit-layer{
+  position:absolute; inset:0; z-index:0;
+  border-radius:inherit; pointer-events:none;
+  opacity:0; transition:opacity .38s ease;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),
+             rgba(47,122,92,.15), rgba(47,122,92,.05) 42%, rgba(47,122,92,0) 68%);
+}
+.is-lit .lit-layer{ opacity:1; }
+
+/* the card's own content has to sit above the light */
+.project-card>*:not(.lit-layer),.experience-card>*:not(.lit-layer),
+.blog-card>*:not(.lit-layer),.post-card>*:not(.lit-layer),
+.about-card>*:not(.lit-layer),.stat-item>*:not(.lit-layer),
+.skill-row>*:not(.lit-layer),.game-box>*:not(.lit-layer){
+  position:relative; z-index:1;
+}
+
+/* A lifted card should read as lifted, so the shadow grows with the tilt.
+   transform is left out of the transition on purpose -- interact.js eases it
+   on a rAF, and a CSS transition on the same property would fight that and
+   add lag on every pointermove. */
+.project-card,.experience-card,.blog-card,.post-card,.about-card,.stat-item{
+  transition:box-shadow .34s ease, border-color .34s ease;
+}
+.is-lit{
+  box-shadow:0 22px 48px -26px rgba(22,74,66,.42),
+             0 2px 10px -6px rgba(22,74,66,.18) !important;
+  border-color:rgba(47,122,92,.34) !important;
+}
+
+/* Magnets get no transition either, for the same reason. will-change is set
+   and cleared by the script so idle buttons are not each holding a layer. */
+.cta-button,.resume-button,.project-link,.contact-link,
+.filter-pill,.repo-link,.read-more{
+  transition:background .3s ease, color .3s ease, border-color .3s ease,
+             box-shadow .3s ease;
+}
+
+@media (hover:none){
+  /* touch has no cursor to follow, and a tilt that only fires on tap is noise */
+  .lit-layer{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){
+  .lit-layer{ display:none; }
+}
